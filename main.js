@@ -14,8 +14,8 @@ class Gate {
 }
 
 class ANDGate extends Gate {
-    constructor() {
-        super();
+    constructor(type, id) {
+        super(type, id);
         this.gateEl.innerHTML = "AND";
     }
     returnValue(a, b) {
@@ -24,6 +24,9 @@ class ANDGate extends Gate {
         }else {
             return false;
         }
+    }
+    clone() {
+        return new ANDGate(this.type, this.id);
     }
 }
 
@@ -35,15 +38,18 @@ class NOTGate extends Gate {
     returnValue(a) {
         return !a;
     }
+    clone() {
+        return new NOTGate(this.type, this.id);
+    }
 }
 
 presetsGates.push(new ANDGate(presetsGates.length));
 presetsGates.push(new NOTGate(presetsGates.length));
 
-presetsGates.forEach((el) => {
+presetsGates.forEach((el, index) => {
     el.gateEl.classList.add("draggable-gate");
     el.gateEl.setAttribute("draggable", "true");
-    el.gateEl.setAttribute("id", el.gateEl.innerHTML);
+    el.gateEl.setAttribute("id", index + "drag");
     gatesToolbox.appendChild(el.gateEl);
     el.gateEl.addEventListener("dragstart", (event) => {
         console.log("dragstart");
@@ -73,4 +79,6 @@ main.addEventListener("drop", function(event) {
     let nodeCopy = document.getElementById(id).cloneNode(true);
     nodeCopy.id = gates.length + "gate";
     this.appendChild(nodeCopy);
+    gates.push(presetsGates[parseInt(id)].clone());
+    gates[gates.length-1].gateEl = nodeCopy;
 });
