@@ -6,17 +6,43 @@ let dragElementId;
 
 class Gate {
     gateEl = document.createElement("div");
+    InputsConEl = document.createElement("div");
+    OutputsConEl = document.createElement("div");
+    text = document.createElement("p");
+    amountOfInputs = 2;
+    inputs = [];
+    output;
     constructor(type, id) {
         this.type = type;
         this.id = id;
         this.gateEl.classList.add("gate");
+        this.generateInputsCon();
+        this.gateEl.appendChild(this.text);
+        this.generateOutputsCon();
+        this.addInputsAndOutput();
+    }
+    generateInputsCon() {
+        this.InputsConEl.classList.add("inputs");
+        this.gateEl.appendChild(this.InputsConEl);
+    }
+    generateOutputsCon() {
+        this.OutputsConEl.classList.add("outputs");
+        this.gateEl.appendChild(this.OutputsConEl);
+    }
+    addInputsAndOutput() {
+        for(let i = 0; i < this.amountOfInputs; i++) {
+            this.inputs.push(new Input());
+            this.InputsConEl.appendChild(this.inputs[i].inputEl);
+        }
+        this.output = new Output();
+        this.OutputsConEl.appendChild(this.output.outputEl);
     }
 }
 
 class ANDGate extends Gate {
     constructor(type, id) {
         super(type, id);
-        this.gateEl.innerHTML = "AND";
+        this.text.innerHTML += "AND";
     }
     returnValue(a, b) {
         if(a === true && b === true) {
@@ -33,13 +59,33 @@ class ANDGate extends Gate {
 class NOTGate extends Gate {
     constructor() {
         super();
-        this.gateEl.innerHTML = "NOT";
+        this.text.innerHTML += "NOT";
     }
     returnValue(a) {
         return !a;
     }
     clone() {
         return new NOTGate(this.type, this.id);
+    }
+}
+
+class Input {
+    inputEl = document.createElement("div");
+    constructor() {
+        this.createElement();
+    }
+    createElement() {
+        this.inputEl.classList.add("input");
+    }
+}
+
+class Output {
+    outputEl = document.createElement("div");
+    constructor() {
+        this.createElement();
+    }
+    createElement() {
+        this.outputEl.classList.add("output");
     }
 }
 

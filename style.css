@@ -23,8 +23,35 @@ main {
     justify-content: center;
     align-items: center;
     cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
 }
 
 .draggable-gate {
 
+}
+
+.inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.output {
+
+}
+
+.input {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: cornflowerblue;
+}
+
+.output {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: chocolate;
 }
