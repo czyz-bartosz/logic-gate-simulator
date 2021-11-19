@@ -1,14 +1,57 @@
 const main = document.querySelector("main");
-const draggableGates = document.querySelectorAll(".draggable-gate");
+const gatesToolbox = document.querySelector("#left");
+const presetsGates = [];
 const gates = [];
 let dragElementId;
 
-draggableGates.forEach((el) => {
-    el.addEventListener("dragstart", () => {
+class Gate {
+    gateEl = document.createElement("div");
+    constructor(type, id) {
+        this.type = type;
+        this.id = id;
+        this.gateEl.classList.add("gate");
+    }
+}
+
+class ANDGate extends Gate {
+    constructor() {
+        super();
+        this.gateEl.innerHTML = "AND";
+    }
+    returnValue(a, b) {
+        if(a === true && b === true) {
+            return true;
+        }else {
+            return false;
+        }
+    }
+}
+
+class NOTGate extends Gate {
+    constructor() {
+        super();
+        this.gateEl.innerHTML = "NOT";
+    }
+    returnValue(a) {
+        return !a;
+    }
+}
+
+presetsGates.push(new ANDGate(presetsGates.length));
+presetsGates.push(new NOTGate(presetsGates.length));
+
+presetsGates.forEach((el) => {
+    el.gateEl.classList.add("draggable-gate");
+    el.gateEl.setAttribute("draggable", "true");
+    el.gateEl.setAttribute("id", el.gateEl.innerHTML);
+    gatesToolbox.appendChild(el.gateEl);
+    el.gateEl.addEventListener("dragstart", (event) => {
         console.log("dragstart");
-        dragElementId = el.getAttribute("id");
+        dragElementId = event.target.getAttribute("id");
+        event.dataTransfer.setData("text/plain", event.target.id);
+        event.dataTransfer.dropEffect = "copy";
     });
-    el.addEventListener("dragend", () => {
+    el.gateEl.addEventListener("dragend", () => {
         main.style.background = "none";
     });
 });
@@ -21,46 +64,13 @@ main.addEventListener("dragleave", function(event) {
 main.addEventListener("dragover", function(event) {
     event.preventDefault();
     this.style.background = "blue";
+    event.dataTransfer.dropEffect = "copy";
 });
 
 main.addEventListener("drop", function(event) {
-    const id = dragElementId;
-    switch(id) {
-        case "ANDGate":
-            gates.push(new ANDGate("AND", gates.length));
-            break;
-        case "NOTGate":
-            gates.push(new NOTGate("NOT", gates.length));
-            break;
-    }
+    event.preventDefault();
+    const id = event.dataTransfer.getData("text/plain");
+    let nodeCopy = document.getElementById(id).cloneNode(true);
+    nodeCopy.id = gates.length + "gate";
+    this.appendChild(nodeCopy);
 });
-
-class Gate {
-    gateEl = document.createElement("div");
-    constructor(type, id) {
-        this.type;
-        this.id = id;
-        this.displayGate(type);
-    }
-    displayGate(type) {
-        this.gateEl.classList.add("gate");
-        main.appendChild(this.gateEl);
-        this.gateEl.innerHTML = type;
-    }
-}
-
-class ANDGate extends Gate {
-    returnValue(a, b) {
-        if(a === true && b === true) {
-            return true;
-        }else {
-            return false;
-        }
-    }
-}
-
-class NOTGate extends Gate {
-    returnValue(a) {
-        return !a;
-    }
-}
