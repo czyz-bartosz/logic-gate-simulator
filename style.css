@@ -4,6 +4,16 @@
     box-sizing: border-box;
 }
 
+body {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+}
+
+main {
+    width: 100%;
+}
+
 .gate {
     width: 200px;
     height: 100px;
@@ -12,4 +22,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
+}
+
+.draggable-gate {
+
 }
