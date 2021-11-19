@@ -5,20 +5,19 @@ const inputs = document.querySelectorAll("main .input");
 const presetsGates = [];
 const gates = [];
 let dragElementId;
-let selected = false;
 let selectedOutput;
 let selectedInput;
 
 class Gate {
     gateEl = document.createElement("div");
-    InputsConEl = document.createElement("div");
-    OutputsConEl = document.createElement("div");
+    inputsConEl = document.createElement("div");
+    outputsConEl = document.createElement("div");
     text = document.createElement("p");
     amountOfInputs = 2;
+    amountOfOutputs = 1;
     inputs = [];
-    output;
-    constructor(type, id) {
-        this.type = type;
+    outputs = [];
+    constructor(id) {
         this.id = id;
         this.gateEl.classList.add("gate");
         this.generateInputsCon();
@@ -27,27 +26,30 @@ class Gate {
         this.addInputsAndOutput();
     }
     generateInputsCon() {
-        this.InputsConEl.classList.add("inputs");
-        this.gateEl.appendChild(this.InputsConEl);
+        this.inputsConEl.classList.add("inputs");
+        this.gateEl.appendChild(this.inputsConEl);
     }
     generateOutputsCon() {
-        this.OutputsConEl.classList.add("outputs");
-        this.gateEl.appendChild(this.OutputsConEl);
+        this.outputsConEl.classList.add("outputs");
+        this.gateEl.appendChild(this.outputsConEl);
     }
     addInputsAndOutput() {
         for(let i = 0; i < this.amountOfInputs; i++) {
             this.inputs.push(new Input(i));
             this.inputs[i].inputEl.setAttribute("id", i+"-"+this.id);
-            this.InputsConEl.appendChild(this.inputs[i].inputEl);
+            this.inputsConEl.appendChild(this.inputs[i].inputEl);
         }
-        this.output = new Output(0);
-        this.OutputsConEl.appendChild(this.output.outputEl);
+        for(let i = 0; i < this.amountOfOutputs; i++) {
+            this.outputs.push(new Output(i));
+            this.outputs[i].outputEl.setAttribute("id", i+"-"+this.id);
+            this.outputsConEl.appendChild(this.outputs[i].outputEl);
+        }
     }
 }
 
 class ANDGate extends Gate {
-    constructor(type, id) {
-        super(type, id);
+    constructor(id) {
+        super(id);
         this.text.innerHTML += "AND";
     }
     returnValue(a, b) {
@@ -57,21 +59,21 @@ class ANDGate extends Gate {
             return false;
         }
     }
-    clone() {
-        return new ANDGate(this.type, this.id);
+    clone(id) {
+        return new ANDGate(id);
     }
 }
 
 class NOTGate extends Gate {
-    constructor() {
-        super();
+    constructor(id) {
+        super(id);
         this.text.innerHTML += "NOT";
     }
     returnValue(a) {
         return !a;
     }
-    clone() {
-        return new NOTGate(this.type, this.id);
+    clone(id) {
+        return new NOTGate(id);
     }
 }
 
@@ -98,6 +100,7 @@ class Output {
     }
     createElement() {
         this.outputEl.classList.add("output");
+        this.outputEl.classList.add("false");
     }
 }
 
@@ -137,7 +140,7 @@ main.addEventListener("drop", function(event) {
     let nodeCopy = document.getElementById(id).cloneNode(true);
     nodeCopy.id = gates.length + "gate";
     this.appendChild(nodeCopy);
-    gates.push(presetsGates[parseInt(id)].clone());
+    gates.push(presetsGates[parseInt(id)].clone(gates.length));
     gates[gates.length-1].gateEl = nodeCopy;
     gates[gates.length-1].id = gates.length-1;
     const inputsArr = gates[gates.length-1].gateEl.querySelectorAll(".input");
