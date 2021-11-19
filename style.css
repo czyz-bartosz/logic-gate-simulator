@@ -12,6 +12,8 @@ body {
 
 main {
     width: 100%;
+    display: flex;
+    gap: 60px;
 }
 
 .gate {
@@ -32,14 +34,24 @@ main {
 
 }
 
+#outputs-con {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    background: rgb(240, 73, 73);
+    padding: 10px;
+}
+
+#inputs-con {
+    display: flex;
+    background: darkgray;
+    
+}
+
 .inputs {
     display: flex;
     flex-direction: column;
     gap: 30px;
-}
-
-.output {
-
 }
 
 .input {
@@ -53,5 +65,13 @@ main {
     width: 20px;
     height: 20px;
     border-radius: 50%;
-    background: chocolate;
+    background: blue;
+}
+
+.true {
+    background: chartreuse;
+}
+
+.false {
+    background: black;
 }

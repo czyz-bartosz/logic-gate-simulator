@@ -1,8 +1,13 @@
 const main = document.querySelector("main");
 const gatesToolbox = document.querySelector("#left");
+const outputs = document.querySelectorAll(".output");
+const inputs = document.querySelectorAll("main .input");
 const presetsGates = [];
 const gates = [];
 let dragElementId;
+let selected = false;
+let selectedOutput;
+let selectedInput;
 
 class Gate {
     gateEl = document.createElement("div");
@@ -31,10 +36,11 @@ class Gate {
     }
     addInputsAndOutput() {
         for(let i = 0; i < this.amountOfInputs; i++) {
-            this.inputs.push(new Input());
+            this.inputs.push(new Input(i));
+            this.inputs[i].inputEl.setAttribute("id", i+"-"+this.id);
             this.InputsConEl.appendChild(this.inputs[i].inputEl);
         }
-        this.output = new Output();
+        this.output = new Output(0);
         this.OutputsConEl.appendChild(this.output.outputEl);
     }
 }
@@ -71,8 +77,11 @@ class NOTGate extends Gate {
 
 class Input {
     inputEl = document.createElement("div");
-    constructor() {
+    currentValue = null;
+    id = null;
+    constructor(id) {
         this.createElement();
+        this.id = id;
     }
     createElement() {
         this.inputEl.classList.add("input");
@@ -81,8 +90,11 @@ class Input {
 
 class Output {
     outputEl = document.createElement("div");
-    constructor() {
+    currentValue = null;
+    id = null;
+    constructor(id) {
         this.createElement();
+        this.id = id;
     }
     createElement() {
         this.outputEl.classList.add("output");
@@ -127,4 +139,33 @@ main.addEventListener("drop", function(event) {
     this.appendChild(nodeCopy);
     gates.push(presetsGates[parseInt(id)].clone());
     gates[gates.length-1].gateEl = nodeCopy;
+    gates[gates.length-1].id = gates.length-1;
+    const inputsArr = gates[gates.length-1].gateEl.querySelectorAll(".input");
+    inputsArr.forEach((el) => {
+        el.addEventListener("click", () => {
+            selectedInput = el;
+            console.log(el);
+            console.log((el.parentElement).parentElement);
+            const parent = (el.parentElement).parentElement;
+            const inputId = parseInt(el.getAttribute("id"));
+            const gateId = parseInt(parent.getAttribute("id"));
+            
+            gates[gateId].inputs[inputId].currentValue = selectedOutput?.classList.contains("true") ? true : false;
+            console.log(gates[gateId]);
+        });
+    });
+});
+
+outputs.forEach((el, index) => {
+    el.addEventListener("click", () => {
+        selectedOutput = el;
+        console.log(el);
+    });
+});
+
+inputs.forEach((el, index) => {
+    el.addEventListener("click", () => {
+        console.log(el);
+        console.log(el.parentElement);
+    });
 });
