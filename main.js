@@ -95,6 +95,20 @@ class NOTGate extends Gate {
     clone(id = gates.length) {
         return new NOTGate(id);
     }
+    changeStatus() {
+        console.log(this.inputs[0].currentValue)
+        if(this.returnValue(this.inputs[0].currentValue)) {
+            this.outputs[0].currentValue = true;
+            this.outputs[0].outputEl.classList.add("true");
+            this.outputs[0].outputEl.classList.remove("false");
+            console.log(true)
+        }else {
+            this.outputs[0].currentValue = false;
+            this.outputs[0].outputEl.classList.add("false");
+            this.outputs[0].outputEl.classList.remove("true");
+            console.log(false)
+        }
+    }
 }
 
 class Input {
@@ -140,17 +154,27 @@ class Wire {
     constructor(el1, el2) {
         this.el1 = {element: el1, position: { x:el1.offsetLeft, y:el1.offsetTop}};
         this.el2 = {element: el2, position: { x:el2.offsetLeft, y:el2.offsetTop}};
-        if(el1.classList.contains("true")){
-            console.log(true, +(el2.id).slice(2));
-            const parentId = +((el2.id).slice(2));
-            const id = parseInt(el2.id);
-            gates[parentId].inputs[id].setInputValue(true, parentId);
-            // gates[parentId].outputs[0].outputEl.classList.add(true);
-        }else if(el1.classList.contains("false")) {
-            console.log(false, +(el2.id).slice(2));
-            const parentId = +((el2.id).slice(2));
-            const id = parseInt(el2.id);
-            gates[parentId].inputs[id].setInputValue(false, parentId);
+        if(!el2.classList.contains("main-input")) {
+            if(el1.classList.contains("true")){
+                console.log(true, +(el2.id).slice(2));
+                const parentId = +((el2.id).slice(2));
+                const id = parseInt(el2.id);
+                gates[parentId].inputs[id].setInputValue(true, parentId);
+                // gates[parentId].outputs[0].outputEl.classList.add(true);
+            }else if(el1.classList.contains("false")) {
+                console.log(false, +(el2.id).slice(2));
+                const parentId = +((el2.id).slice(2));
+                const id = parseInt(el2.id);
+                gates[parentId].inputs[id].setInputValue(false, parentId);
+            }
+        }else {
+            if(el1.classList.contains("true")){
+                el2.classList.add("true");
+                el2.classList.remove("false");
+            }else if(el1.classList.contains("false")) {
+                el2.classList.add("false");
+                el2.classList.remove("true");
+            }
         }
         this.draw();
     }
