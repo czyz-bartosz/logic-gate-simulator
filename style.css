@@ -88,8 +88,9 @@ svg {
     padding: 50px;
 }
 
-polyline {
+path {
     fill: none;
     stroke: black;
-    stroke-width: 5;
+    stroke-width: 6;
+    stroke-linejoin: round;
 }

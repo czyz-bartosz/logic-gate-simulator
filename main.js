@@ -110,13 +110,13 @@ class Output {
 
 class Wire {
     id = wires.length;
-    el = document.createElementNS("http://www.w3.org/2000/svg", "polyline");;
+    el = document.createElementNS("http://www.w3.org/2000/svg", "path");;
     con = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     width;
     height;
     constructor(el1, el2) {
-        this.el1 = {position: { x:el1.offsetLeft + 10, y:el1.offsetTop + 10 }};
-        this.el2 = {position: { x:el2.offsetLeft + 10, y:el2.offsetTop + 10 }};
+        this.el1 = {position: { x:el1.offsetLeft, y:el1.offsetTop}};
+        this.el2 = {position: { x:el2.offsetLeft, y:el2.offsetTop}};
         this.draw();
     }
     draw() {
@@ -132,12 +132,13 @@ class Wire {
         }else {
             this.height = 10;
         }
-        this.width += 5;
-        const halfX = (this.el1.position.x + this.el2.position.x) / 2;
+        this.height += 20;
+        this.width += 20;
         this.con.setAttribute("width", this.width);
         this.con.setAttribute("height", this.height);
         this.con.setAttribute("style", `top: ${this.el1.position.y}px; left: ${this.el1.position.x}px`);
-        this.el.setAttribute("points", `0,0 ${this.width/2},0 ${this.width/2},${this.height} ${this.width},${this.height}`);
+        this.el.setAttribute("d", `M 0 10 H ${this.width/2} V ${this.height - 10} H ${this.width}`);
+        // this.el.setAttribute("d", `M 0 0 H ${this.width/2}  ${this.width/2},${this.height} ${this.width},${this.height}`);
         this.con.appendChild(this.el);
         main.appendChild(this.con);
     }
