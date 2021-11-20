@@ -1,10 +1,10 @@
-const main = document.querySelector("main");
+const main = document.querySelector("#work-area");
 const gatesToolbox = document.querySelector("#left");
 const outputs = document.querySelectorAll(".output");
-const inputs = document.querySelectorAll("main .input");
+const inputs = document.querySelectorAll("#work-area .input");
 const presetsGates = [];
 const gates = [];
-let dragElementId;
+const wires = [];
 let selectedOutput;
 let selectedInput;
 
@@ -13,12 +13,14 @@ class Gate {
     inputsConEl = document.createElement("div");
     outputsConEl = document.createElement("div");
     text = document.createElement("p");
-    amountOfInputs = 2;
-    amountOfOutputs = 1;
+    amountOfInputs;
+    amountOfOutputs;
     inputs = [];
     outputs = [];
-    constructor(id) {
+    constructor(id, inputs = 2, outputs = 1) {
         this.id = id;
+        this.amountOfInputs = inputs;
+        this.amountOfOutputs = outputs;
         this.gateEl.classList.add("gate");
         this.generateInputsCon();
         this.gateEl.appendChild(this.text);
@@ -65,8 +67,9 @@ class ANDGate extends Gate {
 }
 
 class NOTGate extends Gate {
-    constructor(id) {
-        super(id);
+    amountOfInputs = 1;
+    constructor(id, inputs, outputs) {
+        super(id, 1, 1);
         this.text.innerHTML += "NOT";
     }
     returnValue(a) {
@@ -101,6 +104,29 @@ class Output {
     createElement() {
         this.outputEl.classList.add("output");
         this.outputEl.classList.add("false");
+    }
+}
+
+class Wire {
+    constructor() {
+
+    }
+    
+}
+
+function makeConnection(el) {
+    if(el.classList.contains("output")) {
+        if(!selectedOutput) {
+            selectedOutput = el;
+        }
+    }else {
+        if(!selectedInput) {
+            selectedInput = el;
+        }
+    }
+    if(selectedInput && selectedOutput) {
+        
+        selectedOutput = selectedInput = null;
     }
 }
 

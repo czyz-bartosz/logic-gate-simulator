@@ -13,7 +13,6 @@ body {
 main {
     width: 100%;
     display: flex;
-    gap: 60px;
 }
 
 .gate {
@@ -74,4 +73,24 @@ main {
 
 .false {
     background: black;
+}
+
+svg {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: -1;
+}
+
+#work-area {
+    display: flex;
+    justify-content: space-evenly;
+    width: 100%;
+    position: relative;
+}
+
+polyline {
+    fill: none;
+    stroke: black;
+    stroke-width: 10;
 }
