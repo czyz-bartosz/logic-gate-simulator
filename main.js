@@ -6,7 +6,7 @@ const inputs = document.querySelectorAll(".input");
 const presetsGates = [];
 const gates = [];
 const wires = [];
-const mainOutputs = [];
+const mainOutputs = document.querySelectorAll();
 const mainInputs = [];
 let selectedOutput;
 let selectedInput;
@@ -149,34 +149,38 @@ class Wire {
     id = wires.length;
     el = document.createElementNS("http://www.w3.org/2000/svg", "path");;
     con = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    nextGateId;
     width;
     height;
     constructor(el1, el2) {
         this.el1 = {element: el1, position: { x:el1.offsetLeft, y:el1.offsetTop}};
         this.el2 = {element: el2, position: { x:el2.offsetLeft, y:el2.offsetTop}};
-        if(!el2.classList.contains("main-input")) {
-            if(el1.classList.contains("true")){
-                console.log(true, +(el2.id).slice(2));
-                const parentId = +((el2.id).slice(2));
-                const id = parseInt(el2.id);
-                gates[parentId].inputs[id].setInputValue(true, parentId);
+        this.transfer();
+        this.draw();
+    }
+    transfer() {
+        if(!this.el2.element.classList.contains("main-input")) {
+            if(this.el1.element.classList.contains("true")){
+                console.log(true, +(this.el2.element.id).slice(2));
+                this.nextGateId = +((this.el2.element.id).slice(2));
+                const id = parseInt(this.el2.element.id);
+                gates[this.nextGateId].inputs[id].setInputValue(true, this.nextGateId);
                 // gates[parentId].outputs[0].outputEl.classList.add(true);
-            }else if(el1.classList.contains("false")) {
-                console.log(false, +(el2.id).slice(2));
-                const parentId = +((el2.id).slice(2));
-                const id = parseInt(el2.id);
-                gates[parentId].inputs[id].setInputValue(false, parentId);
+            }else if(this.el1.element.classList.contains("false")) {
+                console.log(false, +(this.el2.element.id).slice(2));
+                this.nextGateId = +((this.el2.element.id).slice(2));
+                const id = parseInt(this.el2.element.id);
+                gates[this.nextGateId].inputs[id].setInputValue(false, this.nextGateId);
             }
         }else {
-            if(el1.classList.contains("true")){
-                el2.classList.add("true");
-                el2.classList.remove("false");
-            }else if(el1.classList.contains("false")) {
-                el2.classList.add("false");
-                el2.classList.remove("true");
+            if(this.el1.element.classList.contains("true")){
+                this.el2.element.classList.add("true");
+                this.el2.element.classList.remove("false");
+            }else if(this.el1.element.classList.contains("false")) {
+                this.el2.element.classList.add("false");
+                this.el2.element.classList.remove("true");
             }
         }
-        this.draw();
     }
     draw() {
         if(this.el1.position.x > this.el2.position.x) {
