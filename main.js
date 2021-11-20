@@ -137,10 +137,6 @@ class Wire {
         this.el.setAttribute("points", `0,0 ${this.width/2},0 ${this.width/2},${this.height} ${this.width},${this.height}`);
         this.con.appendChild(this.el);
         main.appendChild(this.con);
-
-        // svg.innerHTML += wire;
-        // this.el = document.querySelector("#"+this.id+"-wire");
-        // const wire = `<polyline id="${this.id}-wire" points="${this.el1.position.x},${this.el1.position.y} ${halfX},${this.el1.position.y} ${halfX},${this.el2.position.y} ${this.el2.position.x},${this.el2.position.y}"/>`;
     }
 }
 
