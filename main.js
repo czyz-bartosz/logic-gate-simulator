@@ -127,8 +127,10 @@ class Wire {
         }
         if(this.el1.position.y > this.el2.position.y) {
             this.height = this.el1.position.y - this.el2.position.y;
-        }else {
+        }else if(this.el1.position.y > this.el2.position.y){
             this.height = this.el2.position.y - this.el1.position.y;
+        }else {
+            this.height = 10;
         }
         this.width += 40;
         const halfX = (this.el1.position.x + this.el2.position.x) / 2;
@@ -145,6 +147,7 @@ function makeConnection(el) {
     if(el.classList.contains("output")) {
         if(!selectedOutput) {
             selectedOutput = el;
+            console.log(el);
         }
     }else {
         if(!selectedInput) {
