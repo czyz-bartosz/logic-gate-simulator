@@ -6,7 +6,7 @@ const inputs = document.querySelectorAll(".input");
 const presetsGates = [];
 const gates = [];
 const wires = [];
-const mainOutputs = document.querySelectorAll();
+const mainOutputs = document.querySelectorAll(".main-output");
 const mainInputs = [];
 let selectedOutput;
 let selectedInput;
@@ -286,5 +286,12 @@ inputs.forEach((el, index) => {
     el.addEventListener("click", () => {
         makeConnection(el);
         console.log(el);
+    });
+});
+
+mainOutputs.forEach((el) => {
+    el.addEventListener("dblclick", () => {
+        el.classList.toggle("false");
+        el.classList.toggle("true");
     });
 });
