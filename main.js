@@ -2,6 +2,7 @@ const main = document.querySelector("#work-area");
 const gatesToolbox = document.querySelector("#left");
 const outputs = document.querySelectorAll(".output");
 const inputs = document.querySelectorAll("#work-area .input");
+const svg = document.querySelector("svg");
 const presetsGates = [];
 const gates = [];
 const wires = [];
@@ -110,11 +111,15 @@ class Output {
 class Wire {
     id = wires.length;
     constructor(el1, el2) {
-        // this.el1 = {position: {x:el1., y: }}
+        this.el1 = {position: { x:el1.offsetLeft, y:el1.offsetTop + 10 }};
+        this.el2 = {position: { x:el2.offsetLeft, y:el2.offsetTop + 10 }};
         this.draw();
     }
     draw() {
-
+        const halfX = (this.el1.position.x + this.el2.position.x) / 2;
+        // const halfY = (el1.position.y + el12.position.y) / 2;
+        const wire = `<polyline id="${this.id}-wire" points="${this.el1.position.x},${this.el1.position.y} ${halfX},${this.el1.position.y} ${halfX},${this.el2.position.y} ${this.el2.position.x},${this.el2.position.y}"/>`;
+        svg.innerHTML += wire;
     }
 }
 
@@ -129,7 +134,7 @@ function makeConnection(el) {
         }
     }
     if(selectedInput && selectedOutput) {
-        wires.push(new Wire());
+        wires.push(new Wire(selectedOutput, selectedInput));
         selectedOutput = selectedInput = null;
     }
 }
