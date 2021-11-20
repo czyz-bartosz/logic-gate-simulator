@@ -110,16 +110,37 @@ class Output {
 
 class Wire {
     id = wires.length;
+    el = document.createElementNS("http://www.w3.org/2000/svg", "polyline");;
+    con = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    width;
+    height;
     constructor(el1, el2) {
-        this.el1 = {position: { x:el1.offsetLeft, y:el1.offsetTop + 10 }};
-        this.el2 = {position: { x:el2.offsetLeft, y:el2.offsetTop + 10 }};
+        this.el1 = {position: { x:el1.offsetLeft + 10, y:el1.offsetTop + 10 }};
+        this.el2 = {position: { x:el2.offsetLeft + 10, y:el2.offsetTop + 10 }};
         this.draw();
     }
     draw() {
+        if(this.el1.position.x > this.el2.position.x) {
+            this.width = this.el1.position.x - this.el2.position.x;
+        }else {
+            this.width = this.el2.position.x - this.el1.position.x;
+        }
+        if(this.el1.position.y > this.el2.position.y) {
+            this.height = this.el1.position.y - this.el2.position.y;
+        }else {
+            this.height = this.el2.position.y - this.el1.position.y;
+        }
         const halfX = (this.el1.position.x + this.el2.position.x) / 2;
-        // const halfY = (el1.position.y + el12.position.y) / 2;
-        const wire = `<polyline id="${this.id}-wire" points="${this.el1.position.x},${this.el1.position.y} ${halfX},${this.el1.position.y} ${halfX},${this.el2.position.y} ${this.el2.position.x},${this.el2.position.y}"/>`;
-        svg.innerHTML += wire;
+        this.con.setAttribute("width", this.width);
+        this.con.setAttribute("height", this.height);
+        this.con.setAttribute("style", `top: ${this.el1.position.x}px; left: ${this.el1.position.y}px`);
+        this.el.setAttribute("points", "0,0 20,20);
+        this.con.appendChild(this.el);
+        main.appendChild(this.con);
+
+        // svg.innerHTML += wire;
+        // this.el = document.querySelector("#"+this.id+"-wire");
+        // const wire = `<polyline id="${this.id}-wire" points="${this.el1.position.x},${this.el1.position.y} ${halfX},${this.el1.position.y} ${halfX},${this.el2.position.y} ${this.el2.position.x},${this.el2.position.y}"/>`;
     }
 }
 
