@@ -1,8 +1,8 @@
-const main = document.querySelector("#work-area");
+const workArea = document.querySelector("#work-area");
+const main = document.querySelector("main");
 const gatesToolbox = document.querySelector("#left");
 const outputs = document.querySelectorAll(".output");
 const inputs = document.querySelectorAll("#work-area .input");
-const svg = document.querySelector("svg");
 const presetsGates = [];
 const gates = [];
 const wires = [];
@@ -130,6 +130,7 @@ class Wire {
         }else {
             this.height = this.el2.position.y - this.el1.position.y;
         }
+        this.width += 40;
         const halfX = (this.el1.position.x + this.el2.position.x) / 2;
         this.con.setAttribute("width", this.width);
         this.con.setAttribute("height", this.height);
@@ -171,22 +172,22 @@ presetsGates.forEach((el, index) => {
         event.dataTransfer.dropEffect = "copy";
     });
     el.gateEl.addEventListener("dragend", () => {
-        main.style.background = "none";
+        workArea.style.background = "none";
     });
 });
 
-main.addEventListener("dragleave", function(event) {
+workArea.addEventListener("dragleave", function(event) {
     this.style.background = "none";
     console.log("enter")
 });
 
-main.addEventListener("dragover", function(event) {
+workArea.addEventListener("dragover", function(event) {
     event.preventDefault();
     this.style.background = "blue";
     event.dataTransfer.dropEffect = "copy";
 });
 
-main.addEventListener("drop", function(event) {
+workArea.addEventListener("drop", function(event) {
     event.preventDefault();
     const id = event.dataTransfer.getData("text/plain");
     gates.push(presetsGates[parseInt(id)].clone());

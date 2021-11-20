@@ -13,6 +13,7 @@ body {
 main {
     width: 100%;
     display: flex;
+    position: relative;
 }
 
 .gate {
@@ -85,6 +86,7 @@ svg {
     gap: 50px;
     width: 100%;
     position: relative;
+    padding: 50px;
 }
 
 polyline {
