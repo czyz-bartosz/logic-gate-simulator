@@ -2,10 +2,12 @@ const workArea = document.querySelector("#work-area");
 const main = document.querySelector("main");
 const gatesToolbox = document.querySelector("#left");
 const outputs = document.querySelectorAll(".output");
-const inputs = document.querySelectorAll("#work-area .input");
+const inputs = document.querySelectorAll(".input");
 const presetsGates = [];
 const gates = [];
 const wires = [];
+const mainOutputs = [];
+const mainInputs = [];
 let selectedOutput;
 let selectedInput;
 
@@ -65,6 +67,20 @@ class ANDGate extends Gate {
     clone(id = gates.length) {
         return new ANDGate(id);
     }
+    changeStatus() {
+        console.log(this.inputs[0].currentValue, this.inputs[1].currentValue)
+        if(this.returnValue(this.inputs[0].currentValue, this.inputs[1].currentValue)) {
+            this.outputs[0].currentValue = true;
+            this.outputs[0].outputEl.classList.add("true");
+            this.outputs[0].outputEl.classList.remove("false");
+            console.log(true)
+        }else {
+            this.outputs[0].currentValue = false;
+            this.outputs[0].outputEl.classList.add("false");
+            this.outputs[0].outputEl.classList.remove("true");
+            console.log(false)
+        }
+    }
 }
 
 class NOTGate extends Gate {
@@ -92,6 +108,10 @@ class Input {
     createElement() {
         this.inputEl.classList.add("input");
     }
+    setInputValue(value, parentId) {
+        this.currentValue = value;
+        gates[parentId].changeStatus();
+    }
 }
 
 class Output {
@@ -104,8 +124,11 @@ class Output {
     }
     createElement() {
         this.outputEl.classList.add("output");
-        this.outputEl.classList.add("false");
     }
+}
+
+function makeMainOutputs() {
+
 }
 
 class Wire {
@@ -115,8 +138,20 @@ class Wire {
     width;
     height;
     constructor(el1, el2) {
-        this.el1 = {position: { x:el1.offsetLeft, y:el1.offsetTop}};
-        this.el2 = {position: { x:el2.offsetLeft, y:el2.offsetTop}};
+        this.el1 = {element: el1, position: { x:el1.offsetLeft, y:el1.offsetTop}};
+        this.el2 = {element: el2, position: { x:el2.offsetLeft, y:el2.offsetTop}};
+        if(el1.classList.contains("true")){
+            console.log(true, +(el2.id).slice(2));
+            const parentId = +((el2.id).slice(2));
+            const id = parseInt(el2.id);
+            gates[parentId].inputs[id].setInputValue(true, parentId);
+            // gates[parentId].outputs[0].outputEl.classList.add(true);
+        }else if(el1.classList.contains("false")) {
+            console.log(false, +(el2.id).slice(2));
+            const parentId = +((el2.id).slice(2));
+            const id = parseInt(el2.id);
+            gates[parentId].inputs[id].setInputValue(false, parentId);
+        }
         this.draw();
     }
     draw() {

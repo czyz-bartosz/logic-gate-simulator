@@ -44,8 +44,10 @@ main {
 
 #inputs-con {
     display: flex;
+    flex-direction: column;
+    gap: 20px;
     background: darkgray;
-    
+    padding: 10px;
 }
 
 .inputs {
@@ -73,7 +75,7 @@ main {
 }
 
 .false {
-    background: black;
+    background: red;
 }
 
 svg {
