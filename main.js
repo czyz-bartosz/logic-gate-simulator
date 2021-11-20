@@ -134,7 +134,7 @@ class Wire {
         this.con.setAttribute("width", this.width);
         this.con.setAttribute("height", this.height);
         this.con.setAttribute("style", `top: ${this.el1.position.x}px; left: ${this.el1.position.y}px`);
-        this.el.setAttribute("points", "0,0 20,20);
+        this.el.setAttribute("points", `0,0 ${this.width/2},0 ${this.width/2},${this.height} ${this.width},${this.height}`);
         this.con.appendChild(this.el);
         main.appendChild(this.con);
 
