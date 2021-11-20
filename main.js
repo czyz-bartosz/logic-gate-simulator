@@ -127,12 +127,12 @@ class Wire {
         }
         if(this.el1.position.y > this.el2.position.y) {
             this.height = this.el1.position.y - this.el2.position.y;
-        }else if(this.el1.position.y > this.el2.position.y){
+        }else if(this.el1.position.y < this.el2.position.y){
             this.height = this.el2.position.y - this.el1.position.y;
         }else {
             this.height = 10;
         }
-        this.width += 40;
+        this.width += 5;
         const halfX = (this.el1.position.x + this.el2.position.x) / 2;
         this.con.setAttribute("width", this.width);
         this.con.setAttribute("height", this.height);
