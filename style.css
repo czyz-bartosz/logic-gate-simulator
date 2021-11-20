@@ -84,7 +84,7 @@ svg {
 
 #work-area {
     display: flex;
-    justify-content: space-evenly;
+    gap: 50px;
     width: 100%;
     position: relative;
 }

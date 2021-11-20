@@ -61,7 +61,7 @@ class ANDGate extends Gate {
             return false;
         }
     }
-    clone(id) {
+    clone(id = gates.length) {
         return new ANDGate(id);
     }
 }
@@ -75,7 +75,7 @@ class NOTGate extends Gate {
     returnValue(a) {
         return !a;
     }
-    clone(id) {
+    clone(id = gates.length) {
         return new NOTGate(id);
     }
 }
@@ -108,10 +108,14 @@ class Output {
 }
 
 class Wire {
-    constructor() {
+    id = wires.length;
+    constructor(el1, el2) {
+        // this.el1 = {position: {x:el1., y: }}
+        this.draw();
+    }
+    draw() {
 
     }
-    
 }
 
 function makeConnection(el) {
@@ -125,7 +129,7 @@ function makeConnection(el) {
         }
     }
     if(selectedInput && selectedOutput) {
-        
+        wires.push(new Wire());
         selectedOutput = selectedInput = null;
     }
 }
@@ -163,38 +167,34 @@ main.addEventListener("dragover", function(event) {
 main.addEventListener("drop", function(event) {
     event.preventDefault();
     const id = event.dataTransfer.getData("text/plain");
-    let nodeCopy = document.getElementById(id).cloneNode(true);
-    nodeCopy.id = gates.length + "gate";
-    this.appendChild(nodeCopy);
-    gates.push(presetsGates[parseInt(id)].clone(gates.length));
-    gates[gates.length-1].gateEl = nodeCopy;
-    gates[gates.length-1].id = gates.length-1;
+    gates.push(presetsGates[parseInt(id)].clone());
+    this.appendChild(gates[gates.length-1].gateEl);
     const inputsArr = gates[gates.length-1].gateEl.querySelectorAll(".input");
+    const outputsArr = gates[gates.length-1].gateEl.querySelectorAll(".output");
     inputsArr.forEach((el) => {
         el.addEventListener("click", () => {
-            selectedInput = el;
+            makeConnection(el);
             console.log(el);
-            console.log((el.parentElement).parentElement);
-            const parent = (el.parentElement).parentElement;
-            const inputId = parseInt(el.getAttribute("id"));
-            const gateId = parseInt(parent.getAttribute("id"));
-            
-            gates[gateId].inputs[inputId].currentValue = selectedOutput?.classList.contains("true") ? true : false;
-            console.log(gates[gateId]);
+        });
+    });
+    outputsArr.forEach((el) => {
+        el.addEventListener("click", () => {
+            makeConnection(el);
+            console.log(el);
         });
     });
 });
 
 outputs.forEach((el, index) => {
     el.addEventListener("click", () => {
-        selectedOutput = el;
+        makeConnection(el);
         console.log(el);
     });
 });
 
 inputs.forEach((el, index) => {
     el.addEventListener("click", () => {
+        makeConnection(el);
         console.log(el);
-        console.log(el.parentElement);
     });
 });
