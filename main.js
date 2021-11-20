@@ -133,7 +133,7 @@ class Wire {
         const halfX = (this.el1.position.x + this.el2.position.x) / 2;
         this.con.setAttribute("width", this.width);
         this.con.setAttribute("height", this.height);
-        this.con.setAttribute("style", `top: ${this.el1.position.x}px; left: ${this.el1.position.y}px`);
+        this.con.setAttribute("style", `top: ${this.el1.position.y}px; left: ${this.el1.position.x}px`);
         this.el.setAttribute("points", `0,0 ${this.width/2},0 ${this.width/2},${this.height} ${this.width},${this.height}`);
         this.con.appendChild(this.el);
         main.appendChild(this.con);
