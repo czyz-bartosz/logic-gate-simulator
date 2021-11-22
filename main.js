@@ -10,6 +10,7 @@ const mainOutputs = document.querySelectorAll(".main-output");
 const mainInputs = [];
 let selectedOutput;
 let selectedInput;
+let isMouseDown = false;
 
 class Gate {
     gateEl = document.createElement("div");
@@ -48,6 +49,11 @@ class Gate {
             this.outputs.push(new Output(i));
             this.outputs[i].outputEl.setAttribute("id", i+"-"+this.id);
             this.outputsConEl.appendChild(this.outputs[i].outputEl);
+        }
+    }
+    move() {
+        if(isMouseDown) {
+            console.log("ok");
         }
     }
 }
@@ -272,6 +278,9 @@ workArea.addEventListener("drop", function(event) {
     this.appendChild(gates[gates.length-1].gateEl);
     const inputsArr = gates[gates.length-1].gateEl.querySelectorAll(".input");
     const outputsArr = gates[gates.length-1].gateEl.querySelectorAll(".output");
+    gates[gates.length-1].gateEl.addEventListener("mousedown", () => {isMouseDown = true;});
+    gates[gates.length-1].gateEl.addEventListener("mouseup", () => {isMouseDown = false;});
+    gates[gates.length-1].gateEl.addEventListener("mousemove", (event) => {gates[gates.length-1].move(event)});
     inputsArr.forEach((el) => {
         el.addEventListener("click", () => {
             makeConnection(el);
