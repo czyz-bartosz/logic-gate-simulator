@@ -51,9 +51,11 @@ class Gate {
             this.outputsConEl.appendChild(this.outputs[i].outputEl);
         }
     }
-    move() {
+    move(el) {
         if(isMouseDown) {
-            console.log("ok");
+            console.log(window.event);
+            el.style.top = event.y + "px";
+            el.style.left = event.x + "px";
         }
     }
 }
@@ -267,20 +269,18 @@ workArea.addEventListener("dragleave", function(event) {
 
 workArea.addEventListener("dragover", function(event) {
     event.preventDefault();
-    this.style.background = "blue";
     event.dataTransfer.dropEffect = "copy";
 });
 
 workArea.addEventListener("drop", function(event) {
     event.preventDefault();
     const id = event.dataTransfer.getData("text/plain");
+    console.log(id)
     gates.push(presetsGates[parseInt(id)].clone());
     this.appendChild(gates[gates.length-1].gateEl);
     const inputsArr = gates[gates.length-1].gateEl.querySelectorAll(".input");
     const outputsArr = gates[gates.length-1].gateEl.querySelectorAll(".output");
-    gates[gates.length-1].gateEl.addEventListener("mousedown", () => {isMouseDown = true;});
-    gates[gates.length-1].gateEl.addEventListener("mouseup", () => {isMouseDown = false;});
-    gates[gates.length-1].gateEl.addEventListener("mousemove", (event) => {gates[gates.length-1].move(event)});
+    gates[gates.length-1].gateEl.classList.add("work");
     inputsArr.forEach((el) => {
         el.addEventListener("click", () => {
             makeConnection(el);
