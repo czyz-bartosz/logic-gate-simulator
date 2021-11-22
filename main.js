@@ -193,17 +193,28 @@ class Wire {
         }else if(this.el1.position.y < this.el2.position.y){
             this.height = this.el2.position.y - this.el1.position.y;
         }else {
-            this.height = 10;
+            this.height = 0;
         }
         this.height += 20;
         this.width += 20;
         this.con.setAttribute("width", this.width);
         this.con.setAttribute("height", this.height);
-        this.con.setAttribute("style", `top: ${this.el1.position.y}px; left: ${this.el1.position.x}px`);
-        this.el.setAttribute("d", `M 0 10 H ${this.width/2} V ${this.height - 10} H ${this.width}`);
+        if(this.el1.position.y > this.el2.position.y) {
+            this.el.setAttribute("d", `M 0 ${this.height - 10} H ${this.width/2} V 10 H ${this.width}`);
+            this.con.setAttribute("style", `top: ${this.el2.position.y}px; left: ${this.el1.position.x}px`);
+        }else if(this.el1.position.y < this.el2.position.y){
+            this.el.setAttribute("d", `M 0 10 H ${this.width/2} V ${this.height - 10} H ${this.width}`);
+            this.con.setAttribute("style", `top: ${this.el1.position.y}px; left: ${this.el1.position.x}px`);
+        }else {
+            this.el.setAttribute("d", `M 0 ${this.height / 2} H ${this.width}`);
+            this.con.setAttribute("style", `top: ${this.el1.position.y}px; left: ${this.el1.position.x}px`);
+        }
         // this.el.setAttribute("d", `M 0 0 H ${this.width/2}  ${this.width/2},${this.height} ${this.width},${this.height}`);
         this.con.appendChild(this.el);
         main.appendChild(this.con);
+        this.el.addEventListener("click", () => {
+            console.log("dipa");
+        });
     }
 }
 
