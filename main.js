@@ -60,11 +60,13 @@ workArea.addEventListener("drop", function(event) {
     const id = event.dataTransfer.getData("text/plain");
     const el = document.getElementById(id);
     if(id.includes("gate")) {
+        const idGate = parseInt(id);
         const rect = workArea.getBoundingClientRect();
         const x = event.clientX - rect.left;
         const y = event.clientY - rect.top;
         el.style.top = y + "px";
         el.style.left = x + "px";
+        gates[idGate].move();
     }else {
         gates.push(presetsGates[parseInt(id)].clone());
         this.appendChild(gates[gates.length-1].gateEl);

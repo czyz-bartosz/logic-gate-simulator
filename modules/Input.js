@@ -4,6 +4,7 @@ export class Input {
     inputEl = document.createElement("div");
     currentValue = null;
     id = null;
+    wire;
     constructor(id) {
         this.createElement();
         this.id = id;

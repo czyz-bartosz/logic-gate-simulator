@@ -1,6 +1,6 @@
 import { Input } from "./Input.js";
 import { Output } from "./Output.js";
-import { gates } from "../main.js";
+import { gates, wires } from "../main.js";
 export {Gate, NOTGate, ANDGate};
 
 class Gate {
@@ -41,6 +41,16 @@ class Gate {
             this.outputs[i].outputEl.setAttribute("id", i+"-"+this.id);
             this.outputsConEl.appendChild(this.outputs[i].outputEl);
         }
+    }
+    move() {
+        this.outputs.forEach((el, id) => {
+            this.outputs[id]?.wires.forEach((el, id) => {
+                wires[this.outputs[id].wires[id]].draw();
+            });
+        });
+        this.inputs.forEach((el, id) => {
+            wires[this.inputs[id].wire]?.draw();
+        });
     }
 }
 

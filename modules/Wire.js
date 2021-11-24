@@ -18,11 +18,20 @@ export class Wire {
     width;
     height;
     constructor(el1, el2) {
-        
         this.el1 = {element: el1, position: {...getPosition(el1)}};
         this.el2 = {element: el2, position: {...getPosition(el2)}};
+        this.array1 = el1.id.split("-");
+        this.array2 = el2.id.split("-");
+        console.log(this.array2)
+        gates[this.array1[1]]?.outputs[this.array1[0]].wires.push(this.id);
+        gates[this.array2[1]].inputs[this.array2[0]].wire = this.id;
         this.transfer();
         this.draw();
+        this.addElement();
+    }
+    setPosition() {
+        this.el1.position = {...getPosition(this.el1.element)};
+        this.el2.position = {...getPosition(this.el2.element)};
     }
     transfer() {
         if(!this.el2.element.classList.contains("main-input")) {
@@ -48,6 +57,8 @@ export class Wire {
         }
     }
     draw() {
+        console.log("draw")
+        this.setPosition();
         if(this.el1.position.x > this.el2.position.x) {
             this.width = this.el1.position.x - this.el2.position.x;
         }else {
@@ -74,6 +85,9 @@ export class Wire {
             this.el.setAttribute("d", `M 0 ${this.height / 2} H ${this.width}`);
             this.con.setAttribute("style", `top: ${this.el1.position.y}px; left: ${this.el1.position.x}px`);
         }
+
+    }
+    addElement() {
         this.con.appendChild(this.el);
         main.appendChild(this.con);
         this.el.addEventListener("click", () => {
