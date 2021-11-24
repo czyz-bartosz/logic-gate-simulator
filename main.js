@@ -46,19 +46,10 @@ presetsGates.forEach((el, index) => {
     gatesToolbox.appendChild(el.gateEl);
     el.gateEl.addEventListener("dragstart", (event) => {
         console.log("dragstart");
-        console.log(el.gateEl);
         const dragElementId = el.gateEl.getAttribute("id");
         event.dataTransfer.setData("text/plain", dragElementId);
         event.dataTransfer.dropEffect = "copy";
     });
-    el.gateEl.addEventListener("dragend", () => {
-        workArea.style.background = "none";
-    });
-});
-
-workArea.addEventListener("dragleave", function(event) {
-    this.style.background = "none";
-    console.log("enter")
 });
 
 workArea.addEventListener("dragover", function(event) {
@@ -81,7 +72,13 @@ workArea.addEventListener("drop", function(event) {
     console.log(rect);
     gates[gates.length-1].gateEl.style.top = y + "px";
     gates[gates.length-1].gateEl.style.left = x + "px";
-    console.log(event);
+    gates[gates.length-1].gateEl.id = gates[gates.length-1].id;
+    gates[gates.length-1].gateEl.setAttribute("draggable", "true");
+    gates[gates.length-1].gateEl.addEventListener("dragstart", () => {
+        const dragElementId = this.gateEl.getAttribute("id");
+        event.dataTransfer.setData("text/plain", dragElementId);
+        event.dataTransfer.dropEffect = "copy";
+    });
     inputsArr.forEach((el) => {
         el.addEventListener("click", () => {
             makeConnection(el);

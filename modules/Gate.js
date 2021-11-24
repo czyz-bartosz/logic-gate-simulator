@@ -42,13 +42,6 @@ class Gate {
             this.outputsConEl.appendChild(this.outputs[i].outputEl);
         }
     }
-    move(el) {
-        if(isMouseDown) {
-            console.log(window.event);
-            el.style.top = event.y + "px";
-            el.style.left = event.x + "px";
-        }
-    }
 }
 
 class ANDGate extends Gate {
@@ -63,7 +56,7 @@ class ANDGate extends Gate {
             return false;
         }
     }
-    clone(id = gates.length) {
+    clone( id = (gates.length + "-gate") ) {
         return new ANDGate(id);
     }
     changeStatus() {
@@ -91,7 +84,7 @@ class NOTGate extends Gate {
     returnValue(a) {
         return !a;
     }
-    clone(id = gates.length) {
+    clone(id = (gates.length + "-gate")) {
         return new NOTGate(id);
     }
     changeStatus() {
