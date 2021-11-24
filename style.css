@@ -30,6 +30,11 @@ main {
     padding: 10px;
 }
 
+.work {
+    position: absolute;
+    transform: translate(-50%, -50%);
+}
+
 #outputs-con {
     display: flex;
     flex-direction: column;

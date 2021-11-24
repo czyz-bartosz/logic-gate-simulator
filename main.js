@@ -75,6 +75,13 @@ workArea.addEventListener("drop", function(event) {
     const inputsArr = gates[gates.length-1].gateEl.querySelectorAll(".input");
     const outputsArr = gates[gates.length-1].gateEl.querySelectorAll(".output");
     gates[gates.length-1].gateEl.classList.add("work");
+    const rect = workArea.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+    console.log(rect);
+    gates[gates.length-1].gateEl.style.top = y + "px";
+    gates[gates.length-1].gateEl.style.left = x + "px";
+    console.log(event);
     inputsArr.forEach((el) => {
         el.addEventListener("click", () => {
             makeConnection(el);
