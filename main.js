@@ -61,36 +61,49 @@ workArea.addEventListener("drop", function(event) {
     event.preventDefault();
     const id = event.dataTransfer.getData("text/plain");
     console.log(id)
-    gates.push(presetsGates[parseInt(id)].clone());
-    this.appendChild(gates[gates.length-1].gateEl);
-    const inputsArr = gates[gates.length-1].gateEl.querySelectorAll(".input");
-    const outputsArr = gates[gates.length-1].gateEl.querySelectorAll(".output");
-    gates[gates.length-1].gateEl.classList.add("work");
-    const rect = workArea.getBoundingClientRect();
-    const x = event.clientX - rect.left;
-    const y = event.clientY - rect.top;
-    console.log(rect);
-    gates[gates.length-1].gateEl.style.top = y + "px";
-    gates[gates.length-1].gateEl.style.left = x + "px";
-    gates[gates.length-1].gateEl.id = gates[gates.length-1].id;
-    gates[gates.length-1].gateEl.setAttribute("draggable", "true");
-    gates[gates.length-1].gateEl.addEventListener("dragstart", () => {
-        const dragElementId = this.gateEl.getAttribute("id");
-        event.dataTransfer.setData("text/plain", dragElementId);
-        event.dataTransfer.dropEffect = "copy";
-    });
-    inputsArr.forEach((el) => {
-        el.addEventListener("click", () => {
-            makeConnection(el);
-            console.log(el);
+    const el = document.getElementById(id);
+    if(id.includes("gate")) {
+        console.log("dupa");
+        const rect = workArea.getBoundingClientRect();
+        const x = event.clientX - rect.left;
+        const y = event.clientY - rect.top;
+        console.log(el);
+        el.style.top = y + "px";
+        el.style.left = x + "px";
+    }else {
+        gates.push(presetsGates[parseInt(id)].clone());
+        this.appendChild(gates[gates.length-1].gateEl);
+        const inputsArr = gates[gates.length-1].gateEl.querySelectorAll(".input");
+        const outputsArr = gates[gates.length-1].gateEl.querySelectorAll(".output");
+        gates[gates.length-1].gateEl.classList.add("work");
+        const rect = workArea.getBoundingClientRect();
+        const x = event.clientX - rect.left;
+        const y = event.clientY - rect.top;
+        console.log(rect);
+        gates[gates.length-1].gateEl.style.top = y + "px";
+        gates[gates.length-1].gateEl.style.left = x + "px";
+        gates[gates.length-1].gateEl.id = gates[gates.length-1].id;
+        gates[gates.length-1].gateEl.setAttribute("draggable", "true");
+        gates[gates.length-1].gateEl.addEventListener("dragstart", function(event) {
+            console.log(this);
+            const dragElementId = this.getAttribute("id");
+            event.dataTransfer.setData("text/plain", dragElementId);
+            event.dataTransfer.dropEffect = "copy";
         });
-    });
-    outputsArr.forEach((el) => {
-        el.addEventListener("click", () => {
-            makeConnection(el);
-            console.log(el);
+        inputsArr.forEach((el) => {
+            el.addEventListener("click", () => {
+                makeConnection(el);
+                console.log(el);
+            });
         });
-    });
+        outputsArr.forEach((el) => {
+            el.addEventListener("click", () => {
+                makeConnection(el);
+                console.log(el);
+            });
+        });
+    }
+    
 });
 
 outputs.forEach((el, index) => {

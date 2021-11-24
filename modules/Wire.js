@@ -1,4 +1,4 @@
-import { wires, gates, main } from "../main.js";
+import { wires, gates, main, inputs } from "../main.js";
 
 export class Wire {
     id = wires.length;
@@ -16,15 +16,16 @@ export class Wire {
     transfer() {
         if(!this.el2.element.classList.contains("main-input")) {
             if(this.el1.element.classList.contains("true")){
-                console.log(true, +(this.el2.element.id).slice(2));
-                this.nextGateId = +((this.el2.element.id).slice(2));
-                const id = parseInt(this.el2.element.id);
+                const myArray = this.el2.element.id.split("-");
+                console.log(true, +myArray[1]);
+                this.nextGateId = +myArray[1];
+                const id = +myArray[0];
                 gates[this.nextGateId].inputs[id].setInputValue(true, this.nextGateId);
-                // gates[parentId].outputs[0].outputEl.classList.add(true);
             }else if(this.el1.element.classList.contains("false")) {
-                console.log(false, +(this.el2.element.id).slice(2));
-                this.nextGateId = +((this.el2.element.id).slice(2));
-                const id = parseInt(this.el2.element.id);
+                const myArray = this.el2.element.id.split("-");
+                console.log(true, +myArray[1]);
+                this.nextGateId = +myArray[1];
+                const id = +myArray[0];
                 gates[this.nextGateId].inputs[id].setInputValue(false, this.nextGateId);
             }
         }else {
