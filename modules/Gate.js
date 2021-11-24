@@ -44,8 +44,9 @@ class Gate {
     }
     move() {
         this.outputs.forEach((el, id) => {
-            this.outputs[id]?.wires.forEach((el, id) => {
-                wires[this.outputs[id].wires[id]].draw();
+            this.outputs[id]?.wires.forEach((el, idW) => {
+                wires[this.outputs[id].wires[idW]].draw();
+                console.log(idW);
             });
         });
         this.inputs.forEach((el, id) => {
