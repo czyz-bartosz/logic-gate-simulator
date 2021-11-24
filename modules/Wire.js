@@ -1,5 +1,15 @@
 import { wires, gates, main, inputs } from "../main.js";
 
+function getPosition(el) {
+    const eleRect = el.getBoundingClientRect();
+    const targetRect = main.getBoundingClientRect();
+
+    const y = eleRect.top - targetRect.top;
+    const x = eleRect.left - targetRect.left;
+    
+    return {x, y};
+}
+
 export class Wire {
     id = wires.length;
     el = document.createElementNS("http://www.w3.org/2000/svg", "path");;
@@ -8,8 +18,9 @@ export class Wire {
     width;
     height;
     constructor(el1, el2) {
-        this.el1 = {element: el1, position: { x:el1.offsetLeft, y:el1.offsetTop}};
-        this.el2 = {element: el2, position: { x:el2.offsetLeft, y:el2.offsetTop}};
+        
+        this.el1 = {element: el1, position: {...getPosition(el1)}};
+        this.el2 = {element: el2, position: {...getPosition(el2)}};
         this.transfer();
         this.draw();
     }
@@ -17,13 +28,11 @@ export class Wire {
         if(!this.el2.element.classList.contains("main-input")) {
             if(this.el1.element.classList.contains("true")){
                 const myArray = this.el2.element.id.split("-");
-                console.log(true, +myArray[1]);
                 this.nextGateId = +myArray[1];
                 const id = +myArray[0];
                 gates[this.nextGateId].inputs[id].setInputValue(true, this.nextGateId);
             }else if(this.el1.element.classList.contains("false")) {
                 const myArray = this.el2.element.id.split("-");
-                console.log(true, +myArray[1]);
                 this.nextGateId = +myArray[1];
                 const id = +myArray[0];
                 gates[this.nextGateId].inputs[id].setInputValue(false, this.nextGateId);
@@ -65,7 +74,6 @@ export class Wire {
             this.el.setAttribute("d", `M 0 ${this.height / 2} H ${this.width}`);
             this.con.setAttribute("style", `top: ${this.el1.position.y}px; left: ${this.el1.position.x}px`);
         }
-        // this.el.setAttribute("d", `M 0 0 H ${this.width/2}  ${this.width/2},${this.height} ${this.width},${this.height}`);
         this.con.appendChild(this.el);
         main.appendChild(this.con);
         this.el.addEventListener("click", () => {

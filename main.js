@@ -23,7 +23,6 @@ function makeConnection(el) {
     if(el.classList.contains("output")) {
         if(!selectedOutput) {
             selectedOutput = el;
-            console.log(el);
         }
     }else {
         if(!selectedInput) {
@@ -45,7 +44,6 @@ presetsGates.forEach((el, index) => {
     el.gateEl.setAttribute("id", index + "drag");
     gatesToolbox.appendChild(el.gateEl);
     el.gateEl.addEventListener("dragstart", (event) => {
-        console.log("dragstart");
         const dragElementId = el.gateEl.getAttribute("id");
         event.dataTransfer.setData("text/plain", dragElementId);
         event.dataTransfer.dropEffect = "copy";
@@ -60,14 +58,11 @@ workArea.addEventListener("dragover", function(event) {
 workArea.addEventListener("drop", function(event) {
     event.preventDefault();
     const id = event.dataTransfer.getData("text/plain");
-    console.log(id)
     const el = document.getElementById(id);
     if(id.includes("gate")) {
-        console.log("dupa");
         const rect = workArea.getBoundingClientRect();
         const x = event.clientX - rect.left;
         const y = event.clientY - rect.top;
-        console.log(el);
         el.style.top = y + "px";
         el.style.left = x + "px";
     }else {
@@ -79,13 +74,11 @@ workArea.addEventListener("drop", function(event) {
         const rect = workArea.getBoundingClientRect();
         const x = event.clientX - rect.left;
         const y = event.clientY - rect.top;
-        console.log(rect);
         gates[gates.length-1].gateEl.style.top = y + "px";
         gates[gates.length-1].gateEl.style.left = x + "px";
         gates[gates.length-1].gateEl.id = gates[gates.length-1].id;
         gates[gates.length-1].gateEl.setAttribute("draggable", "true");
         gates[gates.length-1].gateEl.addEventListener("dragstart", function(event) {
-            console.log(this);
             const dragElementId = this.getAttribute("id");
             event.dataTransfer.setData("text/plain", dragElementId);
             event.dataTransfer.dropEffect = "copy";
@@ -93,13 +86,11 @@ workArea.addEventListener("drop", function(event) {
         inputsArr.forEach((el) => {
             el.addEventListener("click", () => {
                 makeConnection(el);
-                console.log(el);
             });
         });
         outputsArr.forEach((el) => {
             el.addEventListener("click", () => {
                 makeConnection(el);
-                console.log(el);
             });
         });
     }
@@ -109,14 +100,12 @@ workArea.addEventListener("drop", function(event) {
 outputs.forEach((el, index) => {
     el.addEventListener("click", () => {
         makeConnection(el);
-        console.log(el);
     });
 });
 
 inputs.forEach((el, index) => {
     el.addEventListener("click", () => {
         makeConnection(el);
-        console.log(el);
     });
 });
 
