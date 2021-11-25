@@ -38,7 +38,11 @@ function makeConnection(el) {
             selectedOutput = el;
         }
     }else {
-        if(!selectedInput) {
+        const gateId = el.id.split("-")[1];
+        const inputId = el.id.split("-")[0];
+        const wire = gates[gateId].inputs[inputId].wire;
+        if(!selectedInput && wire === undefined) {
+            console.log();
             selectedInput = el;
         }
     }
