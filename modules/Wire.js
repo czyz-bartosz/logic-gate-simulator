@@ -88,15 +88,12 @@ export class Wire {
             }
         }else {
             console.log("suka")
-            if(this.el1.position.y > this.el2.position.y) {
-                this.el.setAttribute("d", `M 0 4 H ${this.width/2} V 10 H ${this.width}`);
+            if(this.el1.position.y >= this.el2.position.y) {
+                this.el.setAttribute("d", `M 60 10 H 6 V ${this.height / 2} H ${this.width - 6} V ${this.height - 10} H ${this.width - 60}`);
                 this.con.setAttribute("style", `top: ${this.el2.position.y}px; left: ${this.el2.position.x - 60}px`);
             }else if(this.el1.position.y < this.el2.position.y){
-                this.el.setAttribute("d", `M 0 10 H ${this.width/2} V ${this.height - 10} H ${this.width}`);
+                this.el.setAttribute("d", `M ${this.width - 60} 10 H ${this.width - 6} V ${this.height / 2} H 6 V ${this.height - 10} H 60`);
                 this.con.setAttribute("style", `top: ${this.el1.position.y}px; left: ${this.el2.position.x - 60}px`);
-            }else {
-                this.el.setAttribute("d", `M 0 ${this.height / 2} H ${this.width}`);
-                this.con.setAttribute("style", `top: ${this.el1.position.y}px; left: ${this.el1.position.x}px`);
             }
         }
     }
