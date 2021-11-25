@@ -100,8 +100,8 @@ export class Wire {
     addElement() {
         this.con.appendChild(this.el);
         main.appendChild(this.con);
-        this.el.addEventListener("click", () => {
-            console.log("dipa");
+        this.el.addEventListener("click", (el) => {
+            console.log(el.target);
         });
     }
 }

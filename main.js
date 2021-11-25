@@ -19,6 +19,19 @@ function makeMainOutputs() {
 
 }
 
+function hideSVG() {
+    const wiresArr = document.querySelectorAll("svg");
+    wiresArr.forEach((el) => {
+        el.classList.add("hide");
+    });
+}
+function showSVG() {
+    const wiresArr = document.querySelectorAll("svg");
+    wiresArr.forEach((el) => {
+        el.classList.remove("hide");
+    });
+}
+
 function makeConnection(el) {
     if(el.classList.contains("output")) {
         if(!selectedOutput) {
@@ -47,6 +60,7 @@ presetsGates.forEach((el, index) => {
         const dragElementId = el.gateEl.getAttribute("id");
         event.dataTransfer.setData("text/plain", dragElementId);
         event.dataTransfer.dropEffect = "copy";
+        hideSVG();
     });
 });
 
@@ -57,6 +71,7 @@ workArea.addEventListener("dragover", function(event) {
 
 workArea.addEventListener("drop", function(event) {
     event.preventDefault();
+    showSVG();
     const id = event.dataTransfer.getData("text/plain");
     const el = document.getElementById(id);
     if(id.includes("gate")) {
@@ -82,6 +97,7 @@ workArea.addEventListener("drop", function(event) {
         gates[gates.length-1].gateEl.setAttribute("draggable", "true");
         gates[gates.length-1].gateEl.addEventListener("dragstart", function(event) {
             const dragElementId = this.getAttribute("id");
+            hideSVG();
             event.dataTransfer.setData("text/plain", dragElementId);
             event.dataTransfer.dropEffect = "copy";
         });
