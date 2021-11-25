@@ -59,8 +59,8 @@ export class Wire {
     draw() {
         console.log("draw")
         this.setPosition();
-        if(this.el1.position.x > this.el2.position.x) {
-            this.width = this.el1.position.x - this.el2.position.x;
+        if(this.el1.position.x > this.el2.position.x - 60) {
+            this.width = this.el1.position.x - this.el2.position.x + 120;
         }else {
             this.width = this.el2.position.x - this.el1.position.x;
         }
@@ -75,17 +75,30 @@ export class Wire {
         this.width += 20;
         this.con.setAttribute("width", this.width);
         this.con.setAttribute("height", this.height);
-        if(this.el1.position.y > this.el2.position.y) {
-            this.el.setAttribute("d", `M 0 ${this.height - 10} H ${this.width/2} V 10 H ${this.width}`);
-            this.con.setAttribute("style", `top: ${this.el2.position.y}px; left: ${this.el1.position.x}px`);
-        }else if(this.el1.position.y < this.el2.position.y){
-            this.el.setAttribute("d", `M 0 10 H ${this.width/2} V ${this.height - 10} H ${this.width}`);
-            this.con.setAttribute("style", `top: ${this.el1.position.y}px; left: ${this.el1.position.x}px`);
+        if(this.el1.position.x < this.el2.position.x - 60) {
+            if(this.el1.position.y > this.el2.position.y) {
+                this.el.setAttribute("d", `M 0 ${this.height - 10} H ${this.width/2} V 10 H ${this.width}`);
+                this.con.setAttribute("style", `top: ${this.el2.position.y}px; left: ${this.el1.position.x}px`);
+            }else if(this.el1.position.y < this.el2.position.y){
+                this.el.setAttribute("d", `M 0 10 H ${this.width/2} V ${this.height - 10} H ${this.width}`);
+                this.con.setAttribute("style", `top: ${this.el1.position.y}px; left: ${this.el1.position.x}px`);
+            }else {
+                this.el.setAttribute("d", `M 0 ${this.height / 2} H ${this.width}`);
+                this.con.setAttribute("style", `top: ${this.el1.position.y}px; left: ${this.el1.position.x}px`);
+            }
         }else {
-            this.el.setAttribute("d", `M 0 ${this.height / 2} H ${this.width}`);
-            this.con.setAttribute("style", `top: ${this.el1.position.y}px; left: ${this.el1.position.x}px`);
+            console.log("suka")
+            if(this.el1.position.y > this.el2.position.y) {
+                this.el.setAttribute("d", `M 0 4 H ${this.width/2} V 10 H ${this.width}`);
+                this.con.setAttribute("style", `top: ${this.el2.position.y}px; left: ${this.el2.position.x - 60}px`);
+            }else if(this.el1.position.y < this.el2.position.y){
+                this.el.setAttribute("d", `M 0 10 H ${this.width/2} V ${this.height - 10} H ${this.width}`);
+                this.con.setAttribute("style", `top: ${this.el1.position.y}px; left: ${this.el2.position.x - 60}px`);
+            }else {
+                this.el.setAttribute("d", `M 0 ${this.height / 2} H ${this.width}`);
+                this.con.setAttribute("style", `top: ${this.el1.position.y}px; left: ${this.el1.position.x}px`);
+            }
         }
-
     }
     addElement() {
         this.con.appendChild(this.el);
