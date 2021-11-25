@@ -103,3 +103,14 @@ path {
 .hide {
     z-index: -1;
 }
+
+.outputs-element {
+    background-color: darkred;
+}
+
+#left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}

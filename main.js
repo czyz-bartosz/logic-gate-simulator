@@ -1,5 +1,6 @@
 import { NOTGate, ANDGate } from "./modules/Gate.js";
 import { Wire } from "./modules/Wire.js";
+import { OutputsElement } from "./modules/OutputsElement.js";
 export { gates, wires, inputs, outputs, main };
 
 const workArea = document.querySelector("#work-area");
@@ -54,14 +55,15 @@ function makeConnection(el) {
 
 presetsGates.push(new ANDGate(presetsGates.length));
 presetsGates.push(new NOTGate(presetsGates.length));
+presetsGates.push(new OutputsElement(1, presetsGates.length));
 
 presetsGates.forEach((el, index) => {
-    el.gateEl.classList.add("draggable-gate");
-    el.gateEl.setAttribute("draggable", "true");
-    el.gateEl.setAttribute("id", index + "drag");
-    gatesToolbox.appendChild(el.gateEl);
-    el.gateEl.addEventListener("dragstart", (event) => {
-        const dragElementId = el.gateEl.getAttribute("id");
+    el.element.classList.add("draggable-gate");
+    el.element.setAttribute("draggable", "true");
+    el.element.setAttribute("id", index + "drag");
+    gatesToolbox.appendChild(el.element);
+    el.element.addEventListener("dragstart", (event) => {
+        const dragElementId = el.element.getAttribute("id");
         event.dataTransfer.setData("text/plain", dragElementId);
         event.dataTransfer.dropEffect = "copy";
         hideSVG();
@@ -88,18 +90,18 @@ workArea.addEventListener("drop", function(event) {
         gates[idGate].move();
     }else {
         gates.push(presetsGates[parseInt(id)].clone());
-        this.appendChild(gates[gates.length-1].gateEl);
-        const inputsArr = gates[gates.length-1].gateEl.querySelectorAll(".input");
-        const outputsArr = gates[gates.length-1].gateEl.querySelectorAll(".output");
-        gates[gates.length-1].gateEl.classList.add("work");
+        this.appendChild(gates[gates.length-1].element);
+        const inputsArr = gates[gates.length-1].element.querySelectorAll(".input");
+        const outputsArr = gates[gates.length-1].element.querySelectorAll(".output");
+        gates[gates.length-1].element.classList.add("work");
         const rect = workArea.getBoundingClientRect();
         const x = event.clientX - rect.left;
         const y = event.clientY - rect.top;
-        gates[gates.length-1].gateEl.style.top = y + "px";
-        gates[gates.length-1].gateEl.style.left = x + "px";
-        gates[gates.length-1].gateEl.id = gates[gates.length-1].id;
-        gates[gates.length-1].gateEl.setAttribute("draggable", "true");
-        gates[gates.length-1].gateEl.addEventListener("dragstart", function(event) {
+        gates[gates.length-1].element.style.top = y + "px";
+        gates[gates.length-1].element.style.left = x + "px";
+        gates[gates.length-1].element.id = gates[gates.length-1].id;
+        gates[gates.length-1].element.setAttribute("draggable", "true");
+        gates[gates.length-1].element.addEventListener("dragstart", function(event) {
             const dragElementId = this.getAttribute("id");
             hideSVG();
             event.dataTransfer.setData("text/plain", dragElementId);

@@ -4,7 +4,7 @@ import { gates, wires } from "../main.js";
 export {Gate, NOTGate, ANDGate};
 
 class Gate {
-    gateEl = document.createElement("div");
+    element = document.createElement("div");
     inputsConEl = document.createElement("div");
     outputsConEl = document.createElement("div");
     text = document.createElement("p");
@@ -16,19 +16,19 @@ class Gate {
         this.id = id;
         this.amountOfInputs = inputs;
         this.amountOfOutputs = outputs;
-        this.gateEl.classList.add("gate");
+        this.element.classList.add("gate");
         this.generateInputsCon();
-        this.gateEl.appendChild(this.text);
+        this.element.appendChild(this.text);
         this.generateOutputsCon();
         this.addInputsAndOutput();
     }
     generateInputsCon() {
         this.inputsConEl.classList.add("inputs");
-        this.gateEl.appendChild(this.inputsConEl);
+        this.element.appendChild(this.inputsConEl);
     }
     generateOutputsCon() {
         this.outputsConEl.classList.add("outputs");
-        this.gateEl.appendChild(this.outputsConEl);
+        this.element.appendChild(this.outputsConEl);
     }
     addInputsAndOutput() {
         for(let i = 0; i < this.amountOfInputs; i++) {
@@ -113,4 +113,3 @@ class NOTGate extends Gate {
         }
     }
 }
-
