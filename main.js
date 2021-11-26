@@ -1,24 +1,17 @@
 import { NOTGate, ANDGate } from "./modules/Gate.js";
 import { Wire } from "./modules/Wire.js";
 import { OutputsElement } from "./modules/OutputsElement.js";
-export { gates, wires, inputs, outputs, main };
+export { gates, wires, inputs, outputs, workArea };
 
 const workArea = document.querySelector("#work-area");
-const main = document.querySelector("main");
 const gatesToolbox = document.querySelector("#left");
 const outputs = document.querySelectorAll(".output");
 const inputs = document.querySelectorAll(".input");
 const presetsGates = [];
 const gates = [];
 const wires = [];
-const mainOutputs = document.querySelectorAll(".main-output");
-const mainInputs = [];
 let selectedOutput;
 let selectedInput;
-
-function makeMainOutputs() {
-
-}
 
 function hideSVG() {
     const wiresArr = document.querySelectorAll("svg");
@@ -130,12 +123,5 @@ outputs.forEach((el, index) => {
 inputs.forEach((el, index) => {
     el.addEventListener("click", () => {
         makeConnection(el);
-    });
-});
-
-mainOutputs.forEach((el) => {
-    el.addEventListener("dblclick", () => {
-        el.classList.toggle("false");
-        el.classList.toggle("true");
     });
 });
