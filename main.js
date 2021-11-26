@@ -100,13 +100,17 @@ workArea.addEventListener("drop", function(event) {
             event.dataTransfer.dropEffect = "copy";
         });
         inputsArr.forEach((el) => {
-            el.addEventListener("click", () => {
-                makeConnection(el);
+            el.addEventListener("mouseup", (event) => {
+                if(event.button === 2) {
+                    makeConnection(el);
+                }
             });
         });
         outputsArr.forEach((el) => {
-            el.addEventListener("click", () => {
-                makeConnection(el);
+            el.addEventListener("mouseup", (event) => {
+                if(event.button === 2) {
+                    makeConnection(el);
+                }
             });
         });
     }
