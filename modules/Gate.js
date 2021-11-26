@@ -79,6 +79,9 @@ class ANDGate extends Gate {
             this.outputs[0].outputEl.classList.add("false");
             this.outputs[0].outputEl.classList.remove("true");
         }
+        this.outputs[0].wires.forEach((el) => {
+            wires[el].transfer();
+        });
     }
 }
 
@@ -104,5 +107,8 @@ class NOTGate extends Gate {
             this.outputs[0].outputEl.classList.add("false");
             this.outputs[0].outputEl.classList.remove("true");
         }
+        this.outputs[0].wires.forEach((el) => {
+            wires[el].transfer();
+        });
     }
 }
