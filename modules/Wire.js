@@ -34,26 +34,16 @@ export class Wire {
         this.el2.position = {...getPosition(this.el2.element)};
     }
     transfer() {
-        if(!this.el2.element.classList.contains("main-input")) {
-            if(this.el1.element.classList.contains("true")){
-                const myArray = this.el2.element.id.split("-");
-                this.nextGateId = +myArray[1];
-                const id = +myArray[0];
-                gates[this.nextGateId].inputs[id].setInputValue(true, this.nextGateId);
-            }else if(this.el1.element.classList.contains("false")) {
-                const myArray = this.el2.element.id.split("-");
-                this.nextGateId = +myArray[1];
-                const id = +myArray[0];
-                gates[this.nextGateId].inputs[id].setInputValue(false, this.nextGateId);
-            }
-        }else {
-            if(this.el1.element.classList.contains("true")){
-                this.el2.element.classList.add("true");
-                this.el2.element.classList.remove("false");
-            }else if(this.el1.element.classList.contains("false")) {
-                this.el2.element.classList.add("false");
-                this.el2.element.classList.remove("true");
-            }
+        if(this.el1.element.classList.contains("true")){
+            const myArray = this.el2.element.id.split("-");
+            this.nextGateId = +myArray[1];
+            const id = +myArray[0];
+            gates[this.nextGateId].inputs[id].setInputValue(true, this.nextGateId);
+        }else if(this.el1.element.classList.contains("false")) {
+            const myArray = this.el2.element.id.split("-");
+            this.nextGateId = +myArray[1];
+            const id = +myArray[0];
+            gates[this.nextGateId].inputs[id].setInputValue(false, this.nextGateId);
         }
     }
     draw() {

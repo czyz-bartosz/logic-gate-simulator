@@ -26,15 +26,6 @@ export class InputsElement {
         });
     }
     changeStatus() {
-        this.inputs.forEach((el) => {
-            if(el.currentValue) {
-                el.inputEl.classList.add("true");
-                el.inputEl.classList.remove("false");
-            }else {
-                el.inputEl.classList.add("false");
-                el.inputEl.classList.remove("true");
-            }
-        });
     }
     clone() {
         return new InputsElement(1, (gates.length + "-gate"));

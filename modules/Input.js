@@ -14,6 +14,13 @@ export class Input {
     }
     setInputValue(value, parentId) {
         this.currentValue = value;
+        if(this.currentValue) {
+            this.inputEl.classList.add("true");
+            this.inputEl.classList.remove("false");
+        }else {
+            this.inputEl.classList.add("false");
+            this.inputEl.classList.remove("true");
+        }
         gates[parentId].changeStatus();
     }
 }
