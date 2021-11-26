@@ -1,4 +1,4 @@
-import { gates } from "../main.js";
+import { gates, wires } from "../main.js";
 import { Output } from "./Output.js";
 
 export class OutputsElement {
@@ -24,5 +24,16 @@ export class OutputsElement {
             });
             this.element.appendChild(this.outputs[i].outputEl);
         }
+    }
+    move() {
+        this.outputs.forEach((el, id) => {
+            this.outputs[id]?.wires.forEach((el, idW) => {
+                wires[this.outputs[id].wires[idW]].draw();
+                console.log(idW);
+            });
+        });
+    }
+    clone() {
+        return new OutputsElement(1, (gates.length + "-gate"));
     }
 }
