@@ -29,7 +29,6 @@ export class OutputsElement {
         this.outputs.forEach((el, id) => {
             this.outputs[id]?.wires.forEach((el, idW) => {
                 wires[this.outputs[id].wires[idW]].draw();
-                console.log(idW);
             });
         });
     }

@@ -22,7 +22,6 @@ export class Wire {
         this.el2 = {element: el2, position: {...getPosition(el2)}};
         this.array1 = el1.id.split("-");
         this.array2 = el2.id.split("-");
-        console.log(this.array2)
         gates[this.array1[1]]?.outputs[this.array1[0]].wires.push(this.id);
         gates[this.array2[1]].inputs[this.array2[0]].wire = this.id;
         this.transfer();
@@ -47,7 +46,6 @@ export class Wire {
         }
     }
     draw() {
-        console.log("draw")
         this.setPosition();
         if(this.el1.position.x > this.el2.position.x - 60) {
             this.width = this.el1.position.x - this.el2.position.x + 120;
@@ -77,7 +75,6 @@ export class Wire {
                 this.con.setAttribute("style", `top: ${this.el1.position.y}px; left: ${this.el1.position.x}px`);
             }
         }else {
-            console.log("suka")
             if(this.el1.position.y >= this.el2.position.y) {
                 this.el.setAttribute("d", `M 60 10 H 6 V ${this.height / 2} H ${this.width - 6} V ${this.height - 10} H ${this.width - 60}`);
                 this.con.setAttribute("style", `top: ${this.el2.position.y}px; left: ${this.el2.position.x - 60}px`);

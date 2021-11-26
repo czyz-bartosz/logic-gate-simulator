@@ -46,7 +46,6 @@ class Gate {
         this.outputs.forEach((el, id) => {
             this.outputs[id]?.wires.forEach((el, idW) => {
                 wires[this.outputs[id].wires[idW]].draw();
-                console.log(idW);
             });
         });
         this.inputs.forEach((el, id) => {
@@ -71,17 +70,14 @@ class ANDGate extends Gate {
         return new ANDGate(id);
     }
     changeStatus() {
-        console.log(this.inputs[0].currentValue, this.inputs[1].currentValue)
         if(this.returnValue(this.inputs[0].currentValue, this.inputs[1].currentValue)) {
             this.outputs[0].currentValue = true;
             this.outputs[0].outputEl.classList.add("true");
             this.outputs[0].outputEl.classList.remove("false");
-            console.log(true)
         }else {
             this.outputs[0].currentValue = false;
             this.outputs[0].outputEl.classList.add("false");
             this.outputs[0].outputEl.classList.remove("true");
-            console.log(false)
         }
     }
 }
@@ -99,17 +95,14 @@ class NOTGate extends Gate {
         return new NOTGate(id);
     }
     changeStatus() {
-        console.log(this.inputs[0].currentValue)
         if(this.returnValue(this.inputs[0].currentValue)) {
             this.outputs[0].currentValue = true;
             this.outputs[0].outputEl.classList.add("true");
             this.outputs[0].outputEl.classList.remove("false");
-            console.log(true)
         }else {
             this.outputs[0].currentValue = false;
             this.outputs[0].outputEl.classList.add("false");
             this.outputs[0].outputEl.classList.remove("true");
-            console.log(false)
         }
     }
 }

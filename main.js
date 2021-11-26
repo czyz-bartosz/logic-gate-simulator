@@ -37,7 +37,6 @@ function makeConnection(el) {
         const inputId = el.id.split("-")[0];
         const wire = gates[gateId].inputs[inputId].wire;
         if(!selectedInput && wire === undefined) {
-            console.log();
             selectedInput = el;
         }
     }
