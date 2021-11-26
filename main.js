@@ -2,12 +2,10 @@ import { NOTGate, ANDGate } from "./modules/Gate.js";
 import { Wire } from "./modules/Wire.js";
 import { OutputsElement } from "./modules/OutputsElement.js";
 import { InputsElement } from "./modules/InputsElement.js";
-export { gates, wires, inputs, outputs, workArea };
+export { gates, wires, workArea };
 
 const workArea = document.querySelector("#work-area");
 const gatesToolbox = document.querySelector("#left");
-const outputs = document.querySelectorAll(".output");
-const inputs = document.querySelectorAll(".input");
 const presetsGates = [];
 const gates = [];
 const wires = [];
@@ -112,17 +110,4 @@ workArea.addEventListener("drop", function(event) {
             });
         });
     }
-    
-});
-
-outputs.forEach((el, index) => {
-    el.addEventListener("click", () => {
-        makeConnection(el);
-    });
-});
-
-inputs.forEach((el, index) => {
-    el.addEventListener("click", () => {
-        makeConnection(el);
-    });
 });
