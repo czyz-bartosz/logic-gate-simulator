@@ -1,6 +1,7 @@
 import { NOTGate, ANDGate } from "./modules/Gate.js";
 import { Wire } from "./modules/Wire.js";
 import { OutputsElement } from "./modules/OutputsElement.js";
+import { InputsElement } from "./modules/InputsElement.js";
 export { gates, wires, inputs, outputs, workArea };
 
 const workArea = document.querySelector("#work-area");
@@ -49,6 +50,7 @@ function makeConnection(el) {
 presetsGates.push(new ANDGate(presetsGates.length));
 presetsGates.push(new NOTGate(presetsGates.length));
 presetsGates.push(new OutputsElement(1, presetsGates.length));
+presetsGates.push(new InputsElement(1, presetsGates.length));
 
 presetsGates.forEach((el, index) => {
     el.element.classList.add("draggable-gate");

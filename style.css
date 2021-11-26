@@ -106,6 +106,12 @@ path {
 
 .outputs-element {
     background-color: darkred;
+    padding: 10px;
+}
+
+.inputs-element {
+    background-color: black;
+    padding: 10px;
 }
 
 #left {
