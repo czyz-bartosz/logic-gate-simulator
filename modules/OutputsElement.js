@@ -21,6 +21,9 @@ export class OutputsElement {
             this.outputs[i].outputEl.addEventListener("dblclick", () => {
                 this.outputs[i].outputEl.classList.toggle("false");
                 this.outputs[i].outputEl.classList.toggle("true");
+                this.outputs[i].wires.forEach((el) => {
+                    wires[el].transfer();
+                });
             });
             this.element.appendChild(this.outputs[i].outputEl);
         }
