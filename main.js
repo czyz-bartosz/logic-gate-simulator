@@ -115,3 +115,11 @@ workArea.addEventListener("drop", function(event) {
         });
     }
 });
+
+document.querySelector("button").addEventListener("click", () => {
+    const inputsElementArray = Array.from(document.querySelectorAll(".work.inputs-element"));
+    const idInputsElement = inputsElementArray.map((el) => {
+        return parseInt(el.id);
+    });
+    console.log(inputsElementArray, idInputsElement);
+});
