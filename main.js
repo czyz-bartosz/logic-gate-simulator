@@ -116,10 +116,42 @@ workArea.addEventListener("drop", function(event) {
     }
 });
 
+function getPreviousGate(input) {
+    const wire = wires[input.wire];
+    return gates[wire.array1[1]];
+}
+
+function getGate(input) {
+    const wire = wires[input.wire];
+    return gates[wire.array2[1]];
+}
+
 document.querySelector("button").addEventListener("click", () => {
     const inputsElementArray = Array.from(document.querySelectorAll(".work.inputs-element"));
     const idInputsElement = inputsElementArray.map((el) => {
         return parseInt(el.id);
     });
-    console.log(inputsElementArray, idInputsElement);
+    // console.log(inputsElementArray, idInputsElement);
+    // idInputsElement.forEach((value) => {
+    //     console.log(getPreviousGate(gates[value].inputs[0]));
+    // });
+    console.log("koniec", przejdz(getPreviousGate(gates[idInputsElement[0]].inputs[0])));
 });
+
+function przejdz(gate) {
+    if(!gate.element.classList.contains("outputs-element")) {
+        const gateArray = [];
+        let string = "";
+        gate.inputs.forEach((el) => {
+            gateArray.push(getPreviousGate(el));
+        });
+        gateArray.forEach((el) => {
+            string += "przejdz(gates[" + parseInt(el.id) + "])+"
+        });
+        string = string.slice(0, (string.length - 1));
+        console.log(gate, string);
+        return (gate.functionString + eval(string) + ")");
+    }else {
+        return "";
+    }
+}

@@ -55,6 +55,7 @@ class Gate {
 }
 
 class ANDGate extends Gate {
+    functionString = "AND(";
     constructor(id) {
         super(id);
         this.text.innerHTML += "AND";
@@ -87,6 +88,7 @@ class ANDGate extends Gate {
 
 class NOTGate extends Gate {
     amountOfInputs = 1;
+    functionString = "NOT(";
     constructor(id, inputs, outputs) {
         super(id, 1, 1);
         this.text.innerHTML += "NOT";

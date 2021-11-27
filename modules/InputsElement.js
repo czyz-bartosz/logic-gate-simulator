@@ -16,7 +16,8 @@ export class InputsElement {
     addInputs() {
         for(let i = 0; i < this.amountOfInputs; i++) {
             this.inputs.push(new Input(i));
-            this.inputs[i].inputEl.setAttribute("id", i+"-"+this.id);
+            this.inputs[i].inputEl.setAttribute("id", (i+"-"+this.id));
+            this.inputs[i].id = this.inputs[i].inputEl.getAttribute("id");
             this.element.appendChild(this.inputs[i].inputEl);
         }
     }
