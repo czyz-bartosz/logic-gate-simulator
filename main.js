@@ -152,6 +152,6 @@ function przejdz(gate) {
         console.log(gate, string);
         return (gate.functionString + eval(string) + ")");
     }else {
-        return "";
+        return gate.outputs[0].outputEl.getAttribute("id");
     }
 }
