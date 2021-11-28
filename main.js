@@ -143,6 +143,7 @@ document.querySelector("button").addEventListener("click", () => {
     });
     console.log(functionStringArray, outputsArray);
     createMyGate(functionStringArray, outputsArray);
+    workArea.innerHTML = null;
 });
 
 function createMyGate(functionStringArray, outputsArray) {
@@ -178,7 +179,7 @@ function goThroughTheGates(gate) {
         });
         string = string.slice(0, (string.length - 1));
         console.log(gate, string);
-        return (gate.functionString + eval(string) + ")");
+        return (gate.functionStringHead + eval(string) + gate.functionStringTail);
     }else {
         return gate.outputs[0].outputEl.getAttribute("id") + ",";
     }

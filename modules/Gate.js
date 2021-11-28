@@ -55,7 +55,8 @@ class Gate {
 }
 
 class ANDGate extends Gate {
-    functionString = "AND(";
+    functionStringHead = "AND(";
+    functionStringTail = ")";
     constructor(id) {
         super(id);
         this.text.innerHTML += "AND";
@@ -88,7 +89,8 @@ class ANDGate extends Gate {
 
 class NOTGate extends Gate {
     amountOfInputs = 1;
-    functionString = "NOT(";
+    functionStringHead = "NOT(";
+    functionStringTail = ")";
     constructor(id, inputs, outputs) {
         super(id, 1, 1);
         this.text.innerHTML += "NOT";
@@ -116,11 +118,23 @@ class NOTGate extends Gate {
 }
 
 class MyGate extends Gate {
+    functionStringHead;
+    functionStringTail;
     constructor(id, inputs, outputs, functionStringArray, outputsArray) {
         super(id, inputs, outputs);
         this.text.innerHTML += "MyGate";
         this.functionString = functionStringArray;
         this.outputsArray = outputsArray;
+        this.makeHeadAndTail();
+    }
+    makeHeadAndTail() {
+        this.functionString.forEach((string) => {
+            const headLastIndex = string.lastIndexOf("(") + 1;
+            const tailFirstIndex = string.indexOf(")");
+            this.functionStringHead = string.slice(0, headLastIndex);
+            this.functionStringTail = string.slice(tailFirstIndex, string.length);
+            console.log(this.functionStringHead, this.functionStringTail);
+        });
     }
     clone(id = (gates.length + "-gate")) {
         return new MyGate(id, this.amountOfInputs, this.amountOfOutputs, this.functionString, this.outputsArray);
