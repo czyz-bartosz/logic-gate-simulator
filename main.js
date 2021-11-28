@@ -135,10 +135,25 @@ document.querySelector("button").addEventListener("click", () => {
     // idInputsElement.forEach((value) => {
     //     console.log(getPreviousGate(gates[value].inputs[0]));
     // });
-    console.log("koniec", przejdz(getPreviousGate(gates[idInputsElement[0]].inputs[0])));
+    const stringFun = prepareString(goThroughTheGates(getPreviousGate(gates[idInputsElement[0]].inputs[0])));
+    console.log("koniec", stringFun);
 });
 
-function przejdz(gate) {
+function addStringAtPosition(string, stringToAdd, index) {
+    return string.slice(0, index) + stringToAdd + string.slice(index, string.length);
+}
+
+function prepareString(str) {
+    const regEx = /\51[a-zA-Z0-9]/g;
+    let string = str;
+    while(regEx.test(string)) {
+        const index = string.search(regEx) + 1;
+        string = addStringAtPosition(string, ",", index);
+    }
+    return string;
+}
+
+function goThroughTheGates(gate) {
     if(!gate.element.classList.contains("outputs-element")) {
         const gateArray = [];
         let string = "";
@@ -146,13 +161,13 @@ function przejdz(gate) {
             gateArray.push(getPreviousGate(el));
         });
         gateArray.forEach((el) => {
-            string += "przejdz(gates[" + parseInt(el.id) + "])+"
+            string += "goThroughTheGates(gates[" + parseInt(el.id) + "])+"
         });
         string = string.slice(0, (string.length - 1));
         console.log(gate, string);
         return (gate.functionString + eval(string) + ")");
     }else {
-        return gate.outputs[0].outputEl.getAttribute("id");
+        return gate.outputs[0].outputEl.getAttribute("id") + ",";
     }
 }
 
@@ -164,4 +179,4 @@ function NOT(a) {
     return !a;
 }
 
-console.log(eval("NOT(AND(NOT(AND(true,NOT(AND(true,true)))),NOT(AND(NOT(AND(true,true)),true))))"));
+console.log(eval("NOT(AND(NOT(AND(true,NOT(AND(true,true,)))),NOT(AND(NOT(AND(true,true,)),true,))))"));
