@@ -183,13 +183,3 @@ function goThroughTheGates(gate) {
         return gate.outputs[0].outputEl.getAttribute("id") + ",";
     }
 }
-
-function AND(a, b) {
-    return a && b ? true : false;
-}
-
-function NOT(a) {
-    return !a;
-}
-
-console.log(eval("NOT(AND(NOT(AND(true,NOT(AND(true,true,)))),NOT(AND(NOT(AND(true,true,)),true,))))"));

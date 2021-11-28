@@ -119,22 +119,45 @@ class MyGate extends Gate {
     constructor(id, inputs, outputs, functionStringArray, outputsArray) {
         super(id, inputs, outputs);
         this.text.innerHTML += "MyGate";
+        this.functionString = functionStringArray;
+        this.outputsArray = outputsArray;
     }
     clone(id = (gates.length + "-gate")) {
-        return new MyGate(id, this.amountOfInputs, this.amountOfOutputs);
+        return new MyGate(id, this.amountOfInputs, this.amountOfOutputs, this.functionString, this.outputsArray);
     }
     changeStatus() {
-        if(this.returnValue(this.inputs[0].currentValue, this.inputs[1].currentValue)) {
-            this.outputs[0].currentValue = true;
-            this.outputs[0].outputEl.classList.add("true");
-            this.outputs[0].outputEl.classList.remove("false");
-        }else {
-            this.outputs[0].currentValue = false;
-            this.outputs[0].outputEl.classList.add("false");
-            this.outputs[0].outputEl.classList.remove("true");
-        }
-        this.outputs[0].wires.forEach((el) => {
-            wires[el].transfer();
+        const valueArray = this.inputs.map((el) => {
+            return el.currentValue;
+        });
+
+        this.functionString.forEach((value, outputIndex) => {
+            let string = value;
+            this.outputsArray.forEach((outputId, index) => {
+                string = string.replaceAll(outputId, valueArray[index]);
+            });
+            const result = eval(string);
+            if(result) {
+                this.outputs[outputIndex].currentValue = true;
+                this.outputs[outputIndex].outputEl.classList.add("true");
+                this.outputs[outputIndex].outputEl.classList.remove("false");
+            }else {
+                this.outputs[outputIndex].currentValue = false;
+                this.outputs[outputIndex].outputEl.classList.add("false");
+                this.outputs[outputIndex].outputEl.classList.remove("true");
+            }
+        });
+        this.outputs.forEach((el) => {
+            el.wires.forEach((el) => {
+                wires[el].transfer();
+            });
         });
     }
+}
+
+function AND(a, b) {
+    return a && b ? true : false;
+}
+
+function NOT(a) {
+    return !a;
 }
