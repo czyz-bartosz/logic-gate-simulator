@@ -121,22 +121,15 @@ function getPreviousGate(input) {
     return gates[wire.array1[1]];
 }
 
-function getGate(input) {
-    const wire = wires[input.wire];
-    return gates[wire.array2[1]];
-}
-
 document.querySelector("button").addEventListener("click", () => {
     const inputsElementArray = Array.from(document.querySelectorAll(".work.inputs-element"));
     const idInputsElement = inputsElementArray.map((el) => {
         return parseInt(el.id);
     });
-    // console.log(inputsElementArray, idInputsElement);
-    // idInputsElement.forEach((value) => {
-    //     console.log(getPreviousGate(gates[value].inputs[0]));
-    // });
-    const stringFun = prepareString(goThroughTheGates(getPreviousGate(gates[idInputsElement[0]].inputs[0])));
-    console.log("koniec", stringFun);
+    idInputsElement.forEach((value) => {
+        const stringFun = prepareString(goThroughTheGates(getPreviousGate(gates[value].inputs[0])));
+        console.log("koniec", stringFun);
+    });
 });
 
 function addStringAtPosition(string, stringToAdd, index) {
