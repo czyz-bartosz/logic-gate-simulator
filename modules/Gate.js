@@ -1,7 +1,7 @@
 import { Input } from "./Input.js";
 import { Output } from "./Output.js";
 import { gates, wires } from "../main.js";
-export {Gate, NOTGate, ANDGate};
+export {Gate, NOTGate, ANDGate, MyGate};
 
 class Gate {
     element = document.createElement("div");
@@ -101,6 +101,30 @@ class NOTGate extends Gate {
     }
     changeStatus() {
         if(this.returnValue(this.inputs[0].currentValue)) {
+            this.outputs[0].currentValue = true;
+            this.outputs[0].outputEl.classList.add("true");
+            this.outputs[0].outputEl.classList.remove("false");
+        }else {
+            this.outputs[0].currentValue = false;
+            this.outputs[0].outputEl.classList.add("false");
+            this.outputs[0].outputEl.classList.remove("true");
+        }
+        this.outputs[0].wires.forEach((el) => {
+            wires[el].transfer();
+        });
+    }
+}
+
+class MyGate extends Gate {
+    constructor(id, inputs, outputs, functionStringArray, outputsArray) {
+        super(id, inputs, outputs);
+        this.text.innerHTML += "MyGate";
+    }
+    clone(id = (gates.length + "-gate")) {
+        return new MyGate(id, this.amountOfInputs, this.amountOfOutputs);
+    }
+    changeStatus() {
+        if(this.returnValue(this.inputs[0].currentValue, this.inputs[1].currentValue)) {
             this.outputs[0].currentValue = true;
             this.outputs[0].outputEl.classList.add("true");
             this.outputs[0].outputEl.classList.remove("false");

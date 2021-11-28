@@ -1,4 +1,4 @@
-import { NOTGate, ANDGate } from "./modules/Gate.js";
+import { NOTGate, ANDGate, MyGate } from "./modules/Gate.js";
 import { Wire } from "./modules/Wire.js";
 import { OutputsElement } from "./modules/OutputsElement.js";
 import { InputsElement } from "./modules/InputsElement.js";
@@ -50,6 +50,10 @@ presetsGates.push(new OutputsElement(1, presetsGates.length));
 presetsGates.push(new InputsElement(1, presetsGates.length));
 
 presetsGates.forEach((el, index) => {
+    makePresetsGate(el, index);
+});
+
+function makePresetsGate(el, index) {
     el.element.classList.add("draggable-gate");
     el.element.setAttribute("draggable", "true");
     el.element.setAttribute("id", index + "drag");
@@ -60,7 +64,7 @@ presetsGates.forEach((el, index) => {
         event.dataTransfer.dropEffect = "copy";
         hideSVG();
     });
-});
+}
 
 workArea.addEventListener("dragover", function(event) {
     event.preventDefault();
@@ -123,14 +127,30 @@ function getPreviousGate(input) {
 
 document.querySelector("button").addEventListener("click", () => {
     const inputsElementArray = Array.from(document.querySelectorAll(".work.inputs-element"));
+    const outputsElementArray = Array.from(document.querySelectorAll(".work.outputs-element"));
+    const functionStringArray = [];
     const idInputsElement = inputsElementArray.map((el) => {
         return parseInt(el.id);
     });
+    const outputsArray = outputsElementArray.map((el) => {
+        const id = parseInt(el.id);
+        return gates[id].outputs[0].outputEl.id;
+    });
     idInputsElement.forEach((value) => {
         const stringFun = prepareString(goThroughTheGates(getPreviousGate(gates[value].inputs[0])));
-        console.log("koniec", stringFun);
+        console.log("koniec", stringFun, outputsArray);
+        functionStringArray.push(stringFun);
     });
+    console.log(functionStringArray, outputsArray);
+    createMyGate(functionStringArray, outputsArray);
 });
+
+function createMyGate(functionStringArray, outputsArray) {
+    const amountOfInputs = outputsArray.length;
+    const amountOfOutputs = functionStringArray.length;
+    presetsGates.push(new MyGate(presetsGates.length, amountOfInputs, amountOfOutputs, functionStringArray, outputsArray));
+    makePresetsGate(presetsGates[presetsGates.length - 1], presetsGates.length - 1);
+}
 
 function addStringAtPosition(string, stringToAdd, index) {
     return string.slice(0, index) + stringToAdd + string.slice(index, string.length);
