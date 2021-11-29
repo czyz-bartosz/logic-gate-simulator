@@ -125,6 +125,16 @@ function getPreviousGate(input) {
     return gates[wire.array1[1]];
 }
 
+function getCloneId(input) {
+    const wire = wires[input.wire];
+    if(wire.array1[3]) {
+        console.log("kutas")
+        return wire.array1[3];
+    }else {
+        return 0;
+    }
+}
+
 function getOutputId(input) {
     const wire = wires[input.wire];
     return wire.el1.element.id;
@@ -143,7 +153,8 @@ document.querySelector("button").addEventListener("click", () => {
         return gates[id].outputs[0].outputEl.id;
     });
     idInputsElement.forEach((value) => {
-        const stringFun = prepareString(goThroughTheGates(getPreviousGate(gates[value].inputs[0])));
+        const x = getCloneId(gates[value].inputs[0]);
+        const stringFun = prepareString(goThroughTheGates(getPreviousGate(gates[value].inputs[0]), x));
         outputIdArray.push(getOutputId(gates[value].inputs[0]));
         console.log("koniec", stringFun, outputsArray);
         functionStringArray.push(stringFun);
@@ -174,20 +185,24 @@ function prepareString(str) {
     return string;
 }
 
-function goThroughTheGates(gate) {
+function goThroughTheGates(gate, x) {
     if(!gate.element.classList.contains("outputs-element")) {
         const gateArray = [];
         let string = "";
         gate.inputs.forEach((el) => {
-            gateArray.push(getPreviousGate(el));
+            gateArray.push([getPreviousGate(el), x===-1?getCloneId(el):x]);
         });
         gateArray.forEach((el) => {
-            string += "goThroughTheGates(gates[" + parseInt(el.id) + "])+"
+            string += "goThroughTheGates(gates[" + parseInt(el[0].id) + "]," + el[1] + ")+";
         });
         string = string.slice(0, (string.length - 1));
         console.log(gate, string);
         return (gate.functionStringHead + eval(string) + gate.functionStringTail);
     }else {
-        return gate.outputs[0].outputEl.getAttribute("id") + ",";
+        if(x === 0) {
+            return gate.outputs[0].outputEl.getAttribute("id") + ",";
+        }else {
+            return goThroughTheGates(gates[x], -1);
+        }
     }
 }

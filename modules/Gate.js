@@ -118,8 +118,8 @@ class NOTGate extends Gate {
 }
 
 class MyGate extends Gate {
-    functionStringHead;
-    functionStringTail;
+    functionStringHead = "";
+    functionStringTail = "";
     constructor(id, inputs, outputs, functionStringArray, outputsArray, outputIdArray) {
         super(id, inputs, outputs);
         this.text.innerHTML += "MyGate";
@@ -127,13 +127,14 @@ class MyGate extends Gate {
         this.outputsArray = outputsArray;
         this.outputsIdArray = outputIdArray;
         this.idGate = parseInt(id);
-        this.makeHeadAndTail();
+        // this.makeHeadAndTail();
         this.copyOutputs();
     }
     copyOutputs() {
         const array = this.outputsIdArray;
         this.outputs.forEach((el, index) => {
-            el.outputEl.setAttribute("id", array[index] + "-" + this.idGate);
+            const stringArray = array[index].split("-");
+            el.outputEl.setAttribute("id", stringArray[0] + "-" + stringArray[1] + "-gate-" + this.idGate);
         });
     }
     makeHeadAndTail() {
