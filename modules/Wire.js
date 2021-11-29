@@ -22,7 +22,11 @@ export class Wire {
         this.el2 = {element: el2, position: {...getPosition(el2)}};
         this.array1 = el1.id.split("-");
         this.array2 = el2.id.split("-");
-        gates[this.array1[1]]?.outputs[this.array1[0]].wires.push(this.id);
+        if(this.array1[3]) {
+            gates[this.array1[3]]?.outputs[this.array1[0]].wires.push(this.id);
+        }else {
+            gates[this.array1[1]]?.outputs[this.array1[0]].wires.push(this.id);
+        }
         gates[this.array2[1]].inputs[this.array2[0]].wire = this.id;
         this.transfer();
         this.draw();

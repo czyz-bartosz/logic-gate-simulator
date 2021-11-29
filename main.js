@@ -125,10 +125,16 @@ function getPreviousGate(input) {
     return gates[wire.array1[1]];
 }
 
+function getOutputId(input) {
+    const wire = wires[input.wire];
+    return wire.el1.element.id;
+}
+
 document.querySelector("button").addEventListener("click", () => {
     const inputsElementArray = Array.from(document.querySelectorAll(".work.inputs-element"));
     const outputsElementArray = Array.from(document.querySelectorAll(".work.outputs-element"));
     const functionStringArray = [];
+    const outputIdArray = [];
     const idInputsElement = inputsElementArray.map((el) => {
         return parseInt(el.id);
     });
@@ -138,18 +144,19 @@ document.querySelector("button").addEventListener("click", () => {
     });
     idInputsElement.forEach((value) => {
         const stringFun = prepareString(goThroughTheGates(getPreviousGate(gates[value].inputs[0])));
+        outputIdArray.push(getOutputId(gates[value].inputs[0]));
         console.log("koniec", stringFun, outputsArray);
         functionStringArray.push(stringFun);
     });
-    console.log(functionStringArray, outputsArray);
-    createMyGate(functionStringArray, outputsArray);
+    console.log(outputIdArray);
+    createMyGate(functionStringArray, outputsArray, outputIdArray);
     workArea.innerHTML = null;
 });
 
-function createMyGate(functionStringArray, outputsArray) {
+function createMyGate(functionStringArray, outputsArray, outputIdArray) {
     const amountOfInputs = outputsArray.length;
     const amountOfOutputs = functionStringArray.length;
-    presetsGates.push(new MyGate(presetsGates.length, amountOfInputs, amountOfOutputs, functionStringArray, outputsArray));
+    presetsGates.push(new MyGate(presetsGates.length, amountOfInputs, amountOfOutputs, functionStringArray, outputsArray, outputIdArray));
     makePresetsGate(presetsGates[presetsGates.length - 1], presetsGates.length - 1);
 }
 
