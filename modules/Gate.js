@@ -133,8 +133,7 @@ class MyGate extends Gate {
     copyOutputs() {
         const array = this.outputsIdArray;
         this.outputs.forEach((el, index) => {
-            const stringArray = array[index].split("-");
-            el.outputEl.setAttribute("id", stringArray[0] + "-" + stringArray[1] + "-gate-" + this.idGate);
+            el.outputEl.setAttribute("id", 0 + "-" + array[index] + "-gate-" + this.idGate);
         });
     }
     makeHeadAndTail() {

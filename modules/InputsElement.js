@@ -3,6 +3,8 @@ import { Input } from "./Input.js";
 
 export class InputsElement {
     inputs = [];
+    functionStringHead = "";
+    functionStringTail = "";
     element = document.createElement("div");
     constructor(amountOfInputs, id=gates.length) {
         this.amountOfInputs = amountOfInputs;
