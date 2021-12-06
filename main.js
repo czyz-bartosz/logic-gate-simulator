@@ -24,7 +24,8 @@ class Stack {
         return this.data.length === 0 ? true : false;
     }
 }
-let gatesStack = new Stack;
+let gatesStack = [new Stack, new Stack];
+let tempArray;
 
 let selectedOutput;
 let selectedInput;
@@ -157,7 +158,10 @@ function pushToStack(input) {
     const id = outputId.split("-")[3];
     if(id) {
         for(let i = 0; i < gates[id].amountOfInputs; i++) {
-            gatesStack.push(id);
+            if(gatesStack[i] === undefined) {
+                gatesStack[i].push(new Stack);
+            }
+            gatesStack[i].push(id);
         }
     }
 }
@@ -187,6 +191,7 @@ document.querySelector("button").addEventListener("click", () => {
         const id = parseInt(el.id);
         return gates[id].outputs[0].outputEl.id;
     });
+    tempArray = [ ...outputsArray];
     idInputsElement.forEach((value) => {
         const previousGate = getPreviousGate(gates[value].inputs[0]);
         pushToStack(gates[value].inputs[0]);
@@ -243,8 +248,13 @@ function goThroughTheGates(gate) {
         // });
         for(let i = gateArray.length - 1; i >= 0; i--) {
             const el = gateArray[i];
-            if(el.element.classList.contains("outputs-element") && !gatesStack.isEmpty() ) {
-                const stack = gatesStack.pop();
+            if(el.element.classList.contains("outputs-element") && !gatesStack[i].isEmpty() ) {
+                
+                let stack = gatesStack[i].pop();
+                while(getPreviousGate(gates[stack].inputs[i]).element.classList.contains("outputs-element") && !tempArray.includes(getPreviousGate(gates[stack].inputs[i]).outputs[0].outputEl.id) && !gatesStack[i].isEmpty()) {
+                    stack = gatesStack[i].pop();
+                    console.log("chuj")
+                }
                 string += "goThroughTheGates(getPreviousGate(gates[" + stack + "].inputs[" + i + "]))+";
                 inputsToStack.push(gates[stack].inputs[i]);
                 console.log("hello")
@@ -259,14 +269,10 @@ function goThroughTheGates(gate) {
         }
 
         string = string.slice(0, (string.length - 1));
-        console.log(gate, string, gatesStack.data);
+        console.log(gate, string, gatesStack[0].data, gatesStack[1].data);
         return (gate.functionStringHead + eval(string) + gate.functionStringTail);
     }else {
         console.log(gatesStack)
-        if(gatesStack.isEmpty()) {
-            return gate.outputs[0].outputEl.getAttribute("id") + ",";
-        }else {
-            return gate.outputs[0].outputEl.getAttribute("id") + ",";
-        }
+        return gate.outputs[0].outputEl.getAttribute("id") + ",";
     }
 }
