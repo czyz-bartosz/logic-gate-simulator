@@ -254,7 +254,7 @@ function goThroughTheGates(gate) {
         // gateArray.forEach((el) => {
         //     string += "goThroughTheGates(gates[" + parseInt(el.id) + "])+";
         // });
-        for(let i = gateArray.length - 1; i >= 0; i--) {
+        for(let i = 0; i < gateArray.length; i++) {
             const el = gateArray[i];
             if(el.element.classList.contains("outputs-element") && !gatesStack[i].isEmpty() ) {
                 
