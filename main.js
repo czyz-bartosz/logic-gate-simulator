@@ -166,11 +166,19 @@ function pushToStack(input) {
     }
 }
 
-function pushToStack1(input) {
+function pushToStack1(input, copyStack) {
     const outputId = getOutputId(input);
     const id = outputId.split("-")[3];
     if(id) {
-        gatesStack.push(id);
+        for(let i = 0; i < gates[id].amountOfInputs; i++) {
+            if(gatesStack[i] === undefined) {
+                gatesStack[i].push(new Stack);
+            }
+            copyStack[i].forEach((value) => {
+                gatesStack[i].push(value);
+            });
+            gatesStack[i].push(id);
+        }
     }
 }
 
@@ -262,10 +270,17 @@ function goThroughTheGates(gate) {
                 string += "goThroughTheGates(gates[" + parseInt(el.id) + "])+";
             }
         }
+        const copyStack = gatesStack.map((el) => {
+            return [...el.data];
+        });
 
         for(let i = inputsToStack.length - 1; i >= 0; i--) {
             const el = inputsToStack[i];
-            pushToStack(el);
+            if(i === inputsToStack.length - 1) {
+                pushToStack(el);
+            }else {
+                pushToStack1(el, copyStack);
+            }
         }
 
         string = string.slice(0, (string.length - 1));
