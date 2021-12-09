@@ -26,6 +26,7 @@ class Stack {
 }
 let gatesStack = [new Stack, new Stack];
 let tempArray;
+let pseudoId = [];
 
 let selectedOutput;
 let selectedInput;
@@ -201,6 +202,7 @@ document.querySelector("button").addEventListener("click", () => {
     });
     tempArray = [ ...outputsArray];
     idInputsElement.forEach((value) => {
+        pseudoId = [];
         const previousGate = getPreviousGate(gates[value].inputs[0]);
         pushToStack(gates[value].inputs[0]);
         const stringFun = prepareString(goThroughTheGates(previousGate));
@@ -255,16 +257,35 @@ function goThroughTheGates(gate) {
         //     string += "goThroughTheGates(gates[" + parseInt(el.id) + "])+";
         // });
         for(let i = 0; i < gateArray.length; i++) {
+            const a = i;
             const el = gateArray[i];
             if(el.element.classList.contains("outputs-element") && !gatesStack[i].isEmpty() ) {
                 
                 let stack = gatesStack[i].pop();
+                let copy = stack;
                 while(getPreviousGate(gates[stack].inputs[i]).element.classList.contains("outputs-element") && !tempArray.includes(getPreviousGate(gates[stack].inputs[i]).outputs[0].outputEl.id) && !gatesStack[i].isEmpty()) {
+                    copy = stack;
                     stack = gatesStack[i].pop();
                     console.log("chuj")
                 }
+                if(getPreviousGate(gates[stack].inputs[i]).element.classList.contains("outputs-element")) {
+                    if(tempArray.includes(getPreviousGate(gates[stack].inputs[i]).outputs[0].outputEl.id)) {
+                        const tempId = getPreviousGate(gates[copy].inputs[i]).outputs[0].outputEl.id;
+                        if(pseudoId.includes(tempId)) {
+                            const pseudo = pseudoId.findIndex((value) => value === tempId);
+                            i = pseudo;
+                            console.log(pseudoId)
+                        }else {
+                            const pseudo = pseudoId.length;
+                            pseudoId.push(tempId);
+                            i = pseudo;
+                        }
+                    }
+                }
+
                 string += "goThroughTheGates(getPreviousGate(gates[" + stack + "].inputs[" + i + "]))+";
                 inputsToStack.push(gates[stack].inputs[i]);
+                i = a;
                 console.log("hello")
             }else {
                 string += "goThroughTheGates(gates[" + parseInt(el.id) + "])+";
@@ -273,7 +294,6 @@ function goThroughTheGates(gate) {
         const copyStack = gatesStack.map((el) => {
             return [...el.data];
         });
-
         for(let i = inputsToStack.length - 1; i >= 0; i--) {
             const el = inputsToStack[i];
             if(i === inputsToStack.length - 1) {
@@ -287,7 +307,8 @@ function goThroughTheGates(gate) {
         console.log(gate, string, gatesStack[0].data, gatesStack[1].data);
         return (gate.functionStringHead + eval(string) + gate.functionStringTail);
     }else {
-        console.log(gatesStack)
+        console.log(gatesStack);
+        console.log(pseudoId);
         return gate.outputs[0].outputEl.getAttribute("id") + ",";
     }
 }
