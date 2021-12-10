@@ -174,12 +174,42 @@ function goThroughTheGates(gate) {
         gate.inputs.forEach((el) => {
             gateArray.push(getPreviousGate(el));
         });
-        gateArray.forEach((el) => {
-            string += "goThroughTheGates(gates[" + parseInt(el.id) + "])+"
-        });
-        string = string.slice(0, (string.length - 1));
-        console.log(gate, string);
-        return (gate.functionStringHead + eval(string) + gate.functionStringTail);
+        if(gate instanceof ANDGate || gate instanceof NOTGate) {
+            gateArray.forEach((el) => {
+                string += "goThroughTheGates(gates[" + parseInt(el.id) + "])+"
+            });
+            string = string.slice(0, (string.length - 1));
+            console.log(gate, string);
+            return (gate.functionStringHead + eval(string) + gate.functionStringTail);
+        }else {
+            const stringIndexArr = gate.stringIndexArr[0];
+            let functionString = gate.makeStringArr[0];
+            for(let i = 0; i <= stringIndexArr.length; i++) {
+                let start;
+                let end;
+                if(i === 0) {
+                    start = -1;
+                    end = stringIndexArr[i][0];
+                }else if(i === stringIndexArr.length){
+                    start = stringIndexArr[i-1][1];
+                    end = functionString.length;
+                }else {
+                    start = stringIndexArr[i-1][1];
+                    end = stringIndexArr[i][0];
+                }
+                if(i !== stringIndexArr.length) {
+                    string += `functionString.slice(${start+1},${end})+goThroughTheGates(gates[parseInt(gateArray[${parseInt(functionString.slice(stringIndexArr[i][0]+1, stringIndexArr[i][1]))}].id)])+`;
+                }else {
+                    string += `functionString.slice(${start+1},${end})`;
+                }
+                
+            }
+            // outputsA.forEach((value, index) => {
+            //     functionString = functionString.replaceAll(value, `'+goThroughTheGates(gates[parseInt(gateArray[${index}.id)])+'`);
+            // });
+            console.log(gate, string);
+            return eval(string);
+        }
     }else {
         return gate.outputs[0].outputEl.getAttribute("id") + ",";
     }

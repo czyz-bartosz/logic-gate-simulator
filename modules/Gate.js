@@ -125,16 +125,41 @@ class MyGate extends Gate {
         this.text.innerHTML += "MyGate";
         this.functionString = functionStringArray;
         this.outputsArray = outputsArray;
-        this.makeHeadAndTail();
+        this.makeStringArr = [...this.makeString()];
+        this.stringIndexArr = [...this.stringIndex()];
+        console.log("a", this.makeStringArr, this.stringIndexArr)
     }
-    makeHeadAndTail() {
+    makeString() {
+        const arr = [];
         this.functionString.forEach((string) => {
-            const headLastIndex = string.lastIndexOf("(") + 1;
-            const tailFirstIndex = string.indexOf(")");
-            this.functionStringHead = string.slice(0, headLastIndex);
-            this.functionStringTail = string.slice(tailFirstIndex, string.length);
-            console.log(this.functionStringHead, this.functionStringTail);
+            let str = string;
+            this.outputsArray.forEach((value, index) => {
+                str = str.replaceAll(value+",", 'g'+index+'k');
+            });
+            arr.push(str);
         });
+        return arr;
+    }
+    stringIndex() {
+        const arr = [];
+        this.makeStringArr.forEach((string) => {
+            const a = [];
+            let from = 0;
+            while(true) {
+                const gPosition = string.indexOf("g", from);
+                const kPosition = string.indexOf("k", from);
+                console.log(gPosition, kPosition)
+                from = kPosition + 1;
+                if(kPosition !== -1) {
+                    a.push([gPosition, kPosition]);
+                    console.log(a);
+                }else {
+                    break;
+                }
+            }
+            arr.push(a);
+        });
+        return arr;
     }
     clone(id = (gates.length + "-gate")) {
         return new MyGate(id, this.amountOfInputs, this.amountOfOutputs, this.functionString, this.outputsArray);
