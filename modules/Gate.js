@@ -148,11 +148,9 @@ class MyGate extends Gate {
             while(true) {
                 const gPosition = string.indexOf("g", from);
                 const kPosition = string.indexOf("k", from);
-                console.log(gPosition, kPosition)
                 from = kPosition + 1;
                 if(kPosition !== -1) {
                     a.push([gPosition, kPosition]);
-                    console.log(a);
                 }else {
                     break;
                 }

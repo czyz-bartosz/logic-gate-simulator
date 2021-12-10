@@ -204,9 +204,6 @@ function goThroughTheGates(gate) {
                 }
                 
             }
-            // outputsA.forEach((value, index) => {
-            //     functionString = functionString.replaceAll(value, `'+goThroughTheGates(gates[parseInt(gateArray[${index}.id)])+'`);
-            // });
             console.log(gate, string);
             return eval(string);
         }
