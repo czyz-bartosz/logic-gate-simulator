@@ -182,15 +182,15 @@ function goThroughTheGates(gate, outputIndex) {
             outputIndexArray.push(getWhichOutput(el));
         });
         if(gate instanceof ANDGate || gate instanceof NOTGate) {
-            gateArray.forEach((el) => {
-                string += "goThroughTheGates(gates[" + parseInt(el.id) + "])+"
+            gateArray.forEach((el, index) => {
+                string += `goThroughTheGates(gates[${parseInt(el.id)}], ${outputIndexArray[index]})+`
             });
             string = string.slice(0, (string.length - 1));
             console.log(gate, string);
             return (gate.functionStringHead + eval(string) + gate.functionStringTail);
         }else {
-            const stringIndexArr = gate.stringIndexArr[0];
-            let functionString = gate.makeStringArr[0];
+            const stringIndexArr = gate.stringIndexArr[outputIndex];
+            let functionString = gate.makeStringArr[outputIndex];
             for(let i = 0; i <= stringIndexArr.length; i++) {
                 let start;
                 let end;
@@ -205,11 +205,10 @@ function goThroughTheGates(gate, outputIndex) {
                     end = stringIndexArr[i][0];
                 }
                 if(i !== stringIndexArr.length) {
-                    string += `functionString.slice(${start+1},${end})+goThroughTheGates(gates[parseInt(gateArray[${parseInt(functionString.slice(stringIndexArr[i][0]+1, stringIndexArr[i][1]))}].id)])+`;
+                    string += `functionString.slice(${start+1},${end})+goThroughTheGates(gates[parseInt(gateArray[${parseInt(functionString.slice(stringIndexArr[i][0]+1, stringIndexArr[i][1]))}].id)], ${outputIndexArray[parseInt(functionString.slice(stringIndexArr[i][0]+1, stringIndexArr[i][1]))]})+`;
                 }else {
                     string += `functionString.slice(${start+1},${end})`;
                 }
-                
             }
             console.log(gate, string);
             return eval(string);
