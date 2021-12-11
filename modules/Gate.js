@@ -134,7 +134,7 @@ class MyGate extends Gate {
         this.functionString.forEach((string) => {
             let str = string;
             this.outputsArray.forEach((value, index) => {
-                str = str.replaceAll(value+",", 'g'+index+'k');
+                str = str.replaceAll(value + ",", "g" +index + "k");
             });
             arr.push(str);
         });

@@ -125,6 +125,11 @@ function getPreviousGate(input) {
     return gates[wire.array1[1]];
 }
 
+function getWhichOutput(input) {
+    const wire = wires[input.wire];
+    return wire.array1[0];
+}
+
 document.querySelector("button").addEventListener("click", () => {
     const inputsElementArray = Array.from(document.querySelectorAll(".work.inputs-element"));
     const outputsElementArray = Array.from(document.querySelectorAll(".work.outputs-element"));
@@ -137,7 +142,7 @@ document.querySelector("button").addEventListener("click", () => {
         return gates[id].outputs[0].outputEl.id;
     });
     idInputsElement.forEach((value) => {
-        const stringFun = prepareString(goThroughTheGates(getPreviousGate(gates[value].inputs[0])));
+        const stringFun = prepareString(goThroughTheGates(getPreviousGate(gates[value].inputs[0]), getWhichOutput(gates[value].inputs[0])));
         console.log("koniec", stringFun, outputsArray);
         functionStringArray.push(stringFun);
     });
@@ -167,12 +172,14 @@ function prepareString(str) {
     return string;
 }
 
-function goThroughTheGates(gate) {
+function goThroughTheGates(gate, outputIndex) {
     if(!gate.element.classList.contains("outputs-element")) {
         const gateArray = [];
+        const outputIndexArray = [];
         let string = "";
         gate.inputs.forEach((el) => {
             gateArray.push(getPreviousGate(el));
+            outputIndexArray.push(getWhichOutput(el));
         });
         if(gate instanceof ANDGate || gate instanceof NOTGate) {
             gateArray.forEach((el) => {
