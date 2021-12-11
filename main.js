@@ -133,30 +133,33 @@ function getWhichOutput(input) {
 
 document.querySelector("button").addEventListener("click", () => {
     const inputsElementArray = Array.from(document.querySelectorAll(".work.inputs-element"));
-    // const outputsElementArray = Array.from(document.querySelectorAll(".work.outputs-element"));
+    const outputsElementArray = Array.from(document.querySelectorAll(".work.outputs-element"));
     const functionStringArray = [];
     const idInputsElement = inputsElementArray.map((el) => {
         return parseInt(el.id);
     });
-    // const outputsSet = outputsElementArray.map((el) => {
-    //     const id = parseInt(el.id);
-    //     return gates[id].outputs[0].outputEl.id;
-    // });
+    const outputsArray = outputsElementArray.map((el) => {
+        const id = parseInt(el.id);
+        return gates[id].outputs[0].outputEl.id;
+    });
     idInputsElement.forEach((value) => {
         const stringFun = prepareString(goThroughTheGates(getPreviousGate(gates[value].inputs[0]), getWhichOutput(gates[value].inputs[0])));
         console.log("koniec", stringFun);
         functionStringArray.push(stringFun);
     });
-    console.log(functionStringArray, outputsSet);
-    createMyGate(functionStringArray, outputsSet);
+
+    const outputsArr = outputsArray.filter((value) => {
+        return outputsSet.has(value);
+    });
+    console.log(functionStringArray, outputsArr);
+    createMyGate(functionStringArray, outputsArr);
     workArea.innerHTML = null;
     outputsSet.clear();
 });
 
-function createMyGate(functionStringArray, outputsSet) {
-    const amountOfInputs = outputsSet.size;
+function createMyGate(functionStringArray, outputsArray) {
+    const amountOfInputs = outputsArray.length;
     const amountOfOutputs = functionStringArray.length;
-    const outputsArray = Array.from(outputsSet);
     presetsGates.push(new MyGate(presetsGates.length, amountOfInputs, amountOfOutputs, functionStringArray, outputsArray));
     makePresetsGate(presetsGates[presetsGates.length - 1], presetsGates.length - 1);
 }
