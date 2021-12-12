@@ -48,10 +48,10 @@ function makeConnection(el) {
     }
 }
 
-presetsGates.push(new ANDGate(presetsGates.length));
-presetsGates.push(new NOTGate(presetsGates.length));
 presetsGates.push(new OutputsElement(1, presetsGates.length));
 presetsGates.push(new InputsElement(1, presetsGates.length));
+presetsGates.push(new ANDGate(presetsGates.length));
+presetsGates.push(new NOTGate(presetsGates.length));
 
 presetsGates.forEach((el, index) => {
     makePresetsGate(el, index);
