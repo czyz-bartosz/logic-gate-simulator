@@ -8,6 +8,7 @@ const workArea = document.querySelector("#work-area");
 const gatesToolbox = document.querySelector("footer");
 const createGateMenuButton = document.querySelector("#create-gate-menu-button");
 const createGateButton = document.querySelector("#create-gate-button");
+const createBlockMenu = document.querySelector("#create-block-menu");
 const presetsGates = [];
 const gates = [];
 const wires = [];
@@ -167,6 +168,7 @@ function createMyGate(functionStringArray, outputsArray) {
     const name = nameInput.value;
     const color = colorInput.value;
     presetsGates.push(new MyGate(presetsGates.length, amountOfInputs, amountOfOutputs, functionStringArray, outputsArray, name, color));
+    createBlockMenu.style.display = "none";
     makePresetsGate(presetsGates[presetsGates.length - 1], presetsGates.length - 1);
 }
 
@@ -249,4 +251,5 @@ createGateMenuButton.addEventListener("click", () => {
     }
     const colorInput = document.querySelector("#color");
     colorInput.value = randomColor();
+    createBlockMenu.style.display = "flex";
 });
