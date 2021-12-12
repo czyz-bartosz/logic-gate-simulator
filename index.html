@@ -9,12 +9,19 @@
     </head>
     <body oncontextmenu="return false;">
         <header>
-            <button id="create-gate-button">create gate</button>
+            <button id="create-gate-menu-button">create gate</button>
         </header>
         <main>
             <div id="work-area"></div>
         </main>
         <footer></footer>
+        <div id="create-block-menu">
+            <label for="color">Color:</label>
+            <input type="color" name="color" id="color">
+            <label for="name">Name:</label>
+            <input type="text" name="name" id="name">
+            <button id="create-gate-button">create</button>
+        </div>
         <script type="module" src="./main.js"></script>
     </body>
 </html>

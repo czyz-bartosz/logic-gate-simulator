@@ -6,6 +6,7 @@ export { gates, wires, workArea };
 
 const workArea = document.querySelector("#work-area");
 const gatesToolbox = document.querySelector("footer");
+const createGateMenuButton = document.querySelector("#create-gate-menu-button");
 const createGateButton = document.querySelector("#create-gate-button");
 const presetsGates = [];
 const gates = [];
@@ -161,7 +162,11 @@ createGateButton.addEventListener("click", () => {
 function createMyGate(functionStringArray, outputsArray) {
     const amountOfInputs = outputsArray.length;
     const amountOfOutputs = functionStringArray.length;
-    presetsGates.push(new MyGate(presetsGates.length, amountOfInputs, amountOfOutputs, functionStringArray, outputsArray));
+    const colorInput = document.querySelector("#color");
+    const nameInput = document.querySelector("#name");
+    const name = nameInput.value;
+    const color = colorInput.value;
+    presetsGates.push(new MyGate(presetsGates.length, amountOfInputs, amountOfOutputs, functionStringArray, outputsArray, name, color));
     makePresetsGate(presetsGates[presetsGates.length - 1], presetsGates.length - 1);
 }
 
@@ -226,3 +231,22 @@ function goThroughTheGates(gate, outputIndex) {
         return id + ",";
     }
 }
+
+createGateMenuButton.addEventListener("click", () => {
+    function randomColor() {
+        const deg = Math.random() * 360;
+        function hslToHex(h, s=60, l=50) {
+            l /= 100;
+            const a = s * Math.min(l, 1 - l) / 100;
+            const f = n => {
+                const k = (n + h / 30) % 12;
+                const color = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
+                return Math.round(255 * color).toString(16).padStart(2, '0');
+            };
+            return `#${f(0)}${f(8)}${f(4)}`;
+        }
+        return hslToHex(deg);
+    }
+    const colorInput = document.querySelector("#color");
+    colorInput.value = randomColor();
+});
