@@ -5,7 +5,8 @@ import { InputsElement } from "./modules/InputsElement.js";
 export { gates, wires, workArea };
 
 const workArea = document.querySelector("#work-area");
-const gatesToolbox = document.querySelector("#left");
+const gatesToolbox = document.querySelector("footer");
+const createGateButton = document.querySelector("#create-gate-button");
 const presetsGates = [];
 const gates = [];
 const wires = [];
@@ -131,7 +132,7 @@ function getWhichOutput(input) {
     return wire.array1[0];
 }
 
-document.querySelector("button").addEventListener("click", () => {
+createGateButton.addEventListener("click", () => {
     const inputsElementArray = Array.from(document.querySelectorAll(".work.inputs-element"));
     const outputsElementArray = Array.from(document.querySelectorAll(".work.outputs-element"));
     const functionStringArray = [];

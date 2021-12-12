@@ -6,6 +6,7 @@
 
 body {
     display: flex;
+    flex-direction: column;
     width: 100vw;
     height: 100vh;
 }
@@ -14,18 +15,32 @@ main {
     width: 100%;
     display: flex;
     position: relative;
+    flex-grow: 1;
+}
+
+footer {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background-color: rgba(0, 0, 0, 0.541);
+    overflow: auto;
+}
+
+header {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 40px;
+    background-color: rgba(0, 0, 0, 0.541);
 }
 
 .gate {
-    width: 200px;
-    height: 100px;
+    width: 120px;
     background-color: aquamarine;
     border: 5px solid black;
     display: flex;
-    justify-content: center;
     align-items: center;
     cursor: pointer;
-    display: flex;
     justify-content: space-between;
     padding: 10px;
 }
@@ -36,32 +51,16 @@ main {
     transform: translate(-50%, -50%);
 }
 
-#outputs-con {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    background: rgb(240, 73, 73);
-    padding: 10px;
-}
-
-#inputs-con {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    background: darkgray;
-    padding: 10px;
-}
-
 .inputs {
     display: flex;
     flex-direction: column;
-    gap: 30px;
+    gap: 5px;
 }
 
 .outputs {
     display: flex;
     flex-direction: column;
-    gap: 30px;
+    gap: 5px;
 }
 
 .input {
@@ -75,7 +74,7 @@ main {
     width: 20px;
     height: 20px;
     border-radius: 50%;
-    background: blue;
+    background: cornflowerblue;
 }
 
 .true {
@@ -83,7 +82,7 @@ main {
 }
 
 .false {
-    background: red;
+    background: cornflowerblue;
 }
 
 svg {
@@ -100,9 +99,7 @@ path {
 
 #work-area {
     display: flex;
-    gap: 50px;
     width: 100%;
-    padding: 50px;
     position: relative;
 }
 
@@ -113,17 +110,20 @@ path {
 .outputs-element {
     background-color: darkred;
     padding: 10px;
+    cursor: pointer;
 }
 
 .inputs-element {
     background-color: black;
     padding: 10px;
+    cursor: pointer;
 }
 
-#left {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-    background-color: darksalmon;
+.draggable-gate .inputs,
+.draggable-gate .outputs {
+    display: none;
+}
+
+.gate.draggable-gate {
+    justify-content: center;
 }
