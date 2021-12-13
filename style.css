@@ -9,6 +9,7 @@ body {
     flex-direction: column;
     width: 100vw;
     height: 100vh;
+    user-select: none;
 }
 
 main {
@@ -43,6 +44,10 @@ header {
     cursor: pointer;
     justify-content: space-between;
     padding: 10px;
+}
+
+.work.selected {
+    box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.89), -3px -3px 6px rgba(0, 0, 0, 0.5);
 }
 
 .work {
@@ -92,9 +97,13 @@ svg {
 path {
     fill: none;
     stroke: black;
-    stroke-width: 6;
+    stroke-width: 3;
     stroke-linejoin: round;
     cursor: pointer;
+}
+
+path.selected {
+    filter: drop-shadow( 0px 2px 3px rgb(0, 0, 0));
 }
 
 #work-area {
