@@ -1,4 +1,4 @@
-import { wires, gates, workArea } from "../main.js";
+import { wires, gates, workArea, selectElement } from "../main.js";
 
 function getPosition(el) {
     const eleRect = el.getBoundingClientRect();
@@ -87,8 +87,10 @@ export class Wire {
     addElement() {
         this.con.appendChild(this.el);
         workArea.appendChild(this.con);
-        this.el.addEventListener("click", (el) => {
-            console.log(el.target);
+        this.el.addEventListener("click", (event) => {
+            event.stopPropagation();
+            this.el.classList.add("selected");
+            selectElement(this.el);
         });
     }
 }
