@@ -279,7 +279,7 @@ createGateMenuButton.addEventListener("click", () => {
 });
 
 deleteButton.addEventListener("click", () => {
-    const id = selectedElement?.id.split("-");
+    const id = selectedElement?.id?.split("-");
     if(id[1] === "gate") {
         gates[id[0]].delete();
     }else if(id[1] === "wire"){

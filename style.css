@@ -92,6 +92,7 @@ header {
 
 svg {
     position: absolute;
+    pointer-events: none;
 }
 
 path {
@@ -100,6 +101,7 @@ path {
     stroke-width: 3;
     stroke-linejoin: round;
     cursor: pointer;
+    pointer-events: initial;
 }
 
 path.selected {
