@@ -31,4 +31,10 @@ export class InputsElement {
     clone() {
         return new InputsElement(1, (gates.length + "-gate"));
     }
+    delete() {
+        this.element.remove();
+        this.inputs.forEach((input) => {
+            wires[input.wire]?.delete();
+        });
+    }
 }

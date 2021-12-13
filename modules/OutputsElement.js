@@ -22,7 +22,7 @@ export class OutputsElement {
                 this.outputs[i].outputEl.classList.toggle("false");
                 this.outputs[i].outputEl.classList.toggle("true");
                 this.outputs[i].wires.forEach((el) => {
-                    wires[el].transfer();
+                    wires[el]?.transfer();
                 });
             });
             this.element.appendChild(this.outputs[i].outputEl);
@@ -37,5 +37,13 @@ export class OutputsElement {
     }
     clone() {
         return new OutputsElement(1, (gates.length + "-gate"));
+    }
+    delete() {
+        this.element.remove();
+        this.outputs.forEach((output) => {
+            output.wires.forEach((wireId) => {
+                wires[wireId]?.delete();
+            });
+        });
     }
 }

@@ -9,6 +9,7 @@ const gatesToolbox = document.querySelector("footer");
 const createGateMenuButton = document.querySelector("#create-gate-menu-button");
 const createGateButton = document.querySelector("#create-gate-button");
 const createBlockMenu = document.querySelector("#create-block-menu");
+const deleteButton = document.querySelector("#delete-button");
 const presetsGates = [];
 const gates = [];
 const wires = [];
@@ -276,3 +277,12 @@ createGateMenuButton.addEventListener("click", () => {
     colorInput.value = randomColor();
     createBlockMenu.style.display = "flex";
 });
+
+deleteButton.addEventListener("click", () => {
+    const id = selectedElement?.id.split("-");
+    if(id[1] === "gate") {
+        gates[id[0]].delete();
+    }else if(id[1] === "wire"){
+        wires[id[0]].delete();
+    }
+})

@@ -24,6 +24,8 @@ export class Wire {
         this.array2 = el2.id.split("-");
         gates[this.array1[1]]?.outputs[this.array1[0]].wires.push(this.id);
         gates[this.array2[1]].inputs[this.array2[0]].wire = this.id;
+        const myArray = this.el2.element.id.split("-");
+        this.nextGateId = +myArray[1];
         this.transfer();
         this.draw();
         this.addElement();
@@ -35,12 +37,10 @@ export class Wire {
     transfer() {
         if(this.el1.element.classList.contains("true")){
             const myArray = this.el2.element.id.split("-");
-            this.nextGateId = +myArray[1];
             const id = +myArray[0];
             gates[this.nextGateId].inputs[id].setInputValue(true, this.nextGateId);
         }else if(this.el1.element.classList.contains("false")) {
             const myArray = this.el2.element.id.split("-");
-            this.nextGateId = +myArray[1];
             const id = +myArray[0];
             gates[this.nextGateId].inputs[id].setInputValue(false, this.nextGateId);
         }
@@ -87,10 +87,21 @@ export class Wire {
     addElement() {
         this.con.appendChild(this.el);
         workArea.appendChild(this.con);
+        this.el.id = this.id + "-wire";
         this.el.addEventListener("click", (event) => {
             event.stopPropagation();
             this.el.classList.add("selected");
             selectElement(this.el);
         });
+    }
+    delete() {
+        this.con.remove();
+        const arrayOutputsWires = gates[this.array1[1]]?.outputs[this.array1[0]].wires;
+        const index = arrayOutputsWires.indexOf(this.id);
+        if (index > -1) {
+            arrayOutputsWires[index] = undefined;
+        }
+        gates[this.array2[1]].inputs[this.array2[0]].setInputValue(false, this.nextGateId);
+        gates[this.array2[1]].inputs[this.array2[0]].wire = undefined;
     }
 }

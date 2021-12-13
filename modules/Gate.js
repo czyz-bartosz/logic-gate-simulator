@@ -52,6 +52,17 @@ class Gate {
             wires[this.inputs[id].wire]?.draw();
         });
     }
+    delete() {
+        this.element.remove();
+        this.outputs.forEach((output) => {
+            output.wires.forEach((wireId) => {
+                wires[wireId]?.delete();
+            });
+        });
+        this.inputs.forEach((input) => {
+            wires[input.wire]?.delete();
+        });
+    }
 }
 
 class ANDGate extends Gate {
@@ -60,6 +71,7 @@ class ANDGate extends Gate {
     constructor(id) {
         super(id);
         this.text.innerHTML += "AND";
+        this.changeStatus();
     }
     returnValue(a, b) {
         if(a === true && b === true) {
@@ -82,7 +94,7 @@ class ANDGate extends Gate {
             this.outputs[0].outputEl.classList.remove("true");
         }
         this.outputs[0].wires.forEach((el) => {
-            wires[el].transfer();
+            wires[el]?.transfer();
         });
     }
 }
@@ -94,6 +106,7 @@ class NOTGate extends Gate {
     constructor(id, inputs, outputs) {
         super(id, 1, 1);
         this.text.innerHTML += "NOT";
+        this.changeStatus();
     }
     returnValue(a) {
         return !a;
@@ -112,7 +125,7 @@ class NOTGate extends Gate {
             this.outputs[0].outputEl.classList.remove("true");
         }
         this.outputs[0].wires.forEach((el) => {
-            wires[el].transfer();
+            wires[el]?.transfer();
         });
     }
 }
@@ -189,7 +202,7 @@ class MyGate extends Gate {
         });
         this.outputs.forEach((el) => {
             el.wires.forEach((el) => {
-                wires[el].transfer();
+                wires[el]?.transfer();
             });
         });
     }
