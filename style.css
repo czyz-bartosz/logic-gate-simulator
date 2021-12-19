@@ -1,0 +1,154 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    width: 100vw;
+    height: 100vh;
+    user-select: none;
+}
+
+main {
+    width: 100%;
+    display: flex;
+    position: relative;
+    flex-grow: 1;
+}
+
+footer {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background-color: rgba(0, 0, 0, 0.541);
+    overflow: auto;
+}
+
+header {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 40px;
+    background-color: rgba(0, 0, 0, 0.541);
+}
+
+.gate {
+    width: 120px;
+    background-color: aquamarine;
+    border: 5px solid black;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    justify-content: space-between;
+    padding: 10px;
+}
+
+.work.selected {
+    box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.89), -3px -3px 6px rgba(0, 0, 0, 0.5);
+}
+
+.work {
+    position: absolute;
+    z-index: 1;
+    transform: translate(-50%, -50%);
+}
+
+.inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.outputs {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.input {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: cornflowerblue;
+}
+
+.output {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: cornflowerblue;
+}
+
+.true {
+    background: chartreuse;
+}
+
+.false {
+    background: cornflowerblue;
+}
+
+svg {
+    position: absolute;
+    pointer-events: none;
+}
+
+path {
+    fill: none;
+    stroke: black;
+    stroke-width: 3;
+    stroke-linejoin: round;
+    cursor: pointer;
+    pointer-events: initial;
+}
+
+path.selected {
+    filter: drop-shadow( 0px 2px 3px rgb(0, 0, 0));
+}
+
+#work-area {
+    display: flex;
+    width: 100%;
+    position: relative;
+}
+
+.hide {
+    z-index: -1;
+}
+
+.outputs-element {
+    background-color: darkred;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.inputs-element {
+    background-color: black;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.draggable-gate .inputs,
+.draggable-gate .outputs {
+    display: none;
+}
+
+.gate.draggable-gate {
+    justify-content: center;
+}
+
+#create-block-menu {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: none;
+    flex-direction: column;
+    gap: 20px;
+    border: 1px solid black;
+    padding: 10px;
+    z-index: 2;
+    background-color: white;
+}
