@@ -163,8 +163,8 @@ function getWhichOutput(input) {
 }
 
 createGateButton.addEventListener("click", () => {
-    const inputsElementArray = Array.from(document.querySelectorAll(".work.inputs-element"));
-    const outputsElementArray = Array.from(document.querySelectorAll(".work.outputs-element"));
+    const inputsElementArray = Array.from(document.querySelectorAll("#work-area .inputs-element"));
+    const outputsElementArray = Array.from(document.querySelectorAll("#work-area .outputs-element"));
     const functionStringArray = [];
     const idInputsElement = inputsElementArray.map((el) => {
         return parseInt(el.id);

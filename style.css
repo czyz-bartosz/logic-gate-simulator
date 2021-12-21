@@ -130,14 +130,6 @@ path.selected {
     cursor: pointer;
 }
 
-.n-outputs-element {
-
-}
-
-.n-inputs-element {
-    
-}
-
 .draggable-gate .inputs,
 .draggable-gate .outputs {
     display: none;
