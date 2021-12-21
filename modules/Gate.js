@@ -70,7 +70,7 @@ class ANDGate extends Gate {
     functionStringTail = ")";
     constructor(id) {
         super(id);
-        this.text.innerHTML += "AND";
+        this.text.textContent = "AND";
         this.changeStatus();
     }
     returnValue(a, b) {
@@ -105,7 +105,7 @@ class NOTGate extends Gate {
     functionStringTail = ")";
     constructor(id, inputs, outputs) {
         super(id, 1, 1);
-        this.text.innerHTML += "NOT";
+        this.text.textContent = "NOT";
         this.changeStatus();
     }
     returnValue(a) {
@@ -135,14 +135,13 @@ class MyGate extends Gate {
     functionStringTail;
     constructor(id, inputs, outputs, functionStringArray, outputsArray, name, color) {
         super(id, inputs, outputs);
-        this.text.innerHTML += "MyGate";
         this.functionString = functionStringArray;
         this.outputsArray = outputsArray;
         this.makeStringArr = [...this.makeString()];
         this.stringIndexArr = [...this.stringIndex()];
         this.name = name;
         this.color = color;
-        this.text.innerHTML = name;
+        this.text.textContent = name;
         this.element.style.background = color;
         console.log("a", this.makeStringArr, this.stringIndexArr)
     }
