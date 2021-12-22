@@ -17,10 +17,13 @@ export class OutputsElement {
         for(let i = 0; i < this.amountOfOutputs; i++) {
             this.outputs.push(new Output(i));
             this.outputs[i].outputEl.setAttribute("id", i+"-"+this.id);
-            this.outputs[i].outputEl.classList.add("false");
             this.outputs[i].outputEl.addEventListener("dblclick", () => {
-                this.outputs[i].outputEl.classList.toggle("false");
-                this.outputs[i].outputEl.classList.toggle("true");
+                this.outputs[i].toggleValue();
+                const parentElement = this.element.parentElement;
+                if(parentElement.classList.contains("n-outputs-element")) {
+                    const id = parseInt(parentElement.id);
+                    gates[id].changeNumber();
+                }
                 this.outputs[i].wires.forEach((el) => {
                     wires[el]?.transfer();
                 });
