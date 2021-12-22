@@ -1,9 +1,11 @@
-import { gates, wires } from "../main.js";
+import { gates } from "../main.js";
 import { InputsElement } from "./InputsElement.js";
 
 export class nInputsElement {
     element = document.createElement("div");
     valueEl = document.createElement("h2");
+    changeModeButton = document.createElement("button");
+    numberMode = 0;
     inputsElementsId = [];
     constructor(n, id=gates.length) {
         this.element.classList.add("n-inputs-element");
@@ -17,14 +19,24 @@ export class nInputsElement {
         const idString = this.id.toString();
         if(idString.includes("gate")) {
             for(let i = 1; i <= n; i++) {
-                this.valueEl.textContent = 0;
                 gates[id + i] = new InputsElement(1, (id + i + "-gate"));
                 const inputsEl = gates[id + i];
                 inputsEl.element.id = inputsEl.id;
                 this.inputsElementsId.push(id + i);
-                this.element.appendChild(inputsEl.element);
-                this.changeNumber();
+                this.element.appendChild(inputsEl.element);    
             }
+            this.changeModeButton.textContent = "u2";
+            this.changeModeButton.addEventListener("click", () => {
+                if(this.numberMode) {
+                    this.numberMode = 0;
+                }else {
+                    this.numberMode = 1;
+                }
+                this.changeNumber();
+            });
+            this.element.appendChild(this.changeModeButton);
+            this.valueEl.textContent = 0;
+            this.changeNumber();
         }else {
             this.valueEl.textContent = n;
         }
@@ -36,8 +48,14 @@ export class nInputsElement {
             const id = this.inputsElementsId[j];
             gates[id].inputs.forEach((el) => {
                 const value = el.currentValue;
-                if(value) {
-                    sum += Math.pow(2, i);
+                if(j === 0 && this.numberMode === 1) {
+                    if(value) {
+                        sum += Math.pow(2, i) * -1;
+                    }
+                }else {
+                    if(value) {
+                        sum += Math.pow(2, i);
+                    }
                 }
                 i++;
             });
