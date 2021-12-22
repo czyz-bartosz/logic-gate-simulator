@@ -130,6 +130,22 @@ path.selected {
     cursor: pointer;
 }
 
+.n-outputs-element h2 {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.n-outputs-element {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: darkred;
+}
+
 .draggable-gate .inputs,
 .draggable-gate .outputs {
     display: none;

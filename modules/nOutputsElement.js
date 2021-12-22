@@ -3,9 +3,11 @@ import { OutputsElement } from "./OutputsElement.js";
 
 export class nOutputsElement {
     element = document.createElement("div");
+    valueEl = document.createElement("h2");
     outputsElements = [];
     constructor(n, id=gates.length) {
         this.element.classList.add("n-outputs-element");
+        this.element.appendChild(this.valueEl);
         this.n = n;
         this.id = id;
         this.addOutputsElements(n);
@@ -14,19 +16,18 @@ export class nOutputsElement {
         const id = parseInt(this.id);
         const idString = this.id.toString();
         console.log(idString);
-        for(let i = 1; i <= n; i++) {
-            if(idString.includes("gate")) {
+        if(idString.includes("gate")) {
+            for(let i = 1; i <= n; i++) {
                 console.log(this.id)
+                this.valueEl.textContent = 0;
                 gates[id + i] = new OutputsElement(1, (id + i + "-gate"));
                 const outputsEl = gates[id + i];
                 outputsEl.element.id = outputsEl.id;
                 this.outputsElements.push(outputsEl);
                 this.element.appendChild(outputsEl.element);
-            }else {
-                const outputsEl = new OutputsElement(1);
-                this.outputsElements.push(outputsEl);
-                this.element.appendChild(outputsEl.element);
             }
+        }else {
+            this.valueEl.textContent = n;
         }
     }
     move() {
@@ -43,7 +44,6 @@ export class nOutputsElement {
             });
             });
         });
-        
     }
     clone() {
         return new nOutputsElement(this.n, (gates.length + "-gate"))
