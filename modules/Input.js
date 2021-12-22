@@ -2,7 +2,7 @@ import { gates } from "../main.js";
 
 export class Input {
     inputEl = document.createElement("div");
-    currentValue = null;
+    currentValue = false;
     id = null;
     wire;
     constructor(id) {

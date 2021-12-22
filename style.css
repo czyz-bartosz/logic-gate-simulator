@@ -130,6 +130,40 @@ path.selected {
     cursor: pointer;
 }
 
+.n-outputs-element h2 {
+    color: white;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.n-outputs-element {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: darkred;
+}
+
+.n-inputs-element h2 {
+    color: white;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.n-inputs-element {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: black;
+}
+
 .draggable-gate .inputs,
 .draggable-gate .outputs {
     display: none;

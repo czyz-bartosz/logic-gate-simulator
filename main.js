@@ -2,7 +2,9 @@ import { NOTGate, ANDGate, MyGate } from "./modules/Gate.js";
 import { Wire } from "./modules/Wire.js";
 import { OutputsElement } from "./modules/OutputsElement.js";
 import { InputsElement } from "./modules/InputsElement.js";
-export { gates, wires, workArea, selectElement };
+import { nOutputsElement } from "./modules/nOutputsElement.js";
+import { nInputsElement } from "./modules/nInputsElement.js";
+export { gates, wires, workArea, presetsGates, selectElement };
 
 const workArea = document.querySelector("#work-area");
 const gatesToolbox = document.querySelector("footer");
@@ -68,7 +70,13 @@ function makeConnection(el) {
 }
 
 presetsGates.push(new OutputsElement(1, presetsGates.length));
+presetsGates.push(new nOutputsElement(2, presetsGates.length));
+presetsGates.push(new nOutputsElement(4, presetsGates.length));
+presetsGates.push(new nOutputsElement(8, presetsGates.length));
 presetsGates.push(new InputsElement(1, presetsGates.length));
+presetsGates.push(new nInputsElement(2, presetsGates.length));
+presetsGates.push(new nInputsElement(4, presetsGates.length));
+presetsGates.push(new nInputsElement(8, presetsGates.length));
 presetsGates.push(new ANDGate(presetsGates.length));
 presetsGates.push(new NOTGate(presetsGates.length));
 
@@ -108,24 +116,25 @@ workArea.addEventListener("drop", function(event) {
         el.style.left = x + "px";
         gates[idGate].move();
     }else {
-        gates.push(presetsGates[parseInt(id)].clone());
-        this.appendChild(gates[gates.length-1].element);
-        const inputsArr = gates[gates.length-1].element.querySelectorAll(".input");
-        const outputsArr = gates[gates.length-1].element.querySelectorAll(".output");
-        gates[gates.length-1].element.classList.add("work");
+        const gatesIndex = gates.length;
+        gates[gatesIndex] = presetsGates[parseInt(id)].clone();
+        this.appendChild(gates[gatesIndex].element);
+        const inputsArr = gates[gatesIndex].element.querySelectorAll(".input");
+        const outputsArr = gates[gatesIndex].element.querySelectorAll(".output");
+        gates[gatesIndex].element.classList.add("work");
         const rect = workArea.getBoundingClientRect();
         const x = event.clientX - rect.left;
         const y = event.clientY - rect.top;
-        gates[gates.length-1].element.style.top = y + "px";
-        gates[gates.length-1].element.style.left = x + "px";
-        gates[gates.length-1].element.id = gates[gates.length-1].id;
-        gates[gates.length-1].element.setAttribute("draggable", "true");
-        gates[gates.length-1].element.addEventListener("click", function(event) {
+        gates[gatesIndex].element.style.top = y + "px";
+        gates[gatesIndex].element.style.left = x + "px";
+        gates[gatesIndex].element.id = gates[gatesIndex].id;
+        gates[gatesIndex].element.setAttribute("draggable", "true");
+        gates[gatesIndex].element.addEventListener("click", function(event) {
             event.stopPropagation();
             this.classList.add("selected");
             selectElement(this);
         });
-        gates[gates.length-1].element.addEventListener("dragstart", function(event) {
+        gates[gatesIndex].element.addEventListener("dragstart", function(event) {
             const dragElementId = this.getAttribute("id");
             hideSVG();
             event.dataTransfer.setData("text/plain", dragElementId);
@@ -145,6 +154,7 @@ workArea.addEventListener("drop", function(event) {
                 }
             });
         });
+        console.log(gates)
     }
 });
 
@@ -159,8 +169,8 @@ function getWhichOutput(input) {
 }
 
 createGateButton.addEventListener("click", () => {
-    const inputsElementArray = Array.from(document.querySelectorAll(".work.inputs-element"));
-    const outputsElementArray = Array.from(document.querySelectorAll(".work.outputs-element"));
+    const inputsElementArray = Array.from(document.querySelectorAll("#work-area .inputs-element"));
+    const outputsElementArray = Array.from(document.querySelectorAll("#work-area .outputs-element"));
     const functionStringArray = [];
     const idInputsElement = inputsElementArray.map((el) => {
         return parseInt(el.id);
