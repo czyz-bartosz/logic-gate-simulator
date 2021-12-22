@@ -34,7 +34,7 @@ export class OutputsElement {
     move() {
         this.outputs.forEach((el, id) => {
             this.outputs[id]?.wires.forEach((el, idW) => {
-                wires[this.outputs[id].wires[idW]].draw();
+                wires[this.outputs[id].wires[idW]]?.draw();
             });
         });
     }

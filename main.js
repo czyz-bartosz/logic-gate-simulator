@@ -2,7 +2,8 @@ import { NOTGate, ANDGate, MyGate } from "./modules/Gate.js";
 import { Wire } from "./modules/Wire.js";
 import { OutputsElement } from "./modules/OutputsElement.js";
 import { InputsElement } from "./modules/InputsElement.js";
-import { nOutputsElement } from "./modules/nOutputsElement.js"
+import { nOutputsElement } from "./modules/nOutputsElement.js";
+import { nInputsElement } from "./modules/nInputsElement.js";
 export { gates, wires, workArea, presetsGates, selectElement };
 
 const workArea = document.querySelector("#work-area");
@@ -73,6 +74,9 @@ presetsGates.push(new nOutputsElement(2, presetsGates.length));
 presetsGates.push(new nOutputsElement(4, presetsGates.length));
 presetsGates.push(new nOutputsElement(8, presetsGates.length));
 presetsGates.push(new InputsElement(1, presetsGates.length));
+presetsGates.push(new nInputsElement(2, presetsGates.length));
+presetsGates.push(new nInputsElement(4, presetsGates.length));
+presetsGates.push(new nInputsElement(8, presetsGates.length));
 presetsGates.push(new ANDGate(presetsGates.length));
 presetsGates.push(new NOTGate(presetsGates.length));
 

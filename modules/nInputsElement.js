@@ -1,28 +1,28 @@
 import { gates, wires } from "../main.js";
-import { OutputsElement } from "./OutputsElement.js";
+import { InputsElement } from "./InputsElement.js";
 
-export class nOutputsElement {
+export class nInputsElement {
     element = document.createElement("div");
     valueEl = document.createElement("h2");
-    outputsElementsId = [];
+    inputsElementsId = [];
     constructor(n, id=gates.length) {
-        this.element.classList.add("n-outputs-element");
+        this.element.classList.add("n-inputs-element");
         this.element.appendChild(this.valueEl);
         this.n = n;
         this.id = id;
-        this.addOutputsElements(n);
+        this.addInputsElements(n);
     }
-    addOutputsElements(n) {
+    addInputsElements(n) {
         const id = parseInt(this.id);
         const idString = this.id.toString();
         if(idString.includes("gate")) {
             for(let i = 1; i <= n; i++) {
                 this.valueEl.textContent = 0;
-                gates[id + i] = new OutputsElement(1, (id + i + "-gate"));
-                const outputsEl = gates[id + i];
-                outputsEl.element.id = outputsEl.id;
-                this.outputsElementsId.push(id + i);
-                this.element.appendChild(outputsEl.element);
+                gates[id + i] = new InputsElement(1, (id + i + "-gate"));
+                const inputsEl = gates[id + i];
+                inputsEl.element.id = inputsEl.id;
+                this.inputsElementsId.push(id + i);
+                this.element.appendChild(inputsEl.element);
                 this.changeNumber();
             }
         }else {
@@ -32,9 +32,9 @@ export class nOutputsElement {
     changeNumber() {
         let i = 0;
         let sum = 0;
-        for(let j = this.outputsElementsId.length - 1; j >= 0; j--) {
-            const id = this.outputsElementsId[j];
-            gates[id].outputs.forEach((el) => {
+        for(let j = this.inputsElementsId.length - 1; j >= 0; j--) {
+            const id = this.inputsElementsId[j];
+            gates[id].inputs.forEach((el) => {
                 const value = el.currentValue;
                 if(value) {
                     sum += Math.pow(2, i);
@@ -45,19 +45,19 @@ export class nOutputsElement {
         this.valueEl.textContent = sum;
     }
     move() {
-        this.outputsElementsId.forEach((id) => {
+        this.inputsElementsId.forEach((id) => {
             const el = gates[id];
             el.move();
         });
     }
     delete() {
         this.element.remove();
-        this.outputsElementsId.forEach((id) => {
+        this.inputsElementsId.forEach((id) => {
             const el = gates[id];
             el.delete();
         });
     }
     clone() {
-        return new nOutputsElement(this.n, (gates.length + "-gate"))
+        return new nInputsElement(this.n, (gates.length + "-gate"))
     }
 }

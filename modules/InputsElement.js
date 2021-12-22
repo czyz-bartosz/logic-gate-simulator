@@ -27,6 +27,11 @@ export class InputsElement {
         });
     }
     changeStatus() {
+        const parent = this.element.parentElement;
+        if(parent?.classList?.contains("n-inputs-element")) {
+            const id = parseInt(parent.id);
+            gates[id].changeNumber();
+        }
     }
     clone() {
         return new InputsElement(1, (gates.length + "-gate"));
