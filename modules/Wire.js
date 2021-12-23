@@ -24,8 +24,7 @@ export class Wire {
         this.array2 = el2.id.split("-");
         gates[this.array1[1]]?.outputs[this.array1[0]].wires.push(this.id);
         gates[this.array2[1]].inputs[this.array2[0]].wire = this.id;
-        const myArray = this.el2.element.id.split("-");
-        this.nextGateId = +myArray[1];
+        this.nextGateId = +this.array2[1];
         this.transfer();
         this.draw();
         this.addElement();
@@ -35,13 +34,10 @@ export class Wire {
         this.el2.position = {...getPosition(this.el2.element)};
     }
     transfer() {
+        const id = +this.array2[0];
         if(this.el1.element.classList.contains("true")){
-            const myArray = this.el2.element.id.split("-");
-            const id = +myArray[0];
             gates[this.nextGateId].inputs[id].setInputValue(true, this.nextGateId);
         }else if(this.el1.element.classList.contains("false")) {
-            const myArray = this.el2.element.id.split("-");
-            const id = +myArray[0];
             gates[this.nextGateId].inputs[id].setInputValue(false, this.nextGateId);
         }
     }

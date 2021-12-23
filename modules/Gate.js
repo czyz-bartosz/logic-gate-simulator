@@ -133,12 +133,17 @@ class NOTGate extends Gate {
 class MyGate extends Gate {
     functionStringHead;
     functionStringTail;
-    constructor(id, inputs, outputs, functionStringArray, outputsArray, name, color) {
+    constructor(id, inputs, outputs, functionStringArray, outputsArray, name, color, makeStringArr=0, stringIndexArr) {
         super(id, inputs, outputs);
         this.functionString = functionStringArray;
         this.outputsArray = outputsArray;
-        this.makeStringArr = [...this.makeString()];
-        this.stringIndexArr = [...this.stringIndex()];
+        if(makeStringArr === 0) {
+            this.makeStringArr = [...this.makeString()];
+            this.stringIndexArr = [...this.stringIndex()]; 
+        }else {
+            this.makeStringArr = makeStringArr;
+            this.stringIndexArr = stringIndexArr;
+        }
         this.name = name;
         this.color = color;
         this.text.textContent = name;
@@ -176,7 +181,7 @@ class MyGate extends Gate {
         return arr;
     }
     clone(id = (gates.length + "-gate")) {
-        return new MyGate(id, this.amountOfInputs, this.amountOfOutputs, this.functionString, this.outputsArray, this.name, this.color);
+        return new MyGate(id, this.amountOfInputs, this.amountOfOutputs, this.functionString, this.outputsArray, this.name, this.color, this.makeStringArr, this.stringIndexArr);
     }
     changeStatus() {
         const valueArray = this.inputs.map((el) => {
