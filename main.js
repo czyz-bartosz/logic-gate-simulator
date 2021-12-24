@@ -4,6 +4,7 @@ import { OutputsElement } from "./modules/OutputsElement.js";
 import { InputsElement } from "./modules/InputsElement.js";
 import { nOutputsElement } from "./modules/nOutputsElement.js";
 import { nInputsElement } from "./modules/nInputsElement.js";
+import { saveGate, savePresetsGate } from "./modules/save.js";
 export { gates, wires, workArea, presetsGates, selectElement };
 
 const workArea = document.querySelector("#work-area");
@@ -128,6 +129,7 @@ workArea.addEventListener("drop", function(event) {
         gates[gatesIndex].element.style.top = y + "px";
         gates[gatesIndex].element.style.left = x + "px";
         gates[gatesIndex].element.id = gates[gatesIndex].id;
+        saveGate(gates[gatesIndex]);
         gates[gatesIndex].element.setAttribute("draggable", "true");
         gates[gatesIndex].element.addEventListener("click", function(event) {
             event.stopPropagation();
@@ -154,7 +156,6 @@ workArea.addEventListener("drop", function(event) {
                 }
             });
         });
-        console.log(gates)
     }
 });
 
