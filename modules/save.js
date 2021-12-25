@@ -5,29 +5,37 @@ import { nOutputsElement } from "./nOutputsElement.js";
 import { OutputsElement } from "./OutputsElement.js";
 import { gates, presetsGates } from "../main.js";
 
+let projects = [];
 let savedGates = [];
 let savedPresetsGates = [];
+let projectIndex = 0;
 
 export function loadSave() {
-    const loadedGates = getFromLocalStorage("savedGates");
-    if(loadedGates) {
-        savedGates = [ ...loadedGates ];
-        addGates(savedGates);
+    const loadedProjects = getFromLocalStorage("projects");
+    if(loadedProjects) {
+        projects = [ ...loadedProjects ];
+        const project = loadedProjects[projectIndex];
+        if(project) {
+            if(project.gates) {
+                savedGates = [ ...project.gates ];
+                addGates(savedGates);
+            }
+            if(project.presetsGates) {
+                savedPresetsGates = [ ...project.presetsGates ];
+                savedPresetsGates.forEach((obj) => {
+                    presetsGates.push(new MyGate(presetsGates.length, obj.amountOfInputs, obj.amountOfOutputs, obj.functionString, obj.outputsArray, obj.name, obj.color, obj.makeStringArr, obj.stringIndexArr));
+                });
+            }
+        }
+        
     }
-    const loadedPresetsGates = getFromLocalStorage("savedPresetsGates");
-    if(loadedPresetsGates) {
-        savedPresetsGates = [ ...loadedPresetsGates ];
-        savedPresetsGates.forEach((obj) => {
-            presetsGates.push(new MyGate(presetsGates.length, obj.amountOfInputs, obj.amountOfOutputs, obj.functionString, obj.outputsArray, obj.name, obj.color, obj.makeStringArr, obj.stringIndexArr));
-        });
-    }
+
 }
 
 function addGates(loadGates) {
     loadGates.forEach((gate) => {
         const type = gate.type;
         if(type) {
-            console.log(type);
             let obj;
             switch(type) {
                 case "ANDGate": 
@@ -61,7 +69,6 @@ function addGates(loadGates) {
 }
 
 export function saveGate(gate) {
-    console.log(gate);
     const obj = {};
     const el = gate.element;
     if(gate instanceof ANDGate) {
@@ -98,13 +105,16 @@ export function saveGate(gate) {
             savedGates.push({});
         }
     }
-    console.log(obj, savedGates);
-    saveToLocalStorage("savedGates", savedGates);
+    saveToLocalStorage();
 }
 
-function saveToLocalStorage(key, value) {
-    const string = JSON.stringify(value);
-    localStorage.setItem(key, string);
+function saveToLocalStorage() {
+    const project = {};
+    project.gates = savedGates;
+    project.presetsGates = savedPresetsGates;
+    projects[projectIndex] = project;
+    const string = JSON.stringify(projects);
+    localStorage.setItem("projects", string);
 }
 
 function getFromLocalStorage(key) {
@@ -115,7 +125,7 @@ function getFromLocalStorage(key) {
 export function updateGatePosition(gateId) {
     savedGates[gateId].position.top = gates[gateId].element.style.top;
     savedGates[gateId].position.left = gates[gateId].element.style.left;
-    saveToLocalStorage("savedGates", savedGates);
+    saveToLocalStorage();
 }
 
 export function savePresetsGate(gate) {
@@ -129,5 +139,5 @@ export function savePresetsGate(gate) {
     obj.makeStringArr = gate.makeStringArr;
     obj.stringIndexArr = gate.stringIndexArr;
     savedPresetsGates.push(obj);
-    saveToLocalStorage("savedPresetsGates", savedPresetsGates);
+    saveToLocalStorage();
 }
