@@ -3,11 +3,12 @@ import { InputsElement } from "./InputsElement.js";
 import { nInputsElement } from "./nInputsElement.js";
 import { nOutputsElement } from "./nOutputsElement.js";
 import { OutputsElement } from "./OutputsElement.js";
-import { gates, presetsGates } from "../main.js";
+import { gates, presetsGates, workArea } from "../main.js";
 
 let projects = [];
 let savedGates = [];
 let savedPresetsGates = [];
+let workAreaGates = [];
 let projectIndex = 0;
 
 export function loadSave() {
@@ -16,6 +17,9 @@ export function loadSave() {
         projects = [ ...loadedProjects ];
         const project = loadedProjects[projectIndex];
         if(project) {
+            if(project.workAreaGates) {
+                workAreaGates = [ ...project.workAreaGates ];
+            }
             if(project.gates) {
                 savedGates = [ ...project.gates ];
                 addGates(savedGates);
@@ -26,10 +30,8 @@ export function loadSave() {
                     presetsGates.push(new MyGate(presetsGates.length, obj.amountOfInputs, obj.amountOfOutputs, obj.functionString, obj.outputsArray, obj.name, obj.color, obj.makeStringArr, obj.stringIndexArr));
                 });
             }
-        }
-        
+        }   
     }
-
 }
 
 function addGates(loadGates) {
@@ -62,9 +64,11 @@ function addGates(loadGates) {
             obj.element.style.top = gate.position.top;
             obj.element.style.left = gate.position.left;
             prepareGate(obj);
+            if(!workAreaGates.includes(obj.element.id)) {
+                obj.element.remove();
+            }
             gates[parseInt(obj.id)] = obj;
         }
-        
     });
 }
 
@@ -108,10 +112,11 @@ export function saveGate(gate) {
     saveToLocalStorage();
 }
 
-function saveToLocalStorage() {
+export function saveToLocalStorage() {
     const project = {};
     project.gates = savedGates;
     project.presetsGates = savedPresetsGates;
+    project.workAreaGates = saveWorkAreaGates();
     projects[projectIndex] = project;
     const string = JSON.stringify(projects);
     localStorage.setItem("projects", string);
@@ -120,6 +125,15 @@ function saveToLocalStorage() {
 function getFromLocalStorage(key) {
     const string = localStorage.getItem(key);
     return JSON.parse(string);
+}
+
+function saveWorkAreaGates() {
+    let workAreaGates = [ ...document.querySelectorAll(".work") ];
+    workAreaGates = workAreaGates.map((gate) => {
+        return gate.id;
+    });
+    console.log(workAreaGates);
+    return workAreaGates;
 }
 
 export function updateGatePosition(gateId) {

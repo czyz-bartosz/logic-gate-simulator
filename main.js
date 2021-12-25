@@ -4,7 +4,7 @@ import { OutputsElement } from "./modules/OutputsElement.js";
 import { InputsElement } from "./modules/InputsElement.js";
 import { nOutputsElement } from "./modules/nOutputsElement.js";
 import { nInputsElement } from "./modules/nInputsElement.js";
-import { loadSave, saveGate, savePresetsGate, updateGatePosition } from "./modules/save.js";
+import { loadSave, saveGate, savePresetsGate, saveToLocalStorage, updateGatePosition } from "./modules/save.js";
 export { gates, wires, workArea, presetsGates, selectElement, hideSVG, makeConnection };
 
 const workArea = document.querySelector("#work-area");
@@ -148,8 +148,8 @@ createGateButton.addEventListener("click", () => {
     const outputsArr = outputsArray.filter((value) => {
         return outputsSet.has(value);
     });
-    createMyGate(functionStringArray, outputsArr);
     workArea.innerHTML = null;
+    createMyGate(functionStringArray, outputsArr);
     outputsSet.clear();
 });
 
@@ -254,6 +254,7 @@ deleteButton.addEventListener("click", () => {
     }else if(id[1] === "wire"){
         wires[id[0]].delete();
     }
+    saveToLocalStorage();
 })
 
 presetsGates.push(new OutputsElement(1, presetsGates.length));
