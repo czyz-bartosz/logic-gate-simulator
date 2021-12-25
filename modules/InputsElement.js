@@ -4,7 +4,7 @@ import { Input } from "./Input.js";
 export class InputsElement {
     inputs = [];
     element = document.createElement("div");
-    constructor(amountOfInputs, id=gates.length) {
+    constructor(amountOfInputs, id=(gates.length + "-gate")) {
         this.amountOfInputs = amountOfInputs;
         this.id = id;
         this.generateInputsCon();

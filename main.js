@@ -1,4 +1,4 @@
-import { NOTGate, ANDGate, MyGate, prepareGate, getMousePositionRelativToWorkArea } from "./modules/Gate.js";
+import { NOTGate, ANDGate, MyGate, prepareGate } from "./modules/Gate.js";
 import { Wire } from "./modules/Wire.js";
 import { OutputsElement } from "./modules/OutputsElement.js";
 import { InputsElement } from "./modules/InputsElement.js";
@@ -105,14 +105,21 @@ workArea.addEventListener("dragover", function(event) {
     event.dataTransfer.dropEffect = "copy";
 });
 
+function getMousePositionRelativToWorkArea(e) {
+    const rect = workArea.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    return { x: x + "px", y: y + "px"};
+}
+
 workArea.addEventListener("drop", function(event) {
     event.preventDefault();
     showSVG();
     const id = event.dataTransfer.getData("text/plain");
     const el = document.getElementById(id);
+    const mousePosition = getMousePositionRelativToWorkArea(event);
     if(id.includes("gate")) {
         const idGate = parseInt(id);
-        const mousePosition = getMousePositionRelativToWorkArea(event);
         el.style.top = mousePosition.y;
         el.style.left = mousePosition.x;
         gates[idGate].move();
@@ -120,9 +127,12 @@ workArea.addEventListener("drop", function(event) {
         const gatesIndex = gates.length;
         gates[gatesIndex] = presetsGates[parseInt(id)].clone();
         const gate = gates[gatesIndex];
-        prepareGate(gate, gatesIndex, event);
+        prepareGate(gate);
+        gate.element.style.top = mousePosition.y;
+        gate.element.style.left = mousePosition.x;
         saveGate(gate);
     }
+    
 });
 
 function getPreviousGate(input) {

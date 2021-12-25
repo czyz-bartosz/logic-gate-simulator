@@ -220,21 +220,18 @@ function NOT(a) {
     return !a;
 }
 
-export function getMousePositionRelativToWorkArea(e) {
+function getMousePositionRelativToWorkArea(e) {
     const rect = workArea.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
     return { x: x + "px", y: y + "px"};
 }
 
-export function prepareGate(gate, gatesIndex, event) {
+export function prepareGate(gate) {
     workArea.appendChild(gate.element);
     const inputsArr = gate.element.querySelectorAll(".input");
     const outputsArr = gate.element.querySelectorAll(".output");
     gate.element.classList.add("work");
-    const mousePosition = getMousePositionRelativToWorkArea(event);
-    gate.element.style.top = mousePosition.y;
-    gate.element.style.left = mousePosition.x;
     gate.element.id = gate.id;
     gate.element.setAttribute("draggable", "true");
     gate.element.addEventListener("click", function(event) {

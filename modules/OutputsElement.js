@@ -4,7 +4,7 @@ import { Output } from "./Output.js";
 export class OutputsElement {
     outputs = [];
     element = document.createElement("div");
-    constructor(amountOfOutputs, id=gates.length) {
+    constructor(amountOfOutputs, id=(gates.length + "-gate")) {
         this.amountOfOutputs = amountOfOutputs;
         this.id = id;
         this.generateOutputsCon();
