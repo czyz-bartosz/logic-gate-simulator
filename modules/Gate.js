@@ -1,6 +1,6 @@
 import { Input } from "./Input.js";
 import { Output } from "./Output.js";
-import { gates, wires } from "../main.js";
+import { gates, wires, workArea, hideSVG, makeConnection, selectElement } from "../main.js";
 export {Gate, NOTGate, ANDGate, MyGate};
 
 class Gate {
@@ -12,7 +12,7 @@ class Gate {
     amountOfOutputs;
     inputs = [];
     outputs = [];
-    constructor(id, inputs = 2, outputs = 1) {
+    constructor(id=(gates.length + "-gate"), inputs = 2, outputs = 1) {
         this.id = id;
         this.amountOfInputs = inputs;
         this.amountOfOutputs = outputs;
@@ -218,4 +218,48 @@ function AND(a, b) {
 
 function NOT(a) {
     return !a;
+}
+
+export function getMousePositionRelativToWorkArea(e) {
+    const rect = workArea.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    return { x: x + "px", y: y + "px"};
+}
+
+export function prepareGate(gate, gatesIndex, event) {
+    workArea.appendChild(gate.element);
+    const inputsArr = gate.element.querySelectorAll(".input");
+    const outputsArr = gate.element.querySelectorAll(".output");
+    gate.element.classList.add("work");
+    const mousePosition = getMousePositionRelativToWorkArea(event);
+    gate.element.style.top = mousePosition.y;
+    gate.element.style.left = mousePosition.x;
+    gate.element.id = gate.id;
+    gate.element.setAttribute("draggable", "true");
+    gate.element.addEventListener("click", function(event) {
+        event.stopPropagation();
+        this.classList.add("selected");
+        selectElement(this);
+    });
+    gate.element.addEventListener("dragstart", function(event) {
+        const dragElementId = this.getAttribute("id");
+        hideSVG();
+        event.dataTransfer.setData("text/plain", dragElementId);
+        event.dataTransfer.dropEffect = "copy";
+    });
+    inputsArr.forEach((el) => {
+        el.addEventListener("mouseup", (event) => {
+            if(event.button === 2) {
+                makeConnection(el);
+            }
+        });
+    });
+    outputsArr.forEach((el) => {
+        el.addEventListener("mouseup", (event) => {
+            if(event.button === 2) {
+                makeConnection(el);
+            }
+        });
+    });
 }
