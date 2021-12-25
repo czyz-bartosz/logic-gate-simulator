@@ -3,17 +3,23 @@ import { InputsElement } from "./InputsElement.js";
 import { nInputsElement } from "./nInputsElement.js";
 import { nOutputsElement } from "./nOutputsElement.js";
 import { OutputsElement } from "./OutputsElement.js";
-import { gates } from "../main.js";
+import { gates, presetsGates } from "../main.js";
 
 let savedGates = [];
-const savedPresetsGates = [];
+let savedPresetsGates = [];
 
 export function loadSave() {
-    const string = localStorage.getItem("savedGates");
-    const loadGates = JSON.parse(string);
-    if(loadGates) {
-        savedGates = [ ...loadGates ];
-        addGates(loadGates);
+    const loadedGates = getFromLocalStorage("savedGates");
+    if(loadedGates) {
+        savedGates = [ ...loadedGates ];
+        addGates(savedGates);
+    }
+    const loadedPresetsGates = getFromLocalStorage("savedPresetsGates");
+    if(loadedPresetsGates) {
+        savedPresetsGates = [ ...loadedPresetsGates ];
+        savedPresetsGates.forEach((obj) => {
+            presetsGates.push(new MyGate(presetsGates.length, obj.amountOfInputs, obj.amountOfOutputs, obj.functionString, obj.outputsArray, obj.name, obj.color, obj.makeStringArr, obj.stringIndexArr));
+        });
     }
 }
 
@@ -93,20 +99,35 @@ export function saveGate(gate) {
         }
     }
     console.log(obj, savedGates);
-    saveToLocalStorage();
+    saveToLocalStorage("savedGates", savedGates);
 }
 
-function saveToLocalStorage() {
-    const string = JSON.stringify(savedGates);
-    localStorage.setItem("savedGates", string);
+function saveToLocalStorage(key, value) {
+    const string = JSON.stringify(value);
+    localStorage.setItem(key, string);
+}
+
+function getFromLocalStorage(key) {
+    const string = localStorage.getItem(key);
+    return JSON.parse(string);
 }
 
 export function updateGatePosition(gateId) {
     savedGates[gateId].position.top = gates[gateId].element.style.top;
     savedGates[gateId].position.left = gates[gateId].element.style.left;
-    saveToLocalStorage();
+    saveToLocalStorage("savedGates", savedGates);
 }
 
 export function savePresetsGate(gate) {
-
+    const obj = {};
+    obj.amountOfInputs = gate.amountOfInputs;
+    obj.amountOfOutputs = gate.amountOfOutputs;
+    obj.functionString = gate.functionString;
+    obj.outputsArray = gate.outputsArray;
+    obj.name = gate.name;
+    obj.color = gate.color;
+    obj.makeStringArr = gate.makeStringArr;
+    obj.stringIndexArr = gate.stringIndexArr;
+    savedPresetsGates.push(obj);
+    saveToLocalStorage("savedPresetsGates", savedPresetsGates);
 }

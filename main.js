@@ -70,23 +70,6 @@ function makeConnection(el) {
     }
 }
 
-loadSave();
-
-presetsGates.push(new OutputsElement(1, presetsGates.length));
-presetsGates.push(new nOutputsElement(2, presetsGates.length));
-presetsGates.push(new nOutputsElement(4, presetsGates.length));
-presetsGates.push(new nOutputsElement(8, presetsGates.length));
-presetsGates.push(new InputsElement(1, presetsGates.length));
-presetsGates.push(new nInputsElement(2, presetsGates.length));
-presetsGates.push(new nInputsElement(4, presetsGates.length));
-presetsGates.push(new nInputsElement(8, presetsGates.length));
-presetsGates.push(new ANDGate(presetsGates.length));
-presetsGates.push(new NOTGate(presetsGates.length));
-
-presetsGates.forEach((el, index) => {
-    makePresetsGate(el, index);
-});
-
 function makePresetsGate(el, index) {
     el.element.classList.add("draggable-gate");
     el.element.setAttribute("draggable", "true");
@@ -179,7 +162,9 @@ function createMyGate(functionStringArray, outputsArray) {
     const color = colorInput.value;
     presetsGates.push(new MyGate(presetsGates.length, amountOfInputs, amountOfOutputs, functionStringArray, outputsArray, name, color));
     createBlockMenu.style.display = "none";
-    makePresetsGate(presetsGates[presetsGates.length - 1], presetsGates.length - 1);
+    const gate = presetsGates[presetsGates.length - 1];
+    savePresetsGate(gate);
+    makePresetsGate(gate, presetsGates.length - 1);
 }
 
 function addStringAtPosition(string, stringToAdd, index) {
@@ -270,3 +255,20 @@ deleteButton.addEventListener("click", () => {
         wires[id[0]].delete();
     }
 })
+
+presetsGates.push(new OutputsElement(1, presetsGates.length));
+presetsGates.push(new nOutputsElement(2, presetsGates.length));
+presetsGates.push(new nOutputsElement(4, presetsGates.length));
+presetsGates.push(new nOutputsElement(8, presetsGates.length));
+presetsGates.push(new InputsElement(1, presetsGates.length));
+presetsGates.push(new nInputsElement(2, presetsGates.length));
+presetsGates.push(new nInputsElement(4, presetsGates.length));
+presetsGates.push(new nInputsElement(8, presetsGates.length));
+presetsGates.push(new ANDGate(presetsGates.length));
+presetsGates.push(new NOTGate(presetsGates.length));
+
+loadSave();
+
+presetsGates.forEach((el, index) => {
+    makePresetsGate(el, index);
+});
