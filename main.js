@@ -4,7 +4,7 @@ import { OutputsElement } from "./modules/OutputsElement.js";
 import { InputsElement } from "./modules/InputsElement.js";
 import { nOutputsElement } from "./modules/nOutputsElement.js";
 import { nInputsElement } from "./modules/nInputsElement.js";
-import { loadSave, saveGate, savePresetsGate } from "./modules/save.js";
+import { loadSave, saveGate, savePresetsGate, updateGatePosition } from "./modules/save.js";
 export { gates, wires, workArea, presetsGates, selectElement, hideSVG, makeConnection };
 
 const workArea = document.querySelector("#work-area");
@@ -122,6 +122,7 @@ workArea.addEventListener("drop", function(event) {
         const idGate = parseInt(id);
         el.style.top = mousePosition.y;
         el.style.left = mousePosition.x;
+        updateGatePosition(idGate);
         gates[idGate].move();
     }else {
         const gatesIndex = gates.length;

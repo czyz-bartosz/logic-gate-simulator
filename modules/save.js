@@ -93,8 +93,18 @@ export function saveGate(gate) {
         }
     }
     console.log(obj, savedGates);
+    saveToLocalStorage();
+}
+
+function saveToLocalStorage() {
     const string = JSON.stringify(savedGates);
     localStorage.setItem("savedGates", string);
+}
+
+export function updateGatePosition(gateId) {
+    savedGates[gateId].position.top = gates[gateId].element.style.top;
+    savedGates[gateId].position.left = gates[gateId].element.style.left;
+    saveToLocalStorage();
 }
 
 export function savePresetsGate(gate) {

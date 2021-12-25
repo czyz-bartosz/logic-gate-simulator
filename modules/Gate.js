@@ -220,13 +220,6 @@ function NOT(a) {
     return !a;
 }
 
-function getMousePositionRelativToWorkArea(e) {
-    const rect = workArea.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    return { x: x + "px", y: y + "px"};
-}
-
 export function prepareGate(gate) {
     workArea.appendChild(gate.element);
     const inputsArr = gate.element.querySelectorAll(".input");
