@@ -3,12 +3,15 @@ import { InputsElement } from "./InputsElement.js";
 import { nInputsElement } from "./nInputsElement.js";
 import { nOutputsElement } from "./nOutputsElement.js";
 import { OutputsElement } from "./OutputsElement.js";
-import { gates, presetsGates, workArea } from "../main.js";
+import { gates, presetsGates, wires, workArea } from "../main.js";
+import { Wire } from "./Wire.js";
 
 let projects = [];
 let savedGates = [];
 let savedPresetsGates = [];
 let workAreaGates = [];
+let savedWires = [];
+let workAreaWires = [];
 let projectIndex = 0;
 
 export function loadSave() {
@@ -20,6 +23,9 @@ export function loadSave() {
             if(project.workAreaGates) {
                 workAreaGates = [ ...project.workAreaGates ];
             }
+            if(project.workAreaWires) {
+                workAreaWires = [ ...project.workAreaWires ];
+            }
             if(project.gates) {
                 savedGates = [ ...project.gates ];
                 addGates(savedGates);
@@ -30,8 +36,28 @@ export function loadSave() {
                     presetsGates.push(new MyGate(presetsGates.length, obj.amountOfInputs, obj.amountOfOutputs, obj.functionString, obj.outputsArray, obj.name, obj.color, obj.makeStringArr, obj.stringIndexArr));
                 });
             }
+            if(project.wires) {
+                savedWires = [ ...project.wires ];
+                addWires(savedWires);
+            }
         }   
     }
+}
+
+function addWires(loadWires) {
+    loadWires.forEach((obj, index) => {
+        const outputEl = gates[obj.output.gateId].outputs[obj.output.outputId].outputEl;
+        const inputEl = gates[obj.input.gateId].inputs[obj.input.inputId].inputEl;
+        if(obj.isDeleted) {
+            wires.push(new Wire(outputEl, inputEl, true));
+            wires[index].con.remove();
+        }else {
+            wires.push(new Wire(outputEl, inputEl));
+            if(!workAreaWires.includes(index + "-wire")) {
+                wires[index].con.remove();
+            }
+        }
+    });
 }
 
 function addGates(loadGates) {
@@ -116,7 +142,9 @@ export function saveToLocalStorage() {
     const project = {};
     project.gates = savedGates;
     project.presetsGates = savedPresetsGates;
-    project.workAreaGates = saveWorkAreaGates();
+    project.workAreaGates = getWorkAreaGates();
+    project.workAreaWires = getWorkAreaWires();
+    project.wires = savedWires;
     projects[projectIndex] = project;
     const string = JSON.stringify(projects);
     localStorage.setItem("projects", string);
@@ -127,13 +155,21 @@ function getFromLocalStorage(key) {
     return JSON.parse(string);
 }
 
-function saveWorkAreaGates() {
+function getWorkAreaGates() {
     let workAreaGates = [ ...document.querySelectorAll(".work") ];
     workAreaGates = workAreaGates.map((gate) => {
         return gate.id;
     });
     console.log(workAreaGates);
     return workAreaGates;
+}
+
+function getWorkAreaWires() {
+    let workAreaWires = [ ...document.querySelectorAll("path")] ;
+    workAreaWires = workAreaWires.map((wire) => {
+        return wire.id;
+    });
+    return workAreaWires;
 }
 
 export function updateGatePosition(gateId) {
@@ -153,5 +189,21 @@ export function savePresetsGate(gate) {
     obj.makeStringArr = gate.makeStringArr;
     obj.stringIndexArr = gate.stringIndexArr;
     savedPresetsGates.push(obj);
+    saveToLocalStorage();
+}
+
+export function setWireToDeleted(wireId) {
+    savedWires[wireId].isDeleted = true;
+    saveToLocalStorage();
+}
+
+export function saveWire(outputObj, inputObj, wireIndex) {
+    const wire = {};
+    const outputArr = outputObj.id.split("-");
+    const inputArr = inputObj.id.split("-");
+    wire.isDeleted = wires[wireIndex].isDeleted;
+    wire.output = { gateId: outputArr[1], outputId: outputArr[0] };
+    wire.input = { gateId: inputArr[1], inputId: inputArr[0] };
+    savedWires.push(wire);
     saveToLocalStorage();
 }

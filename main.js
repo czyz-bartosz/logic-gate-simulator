@@ -4,7 +4,7 @@ import { OutputsElement } from "./modules/OutputsElement.js";
 import { InputsElement } from "./modules/InputsElement.js";
 import { nOutputsElement } from "./modules/nOutputsElement.js";
 import { nInputsElement } from "./modules/nInputsElement.js";
-import { loadSave, saveGate, savePresetsGate, saveToLocalStorage, updateGatePosition } from "./modules/save.js";
+import { loadSave, saveGate, savePresetsGate, saveToLocalStorage, saveWire, updateGatePosition } from "./modules/save.js";
 export { gates, wires, workArea, presetsGates, selectElement, hideSVG, makeConnection };
 
 const workArea = document.querySelector("#work-area");
@@ -65,7 +65,8 @@ function makeConnection(el) {
         }
     }
     if(selectedInput && selectedOutput) {
-        wires.push(new Wire(selectedOutput, selectedInput));
+        const wireIndex = wires.push(new Wire(selectedOutput, selectedInput)) - 1;
+        saveWire(selectedOutput, selectedInput, wireIndex);
         selectedOutput = selectedInput = null;
     }
 }

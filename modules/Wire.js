@@ -1,4 +1,5 @@
 import { wires, gates, workArea, selectElement } from "../main.js";
+import { setWireToDeleted } from "./save.js";
 
 function getPosition(el) {
     const eleRect = el.getBoundingClientRect();
@@ -17,17 +18,21 @@ export class Wire {
     nextGateId;
     width;
     height;
-    constructor(el1, el2) {
+    isDeleted = false;
+    constructor(el1, el2, isDeleted=false) {
         this.el1 = {element: el1, position: {...getPosition(el1)}};
         this.el2 = {element: el2, position: {...getPosition(el2)}};
         this.array1 = el1.id.split("-");
         this.array2 = el2.id.split("-");
-        gates[this.array1[1]]?.outputs[this.array1[0]].wires.push(this.id);
-        gates[this.array2[1]].inputs[this.array2[0]].wire = this.id;
-        this.nextGateId = +this.array2[1];
-        this.transfer();
-        this.draw();
-        this.addElement();
+        this.isDeleted = isDeleted;
+        if(!isDeleted) {
+            gates[this.array1[1]]?.outputs[this.array1[0]].wires.push(this.id);
+            gates[this.array2[1]].inputs[this.array2[0]].wire = this.id;
+            this.nextGateId = +this.array2[1];
+            this.transfer();
+            this.draw();
+            this.addElement();
+        }
     }
     setPosition() {
         this.el1.position = {...getPosition(this.el1.element)};
@@ -91,6 +96,8 @@ export class Wire {
         });
     }
     delete() {
+        this.isDeleted = true;
+        setWireToDeleted(this.id);
         this.con.remove();
         const arrayOutputsWires = gates[this.array1[1]]?.outputs[this.array1[0]].wires;
         const index = arrayOutputsWires.indexOf(this.id);
