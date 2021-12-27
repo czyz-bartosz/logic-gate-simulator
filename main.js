@@ -1,10 +1,11 @@
-import { NOTGate, ANDGate, MyGate } from "./modules/Gate.js";
+import { NOTGate, ANDGate, MyGate, prepareGate } from "./modules/Gate.js";
 import { Wire } from "./modules/Wire.js";
 import { OutputsElement } from "./modules/OutputsElement.js";
 import { InputsElement } from "./modules/InputsElement.js";
 import { nOutputsElement } from "./modules/nOutputsElement.js";
 import { nInputsElement } from "./modules/nInputsElement.js";
-export { gates, wires, workArea, presetsGates, selectElement };
+import { loadSave, saveGate, savePresetsGate, saveToLocalStorage, saveWire, updateGatePosition } from "./modules/save.js";
+export { gates, wires, workArea, presetsGates, selectElement, hideSVG, makeConnection };
 
 const workArea = document.querySelector("#work-area");
 const gatesToolbox = document.querySelector("footer");
@@ -64,25 +65,11 @@ function makeConnection(el) {
         }
     }
     if(selectedInput && selectedOutput) {
-        wires.push(new Wire(selectedOutput, selectedInput));
+        const wireIndex = wires.push(new Wire(selectedOutput, selectedInput)) - 1;
+        saveWire(selectedOutput, selectedInput, wireIndex);
         selectedOutput = selectedInput = null;
     }
 }
-
-presetsGates.push(new OutputsElement(1, presetsGates.length));
-presetsGates.push(new nOutputsElement(2, presetsGates.length));
-presetsGates.push(new nOutputsElement(4, presetsGates.length));
-presetsGates.push(new nOutputsElement(8, presetsGates.length));
-presetsGates.push(new InputsElement(1, presetsGates.length));
-presetsGates.push(new nInputsElement(2, presetsGates.length));
-presetsGates.push(new nInputsElement(4, presetsGates.length));
-presetsGates.push(new nInputsElement(8, presetsGates.length));
-presetsGates.push(new ANDGate(presetsGates.length));
-presetsGates.push(new NOTGate(presetsGates.length));
-
-presetsGates.forEach((el, index) => {
-    makePresetsGate(el, index);
-});
 
 function makePresetsGate(el, index) {
     el.element.classList.add("draggable-gate");
@@ -102,60 +89,35 @@ workArea.addEventListener("dragover", function(event) {
     event.dataTransfer.dropEffect = "copy";
 });
 
+function getMousePositionRelativToWorkArea(e) {
+    const rect = workArea.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    return { x: x + "px", y: y + "px"};
+}
+
 workArea.addEventListener("drop", function(event) {
     event.preventDefault();
     showSVG();
     const id = event.dataTransfer.getData("text/plain");
     const el = document.getElementById(id);
+    const mousePosition = getMousePositionRelativToWorkArea(event);
     if(id.includes("gate")) {
         const idGate = parseInt(id);
-        const rect = workArea.getBoundingClientRect();
-        const x = event.clientX - rect.left;
-        const y = event.clientY - rect.top;
-        el.style.top = y + "px";
-        el.style.left = x + "px";
+        el.style.top = mousePosition.y;
+        el.style.left = mousePosition.x;
+        updateGatePosition(idGate);
         gates[idGate].move();
     }else {
         const gatesIndex = gates.length;
         gates[gatesIndex] = presetsGates[parseInt(id)].clone();
-        this.appendChild(gates[gatesIndex].element);
-        const inputsArr = gates[gatesIndex].element.querySelectorAll(".input");
-        const outputsArr = gates[gatesIndex].element.querySelectorAll(".output");
-        gates[gatesIndex].element.classList.add("work");
-        const rect = workArea.getBoundingClientRect();
-        const x = event.clientX - rect.left;
-        const y = event.clientY - rect.top;
-        gates[gatesIndex].element.style.top = y + "px";
-        gates[gatesIndex].element.style.left = x + "px";
-        gates[gatesIndex].element.id = gates[gatesIndex].id;
-        gates[gatesIndex].element.setAttribute("draggable", "true");
-        gates[gatesIndex].element.addEventListener("click", function(event) {
-            event.stopPropagation();
-            this.classList.add("selected");
-            selectElement(this);
-        });
-        gates[gatesIndex].element.addEventListener("dragstart", function(event) {
-            const dragElementId = this.getAttribute("id");
-            hideSVG();
-            event.dataTransfer.setData("text/plain", dragElementId);
-            event.dataTransfer.dropEffect = "copy";
-        });
-        inputsArr.forEach((el) => {
-            el.addEventListener("mouseup", (event) => {
-                if(event.button === 2) {
-                    makeConnection(el);
-                }
-            });
-        });
-        outputsArr.forEach((el) => {
-            el.addEventListener("mouseup", (event) => {
-                if(event.button === 2) {
-                    makeConnection(el);
-                }
-            });
-        });
-        console.log(gates)
+        const gate = gates[gatesIndex];
+        prepareGate(gate);
+        gate.element.style.top = mousePosition.y;
+        gate.element.style.left = mousePosition.x;
+        saveGate(gate);
     }
+    
 });
 
 function getPreviousGate(input) {
@@ -181,16 +143,14 @@ createGateButton.addEventListener("click", () => {
     });
     idInputsElement.forEach((value) => {
         const stringFun = prepareString(goThroughTheGates(getPreviousGate(gates[value].inputs[0]), getWhichOutput(gates[value].inputs[0])));
-        console.log("koniec", stringFun);
         functionStringArray.push(stringFun);
     });
 
     const outputsArr = outputsArray.filter((value) => {
         return outputsSet.has(value);
     });
-    console.log(functionStringArray, outputsArr);
-    createMyGate(functionStringArray, outputsArr);
     workArea.innerHTML = null;
+    createMyGate(functionStringArray, outputsArr);
     outputsSet.clear();
 });
 
@@ -203,7 +163,9 @@ function createMyGate(functionStringArray, outputsArray) {
     const color = colorInput.value;
     presetsGates.push(new MyGate(presetsGates.length, amountOfInputs, amountOfOutputs, functionStringArray, outputsArray, name, color));
     createBlockMenu.style.display = "none";
-    makePresetsGate(presetsGates[presetsGates.length - 1], presetsGates.length - 1);
+    const gate = presetsGates[presetsGates.length - 1];
+    savePresetsGate(gate);
+    makePresetsGate(gate, presetsGates.length - 1);
 }
 
 function addStringAtPosition(string, stringToAdd, index) {
@@ -234,7 +196,6 @@ function goThroughTheGates(gate, outputIndex) {
                 string += `goThroughTheGates(gates[${parseInt(el.id)}], ${outputIndexArray[index]})+`
             });
             string = string.slice(0, (string.length - 1));
-            console.log(gate, string);
             return (gate.functionStringHead + eval(string) + gate.functionStringTail);
         }else {
             const stringIndexArr = gate.stringIndexArr[outputIndex];
@@ -258,7 +219,6 @@ function goThroughTheGates(gate, outputIndex) {
                     string += `functionString.slice(${start+1},${end})`;
                 }
             }
-            console.log(gate, string);
             return eval(string);
         }
     }else {
@@ -295,4 +255,22 @@ deleteButton.addEventListener("click", () => {
     }else if(id[1] === "wire"){
         wires[id[0]].delete();
     }
+    saveToLocalStorage();
 })
+
+presetsGates.push(new OutputsElement(1, presetsGates.length));
+presetsGates.push(new nOutputsElement(2, presetsGates.length));
+presetsGates.push(new nOutputsElement(4, presetsGates.length));
+presetsGates.push(new nOutputsElement(8, presetsGates.length));
+presetsGates.push(new InputsElement(1, presetsGates.length));
+presetsGates.push(new nInputsElement(2, presetsGates.length));
+presetsGates.push(new nInputsElement(4, presetsGates.length));
+presetsGates.push(new nInputsElement(8, presetsGates.length));
+presetsGates.push(new ANDGate(presetsGates.length));
+presetsGates.push(new NOTGate(presetsGates.length));
+
+loadSave();
+
+presetsGates.forEach((el, index) => {
+    makePresetsGate(el, index);
+});

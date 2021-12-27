@@ -7,7 +7,7 @@ export class nOutputsElement {
     changeModeButton = document.createElement("button");
     numberMode = 0;
     outputsElementsId = [];
-    constructor(n, id=gates.length) {
+    constructor(n, id=(gates.length + "-gate")) {
         this.element.classList.add("n-outputs-element");
         this.element.appendChild(this.valueEl);
         this.n = n;

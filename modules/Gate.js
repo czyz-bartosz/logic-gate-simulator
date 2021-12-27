@@ -1,6 +1,6 @@
 import { Input } from "./Input.js";
 import { Output } from "./Output.js";
-import { gates, wires } from "../main.js";
+import { gates, wires, workArea, hideSVG, makeConnection, selectElement } from "../main.js";
 export {Gate, NOTGate, ANDGate, MyGate};
 
 class Gate {
@@ -12,7 +12,7 @@ class Gate {
     amountOfOutputs;
     inputs = [];
     outputs = [];
-    constructor(id, inputs = 2, outputs = 1) {
+    constructor(id=(gates.length + "-gate"), inputs = 2, outputs = 1) {
         this.id = id;
         this.amountOfInputs = inputs;
         this.amountOfOutputs = outputs;
@@ -133,12 +133,17 @@ class NOTGate extends Gate {
 class MyGate extends Gate {
     functionStringHead;
     functionStringTail;
-    constructor(id, inputs, outputs, functionStringArray, outputsArray, name, color) {
+    constructor(id, inputs, outputs, functionStringArray, outputsArray, name, color, makeStringArr=0, stringIndexArr) {
         super(id, inputs, outputs);
         this.functionString = functionStringArray;
         this.outputsArray = outputsArray;
-        this.makeStringArr = [...this.makeString()];
-        this.stringIndexArr = [...this.stringIndex()];
+        if(makeStringArr === 0) {
+            this.makeStringArr = [...this.makeString()];
+            this.stringIndexArr = [...this.stringIndex()]; 
+        }else {
+            this.makeStringArr = makeStringArr;
+            this.stringIndexArr = stringIndexArr;
+        }
         this.name = name;
         this.color = color;
         this.text.textContent = name;
@@ -176,7 +181,7 @@ class MyGate extends Gate {
         return arr;
     }
     clone(id = (gates.length + "-gate")) {
-        return new MyGate(id, this.amountOfInputs, this.amountOfOutputs, this.functionString, this.outputsArray, this.name, this.color);
+        return new MyGate(id, this.amountOfInputs, this.amountOfOutputs, this.functionString, this.outputsArray, this.name, this.color, this.makeStringArr, this.stringIndexArr);
     }
     changeStatus() {
         const valueArray = this.inputs.map((el) => {
@@ -213,4 +218,38 @@ function AND(a, b) {
 
 function NOT(a) {
     return !a;
+}
+
+export function prepareGate(gate) {
+    workArea.appendChild(gate.element);
+    const inputsArr = gate.element.querySelectorAll(".input");
+    const outputsArr = gate.element.querySelectorAll(".output");
+    gate.element.classList.add("work");
+    gate.element.id = gate.id;
+    gate.element.setAttribute("draggable", "true");
+    gate.element.addEventListener("click", function(event) {
+        event.stopPropagation();
+        this.classList.add("selected");
+        selectElement(this);
+    });
+    gate.element.addEventListener("dragstart", function(event) {
+        const dragElementId = this.getAttribute("id");
+        hideSVG();
+        event.dataTransfer.setData("text/plain", dragElementId);
+        event.dataTransfer.dropEffect = "copy";
+    });
+    inputsArr.forEach((el) => {
+        el.addEventListener("mouseup", (event) => {
+            if(event.button === 2) {
+                makeConnection(el);
+            }
+        });
+    });
+    outputsArr.forEach((el) => {
+        el.addEventListener("mouseup", (event) => {
+            if(event.button === 2) {
+                makeConnection(el);
+            }
+        });
+    });
 }
