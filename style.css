@@ -186,3 +186,7 @@ path.selected {
     z-index: 2;
     background-color: white;
 }
+
+.edit {
+    border-color: white;
+}

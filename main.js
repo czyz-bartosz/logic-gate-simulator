@@ -4,8 +4,8 @@ import { OutputsElement } from "./modules/OutputsElement.js";
 import { InputsElement } from "./modules/InputsElement.js";
 import { nOutputsElement } from "./modules/nOutputsElement.js";
 import { nInputsElement } from "./modules/nInputsElement.js";
-import { getWorkAreaGates, getWorkAreaWires, loadSave, saveGate, savePresetsGate, saveToLocalStorage, saveWire, updateGatePosition } from "./modules/save.js";
-export { gates, wires, workArea, presetsGates, selectElement, hideSVG, makeConnection };
+import { editSavedPresetsGate, getWorkAreaGates, getWorkAreaWires, loadSave, saveGate, saveMode, savePresetsGate, saveToLocalStorage, saveWire, updateGatePosition } from "./modules/save.js";
+export { gates, wires, workArea, presetsGates, selectElement, hideSVG, makeConnection, enterToEditMode, isEditMode, editGateId, changeMode };
 
 const workArea = document.querySelector("#work-area");
 const gatesToolbox = document.querySelector("footer");
@@ -20,6 +20,40 @@ const outputsSet = new Set();
 let selectedOutput;
 let selectedInput;
 let selectedElement;
+let editGateId;
+let isEditMode = false;
+
+function changeMode() {
+    if(isEditMode) {
+        isEditMode = false;
+    }else {
+        isEditMode = true;
+    }
+}
+
+function enterToEditMode(id) {
+    isEditMode = true;
+    presetsGates[id].element.classList.add("edit");
+    const editButtons = document.querySelectorAll(".edit-button");
+    editButtons.forEach(el => {
+        el.style.display = "none";
+    });
+    createGateMenuButton.textContent = "edit gate";
+    createGateButton.textContent = "edit gate";
+    editGateId = id;
+    saveMode();
+}
+
+function exitFromEditMode() {
+    isEditMode = false;
+    const editButtons = document.querySelectorAll(".edit-button");
+    editButtons.forEach(el => {
+        el.style.display = "block";
+    });
+    createGateMenuButton.textContent = "create gate";
+    createGateButton.textContent = "create gate";
+    saveToLocalStorage();
+}
 
 function unselectElement() {
     selectedElement?.classList.remove("selected");
@@ -78,6 +112,7 @@ function makePresetsGate(gate, index) {
     gate.element.classList.add("draggable-gate");
     gate.element.setAttribute("draggable", "true");
     gate.element.setAttribute("id", index + "drag");
+    gate.element.style.order = index + 1;
     gatesToolbox.appendChild(gate.element);
     gate.element.addEventListener("dragstart", (event) => {
         const dragElementId = gate.element.getAttribute("id");
@@ -155,9 +190,32 @@ createGateButton.addEventListener("click", () => {
     const workAreaGates = getWorkAreaGates();
     const workAreaWires = getWorkAreaWires();
     workArea.innerHTML = null;
-    createMyGate(functionStringArray, outputsArr, workAreaGates, workAreaWires);
+    if(isEditMode) {
+        editMyGate(functionStringArray, outputsArr, workAreaGates, workAreaWires);
+    }else {
+        createMyGate(functionStringArray, outputsArr, workAreaGates, workAreaWires);
+    }
     outputsSet.clear();
 });
+
+function editMyGate(functionStringArray, outputsArray, workAreaGates, workAreaWires) {
+    const amountOfInputs = outputsArray.length;
+    const amountOfOutputs = functionStringArray.length;
+    const colorInput = document.querySelector("#color");
+    const nameInput = document.querySelector("#name");
+    const name = nameInput.value;
+    const color = colorInput.value;
+    presetsGates[editGateId].element.remove();
+    presetsGates[editGateId] = new MyGate(editGateId, amountOfInputs, amountOfOutputs, functionStringArray, outputsArray, name, color);
+    createBlockMenu.style.display = "none";
+    const gate = presetsGates[editGateId];
+    console.log(gate);
+    gate.gatesId = [ ...workAreaGates ];
+    gate.wiresId = [ ...workAreaWires ];
+    editSavedPresetsGate(gate, editGateId);
+    makePresetsGate(gate, editGateId);
+    exitFromEditMode();
+}
 
 function createMyGate(functionStringArray, outputsArray, workAreaGates, workAreaWires) {
     const amountOfInputs = outputsArray.length;
@@ -281,3 +339,5 @@ loadSave();
 presetsGates.forEach((gate, index) => {
     makePresetsGate(gate, index);
 });
+
+saveToLocalStorage();

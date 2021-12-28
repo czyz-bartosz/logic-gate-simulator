@@ -1,6 +1,7 @@
 import { Input } from "./Input.js";
 import { Output } from "./Output.js";
-import { gates, wires, workArea, hideSVG, makeConnection, selectElement } from "../main.js";
+import { gates, wires, workArea, hideSVG, makeConnection, selectElement, enterToEditMode } from "../main.js";
+import { saveToLocalStorage } from "./save.js";
 export {Gate, NOTGate, ANDGate, MyGate};
 
 class Gate {
@@ -214,6 +215,7 @@ class MyGate extends Gate {
     addEditButton() {
         const editButton = document.createElement("button");
         editButton.innerText = "e";
+        editButton.classList.add("edit-button");
         this.element.appendChild(editButton);
         editButton.addEventListener("click", () => {
             workArea.innerHTML = null;
@@ -224,6 +226,7 @@ class MyGate extends Gate {
                 workArea.appendChild(wires[parseInt(id)].con);
                 wires[parseInt(id)].draw();
             });
+            enterToEditMode(this.id);
         });
     }
 }
