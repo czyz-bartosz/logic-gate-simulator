@@ -4,7 +4,7 @@ import { OutputsElement } from "./modules/OutputsElement.js";
 import { InputsElement } from "./modules/InputsElement.js";
 import { nOutputsElement } from "./modules/nOutputsElement.js";
 import { nInputsElement } from "./modules/nInputsElement.js";
-import { loadSave, saveGate, savePresetsGate, saveToLocalStorage, saveWire, updateGatePosition } from "./modules/save.js";
+import { getWorkAreaGates, getWorkAreaWires, loadSave, saveGate, savePresetsGate, saveToLocalStorage, saveWire, updateGatePosition } from "./modules/save.js";
 export { gates, wires, workArea, presetsGates, selectElement, hideSVG, makeConnection };
 
 const workArea = document.querySelector("#work-area");
@@ -71,13 +71,16 @@ function makeConnection(el) {
     }
 }
 
-function makePresetsGate(el, index) {
-    el.element.classList.add("draggable-gate");
-    el.element.setAttribute("draggable", "true");
-    el.element.setAttribute("id", index + "drag");
-    gatesToolbox.appendChild(el.element);
-    el.element.addEventListener("dragstart", (event) => {
-        const dragElementId = el.element.getAttribute("id");
+function makePresetsGate(gate, index) {
+    if(gate instanceof MyGate) {
+        gate.addEditButton();
+    }
+    gate.element.classList.add("draggable-gate");
+    gate.element.setAttribute("draggable", "true");
+    gate.element.setAttribute("id", index + "drag");
+    gatesToolbox.appendChild(gate.element);
+    gate.element.addEventListener("dragstart", (event) => {
+        const dragElementId = gate.element.getAttribute("id");
         event.dataTransfer.setData("text/plain", dragElementId);
         event.dataTransfer.dropEffect = "copy";
         hideSVG();
@@ -149,12 +152,14 @@ createGateButton.addEventListener("click", () => {
     const outputsArr = outputsArray.filter((value) => {
         return outputsSet.has(value);
     });
+    const workAreaGates = getWorkAreaGates();
+    const workAreaWires = getWorkAreaWires();
     workArea.innerHTML = null;
-    createMyGate(functionStringArray, outputsArr);
+    createMyGate(functionStringArray, outputsArr, workAreaGates, workAreaWires);
     outputsSet.clear();
 });
 
-function createMyGate(functionStringArray, outputsArray) {
+function createMyGate(functionStringArray, outputsArray, workAreaGates, workAreaWires) {
     const amountOfInputs = outputsArray.length;
     const amountOfOutputs = functionStringArray.length;
     const colorInput = document.querySelector("#color");
@@ -164,6 +169,8 @@ function createMyGate(functionStringArray, outputsArray) {
     presetsGates.push(new MyGate(presetsGates.length, amountOfInputs, amountOfOutputs, functionStringArray, outputsArray, name, color));
     createBlockMenu.style.display = "none";
     const gate = presetsGates[presetsGates.length - 1];
+    gate.gatesId = [ ...workAreaGates ];
+    gate.wiresId = [ ...workAreaWires ];
     savePresetsGate(gate);
     makePresetsGate(gate, presetsGates.length - 1);
 }
@@ -271,6 +278,6 @@ presetsGates.push(new NOTGate(presetsGates.length));
 
 loadSave();
 
-presetsGates.forEach((el, index) => {
-    makePresetsGate(el, index);
+presetsGates.forEach((gate, index) => {
+    makePresetsGate(gate, index);
 });

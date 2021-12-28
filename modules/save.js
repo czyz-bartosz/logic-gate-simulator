@@ -33,7 +33,9 @@ export function loadSave() {
             if(project.presetsGates) {
                 savedPresetsGates = [ ...project.presetsGates ];
                 savedPresetsGates.forEach((obj) => {
-                    presetsGates.push(new MyGate(presetsGates.length, obj.amountOfInputs, obj.amountOfOutputs, obj.functionString, obj.outputsArray, obj.name, obj.color, obj.makeStringArr, obj.stringIndexArr));
+                    const id = presetsGates.push(new MyGate(presetsGates.length, obj.amountOfInputs, obj.amountOfOutputs, obj.functionString, obj.outputsArray, obj.name, obj.color, obj.makeStringArr, obj.stringIndexArr)) - 1;
+                    presetsGates[id].gatesId = obj.gatesId;
+                    presetsGates[id].wiresId = obj.wiresId;
                 });
             }
             if(project.wires) {
@@ -155,16 +157,15 @@ function getFromLocalStorage(key) {
     return JSON.parse(string);
 }
 
-function getWorkAreaGates() {
+export function getWorkAreaGates() {
     let workAreaGates = [ ...document.querySelectorAll(".work") ];
     workAreaGates = workAreaGates.map((gate) => {
         return gate.id;
     });
-    console.log(workAreaGates);
     return workAreaGates;
 }
 
-function getWorkAreaWires() {
+export function getWorkAreaWires() {
     let workAreaWires = [ ...document.querySelectorAll("path")] ;
     workAreaWires = workAreaWires.map((wire) => {
         return wire.id;
@@ -188,6 +189,8 @@ export function savePresetsGate(gate) {
     obj.color = gate.color;
     obj.makeStringArr = gate.makeStringArr;
     obj.stringIndexArr = gate.stringIndexArr;
+    obj.gatesId = gate.gatesId;
+    obj.wiresId = gate.wiresId;
     savedPresetsGates.push(obj);
     saveToLocalStorage();
 }

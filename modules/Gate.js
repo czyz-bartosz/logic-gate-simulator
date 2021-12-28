@@ -45,7 +45,7 @@ class Gate {
     move() {
         this.outputs.forEach((el, id) => {
             this.outputs[id]?.wires.forEach((el, idW) => {
-                wires[this.outputs[id].wires[idW]].draw();
+                wires[this.outputs[id].wires[idW]]?.draw();
             });
         });
         this.inputs.forEach((el, id) => {
@@ -133,6 +133,8 @@ class NOTGate extends Gate {
 class MyGate extends Gate {
     functionStringHead;
     functionStringTail;
+    gatesId = [];
+    wiresId = [];
     constructor(id, inputs, outputs, functionStringArray, outputsArray, name, color, makeStringArr=0, stringIndexArr) {
         super(id, inputs, outputs);
         this.functionString = functionStringArray;
@@ -148,7 +150,6 @@ class MyGate extends Gate {
         this.color = color;
         this.text.textContent = name;
         this.element.style.background = color;
-        console.log("a", this.makeStringArr, this.stringIndexArr)
     }
     makeString() {
         const arr = [];
@@ -207,6 +208,21 @@ class MyGate extends Gate {
         this.outputs.forEach((el) => {
             el.wires.forEach((el) => {
                 wires[el]?.transfer();
+            });
+        });
+    }
+    addEditButton() {
+        const editButton = document.createElement("button");
+        editButton.innerText = "e";
+        this.element.appendChild(editButton);
+        editButton.addEventListener("click", () => {
+            workArea.innerHTML = null;
+            this.gatesId.forEach((id) => {
+                workArea.appendChild(gates[parseInt(id)].element);
+            });
+            this.wiresId.forEach((id) => {
+                workArea.appendChild(wires[parseInt(id)].con);
+                wires[parseInt(id)].draw();
             });
         });
     }
