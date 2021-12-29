@@ -72,6 +72,7 @@ header {
     height: 20px;
     border-radius: 50%;
     background: cornflowerblue;
+    transform: translateX(-20px);
 }
 
 .output {
@@ -79,6 +80,7 @@ header {
     height: 20px;
     border-radius: 50%;
     background: cornflowerblue;
+    transform: translateX(20px);
 }
 
 .true {
