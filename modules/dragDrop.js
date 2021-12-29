@@ -1,6 +1,6 @@
 import { makeConnection, workArea } from "../main.js";
 
-export function addDragDrop(ele, dragzone, dragFunction, moveFunction, dropFunction) {
+export function addDragging(ele, dragzone, dragFunction, moveFunction, dropFunction) {
     ele.addEventListener("mousedown", (event) => {
         ele.style.zIndex = "100";
         if(dragFunction) {
@@ -45,11 +45,52 @@ export function addDragDrop(ele, dragzone, dragFunction, moveFunction, dropFunct
 export function dragWire(ele, dragzone) {
     ele.addEventListener("mousedown", (event) => {
         event.stopPropagation();
-        const el = document.createElementNS("http://www.w3.org/2000/svg", "path");;
+        const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
         const con = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-        let currentDroppable = null;
-        con.appendChild(el);
+        con.appendChild(path);
         workArea.appendChild(con);
+        
+        function getPosition(ele) {
+            const eleRect = ele.getBoundingClientRect();
+            const targetRect = workArea.getBoundingClientRect();
+        
+            const y = eleRect.top - targetRect.top;
+            const x = eleRect.left - targetRect.left;
+            
+            return {x, y};
+        }
+        const elePosition = getPosition(ele);
+        const mousePosition = {};
+
+
+        function onMouseMove(event) {
+            const rect = dragzone.getBoundingClientRect();
+            const x = event.clientX - rect.left;
+            const y = event.clientY - rect.top;
+            mousePosition.x = x;
+            mousePosition.y = y;
+            if(ele.classList.contains("input")) {
+                draw(elePosition, mousePosition);
+            }else {
+                draw(mousePosition, elePosition);
+            }
+        }
+
+        document.addEventListener("mousemove", onMouseMove);
+
+        function drop(event) {
+            event.stopPropagation();
+            let elemBelow = document.elementFromPoint(event.clientX, event.clientY);
+            if(elemBelow.classList.contains("input") || elemBelow.classList.contains("output")) {
+                makeConnection(ele);
+                makeConnection(elemBelow);
+            }
+            document.removeEventListener("mousemove", onMouseMove);
+            con.remove();
+            document.removeEventListener("mouseup", drop);
+        }
+
+        document.addEventListener("mouseup", drop);
 
         function draw(el1, ele2) {
             let width;
@@ -72,70 +113,25 @@ export function dragWire(ele, dragzone) {
             con.setAttribute("height", height);
             if(ele2.x < el1.x - 60) {
                 if(ele2.y > el1.y) {
-                    el.setAttribute("d", `M 0 ${height - 10} H ${width/2} V 10 H ${width}`);
+                    path.setAttribute("d", `M 0 ${height - 10} H ${width/2} V 10 H ${width}`);
                     con.setAttribute("style", `top: ${el1.y}px; left: ${ele2.x}px`);
                 }else if(ele2.y < el1.y){
-                    el.setAttribute("d", `M 0 10 H ${width/2} V ${height - 10} H ${width}`);
+                    path.setAttribute("d", `M 0 10 H ${width/2} V ${height - 10} H ${width}`);
                     con.setAttribute("style", `top: ${ele2.y}px; left: ${ele2.x}px`);
                 }else {
-                    el.setAttribute("d", `M 0 ${height / 2} H ${width}`);
+                    path.setAttribute("d", `M 0 ${height / 2} H ${width}`);
                     con.setAttribute("style", `top: ${ele2.y}px; left: ${ele2.x}px`);
                 }
             }else {
                 if(ele2.y >= el1.y) {
-                    el.setAttribute("d", `M 60 10 H 6 V ${height / 2} H ${width - 6} V ${height - 10} H ${width - 60}`);
+                    path.setAttribute("d", `M 60 10 H 6 V ${height / 2} H ${width - 6} V ${height - 10} H ${width - 60}`);
                     con.setAttribute("style", `top: ${el1.y}px; left: ${el1.x - 60}px`);
                 }else if(ele2.y < el1.y){
-                    el.setAttribute("d", `M ${width - 60} 10 H ${width - 6} V ${height / 2} H 6 V ${height - 10} H 60`);
+                    path.setAttribute("d", `M ${width - 60} 10 H ${width - 6} V ${height / 2} H 6 V ${height - 10} H 60`);
                     con.setAttribute("style", `top: ${ele2.y}px; left: ${el1.x - 60}px`);
                 }
             }
         }
-        function getPosition(el) {
-            const eleRect = el.getBoundingClientRect();
-            const targetRect = workArea.getBoundingClientRect();
-        
-            const y = eleRect.top - targetRect.top;
-            const x = eleRect.left - targetRect.left;
-            
-            return {x, y};
-        }
-        const elePosition = getPosition(ele);
-        const mousePosition = {};
-
-        onMouseMove(event);
-
-        function onMouseMove(event) {
-            const rect = dragzone.getBoundingClientRect();
-            const x = event.clientX - rect.left;
-            const y = event.clientY - rect.top;
-            mousePosition.x = x;
-            mousePosition.y = y;
-            if(ele.classList.contains("input")) {
-                draw(elePosition, mousePosition);
-            }else {
-                draw(mousePosition, elePosition);
-            }
-            let elemBelow = document.elementFromPoint(event.clientX, event.clientY);
-            if (!elemBelow) return;
-            
-        }
-
-        document.addEventListener("mousemove", onMouseMove);
-
-        function drop(event) {
-            event.stopPropagation();
-            let elemBelow = document.elementFromPoint(event.clientX, event.clientY);
-            if(elemBelow.classList.contains("input") || elemBelow.classList.contains("output")) {
-                makeConnection(ele);
-                makeConnection(elemBelow);
-            }
-            document.removeEventListener("mousemove", onMouseMove);
-            con.remove();
-            document.removeEventListener("mouseup", drop);
-        }
-
-        document.addEventListener("mouseup", drop);
     });
     ele.addEventListener("dragstart", () => false );
 }

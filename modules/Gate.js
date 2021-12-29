@@ -2,7 +2,7 @@ import { Input } from "./Input.js";
 import { Output } from "./Output.js";
 import { gates, wires, workArea, hideSVG, makeConnection, selectElement, enterToEditMode } from "../main.js";
 import { saveToLocalStorage, updateGatePosition } from "./save.js";
-import { addDragDrop, dragWire } from "./dragDrop.js";
+import { addDragging, dragWire } from "./dragDrop.js";
 export {Gate, NOTGate, ANDGate, MyGate};
 
 class Gate {
@@ -251,7 +251,7 @@ export function prepareGate(gate) {
         this.classList.add("selected");
         selectElement(this);
     });
-    addDragDrop(gate.element, workArea, undefined, moveFuntion, dropFunction);
+    addDragging(gate.element, workArea, undefined, moveFuntion, dropFunction);
     function moveFuntion() {
         gate.move();
     }
@@ -260,20 +260,8 @@ export function prepareGate(gate) {
     }
     inputsArr.forEach((el) => {
         dragWire(el, workArea);
-        // el.addEventListener("mousedown", (event) => {
-        //     event.stopPropagation();
-        //     if(event.button === 2) {
-        //         makeConnection(el);
-        //     }
-        // });
     });
     outputsArr.forEach((el) => {
         dragWire(el, workArea);
-        // el.addEventListener("mousedown", (event) => {
-        //     event.stopPropagation();
-        //     if(event.button === 2) {
-        //         makeConnection(el);
-        //     }
-        // });
     });
 }

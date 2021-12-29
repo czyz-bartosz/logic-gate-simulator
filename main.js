@@ -87,18 +87,18 @@ workArea.addEventListener("click", () => {
 
 function makeConnection(el) {
     if(el.classList.contains("output")) {
-        if(!selectedOutput) {
-            selectedOutput = el;
-        }
+        selectedOutput = el;
     }else {
         const gateId = el.id.split("-")[1];
         const inputId = el.id.split("-")[0];
         const wire = gates[gateId].inputs[inputId].wire;
-        if(!selectedInput && wire === undefined) {
+        if(wire === undefined) {
             selectedInput = el;
         }
     }
-    if(selectedInput && selectedOutput) {
+    const outputGate = selectedOutput?.id.split("-")[1];
+    const inputGate = selectedInput?.id.split("-")[1];
+    if(selectedInput && selectedOutput && outputGate !== inputGate) {
         const wireIndex = wires.push(new Wire(selectedOutput, selectedInput)) - 1;
         saveWire(selectedOutput, selectedInput, wireIndex);
         selectedOutput = selectedInput = null;
