@@ -140,22 +140,13 @@ workArea.addEventListener("drop", function(event) {
     const id = event.dataTransfer.getData("text/plain");
     const el = document.getElementById(id);
     const mousePosition = getMousePositionRelativToWorkArea(event);
-    if(id.includes("gate")) {
-        const idGate = parseInt(id);
-        el.style.top = mousePosition.y;
-        el.style.left = mousePosition.x;
-        updateGatePosition(idGate);
-        gates[idGate].move();
-    }else {
-        const gatesIndex = gates.length;
-        gates[gatesIndex] = presetsGates[parseInt(id)].clone();
-        const gate = gates[gatesIndex];
-        prepareGate(gate);
-        gate.element.style.top = mousePosition.y;
-        gate.element.style.left = mousePosition.x;
-        saveGate(gate);
-    }
-    
+    const gatesIndex = gates.length;
+    gates[gatesIndex] = presetsGates[parseInt(id)].clone();
+    const gate = gates[gatesIndex];
+    prepareGate(gate);
+    gate.element.style.top = mousePosition.y;
+    gate.element.style.left = mousePosition.x;
+    saveGate(gate);
 });
 
 function getPreviousGate(input) {

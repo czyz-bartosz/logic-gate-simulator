@@ -1,7 +1,8 @@
 import { Input } from "./Input.js";
 import { Output } from "./Output.js";
 import { gates, wires, workArea, hideSVG, makeConnection, selectElement, enterToEditMode } from "../main.js";
-import { saveToLocalStorage } from "./save.js";
+import { saveToLocalStorage, updateGatePosition } from "./save.js";
+import { addDragDrop } from "./dragDrop.js";
 export {Gate, NOTGate, ANDGate, MyGate};
 
 class Gate {
@@ -245,18 +246,18 @@ export function prepareGate(gate) {
     const outputsArr = gate.element.querySelectorAll(".output");
     gate.element.classList.add("work");
     gate.element.id = gate.id;
-    gate.element.setAttribute("draggable", "true");
     gate.element.addEventListener("click", function(event) {
         event.stopPropagation();
         this.classList.add("selected");
         selectElement(this);
     });
-    gate.element.addEventListener("dragstart", function(event) {
-        const dragElementId = this.getAttribute("id");
-        hideSVG();
-        event.dataTransfer.setData("text/plain", dragElementId);
-        event.dataTransfer.dropEffect = "copy";
-    });
+    addDragDrop(gate.element, workArea, undefined, moveFuntion, dropFunction);
+    function moveFuntion() {
+        gate.move();
+    }
+    function dropFunction() {
+        updateGatePosition(parseInt(gate.id));
+    }
     inputsArr.forEach((el) => {
         el.addEventListener("mouseup", (event) => {
             if(event.button === 2) {
