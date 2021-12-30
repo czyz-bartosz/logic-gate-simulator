@@ -37,6 +37,13 @@ export class nOutputsElement {
             });
             this.element.appendChild(this.changeModeButton);
             this.changeNumber();
+        }else if(idString.includes("g")) {
+            for(let i = 1; i <= n; i++) {
+                const output = new OutputsElement(1, (id + i + "-gate"));
+                const outputsEl = output.element
+                this.element.appendChild(outputsEl);
+            }
+            this.valueEl.textContent = 0;
         }else {
             this.valueEl.textContent = n;
         }
@@ -75,7 +82,7 @@ export class nOutputsElement {
             el.delete();
         });
     }
-    clone() {
-        return new nOutputsElement(this.n, (gates.length + "-gate"))
+    clone(name="-gate") {
+        return new nOutputsElement(this.n, (gates.length + name));
     }
 }

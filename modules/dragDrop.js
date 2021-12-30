@@ -3,6 +3,8 @@ import { makeConnection, workArea } from "../main.js";
 export function addDragging(ele, dragzone, dragFunction, moveFunction, dropFunction) {
     ele.addEventListener("mousedown", (event) => {
         ele.style.zIndex = "100";
+        const top = ele.style.top;
+        const left = ele.style.left;
         if(dragFunction) {
             dragFunction();
         }
@@ -29,15 +31,65 @@ export function addDragging(ele, dragzone, dragFunction, moveFunction, dropFunct
         document.addEventListener("mousemove", onMouseMove);
 
         function drop() {
+            const eleRect = ele.getBoundingClientRect();
+            const workAreaRect = workArea.getBoundingClientRect();
             ele.style.zIndex = "1";
             document.removeEventListener("mousemove", onMouseMove);
-            ele.removeEventListener("mouseup", drop);
-            if(dropFunction) {
+            document.removeEventListener("mouseup", drop);
+            if(eleRect.top > workAreaRect.top && eleRect.bottom < workAreaRect.bottom && eleRect.left > workAreaRect.left && eleRect.right < workAreaRect.right) {
                 dropFunction();
+            }else {
+                ele.style.top = top;
+                ele.style.left = left;
+                moveFunction();
             }
         }
 
-        ele.addEventListener("mouseup", drop);
+        document.addEventListener("mouseup", drop);
+    });
+    ele.addEventListener("dragstart", () => false );
+}
+
+export function dragDrop(ele, dragzone, dragFunction, moveFunction, dropFunction) {
+    ele.addEventListener("mousedown", (event) => {
+        let x;
+        let y;
+        const copyEle = dragFunction();
+        copyEle.classList.remove("draggable-gate");
+        dragzone.appendChild(copyEle);
+        copyEle.style.zIndex = "100";
+        copyEle.style.position = "absolute";
+
+        function moveAt(pageX, pageY) {
+            copyEle.style.left = pageX + 'px';
+            copyEle.style.top = pageY + 'px';
+        }
+
+        onMouseMove(event);
+        
+        function onMouseMove(event) {
+            const rect = dragzone.getBoundingClientRect();
+            x = event.clientX - rect.left;
+            y = event.clientY - rect.top;
+            moveAt(x, y);
+            if(moveFunction) {
+                moveFunction();
+            }
+        }
+
+        document.addEventListener("mousemove", onMouseMove);
+
+        function drop(event) {
+            const copyEleRect = copyEle.getBoundingClientRect();
+            const workAreaRect = workArea.getBoundingClientRect();
+            copyEle.remove();
+            document.removeEventListener("mousemove", onMouseMove);
+            document.removeEventListener("mouseup", drop);
+            if(copyEleRect.top > workAreaRect.top && copyEleRect.bottom < workAreaRect.bottom && copyEleRect.left > workAreaRect.left && copyEleRect.right < workAreaRect.right) {
+                dropFunction(event); 
+            }
+        }
+        document.addEventListener("mouseup", drop);
     });
     ele.addEventListener("dragstart", () => false );
 }
@@ -81,13 +133,13 @@ export function dragWire(ele, dragzone) {
         function drop(event) {
             event.stopPropagation();
             let elemBelow = document.elementFromPoint(event.clientX, event.clientY);
-            if(elemBelow.classList.contains("input") || elemBelow.classList.contains("output")) {
+            con.remove();
+            document.removeEventListener("mousemove", onMouseMove);
+            document.removeEventListener("mouseup", drop);
+            if(elemBelow?.classList.contains("input") || elemBelow?.classList.contains("output")) {
                 makeConnection(ele);
                 makeConnection(elemBelow);
             }
-            document.removeEventListener("mousemove", onMouseMove);
-            con.remove();
-            document.removeEventListener("mouseup", drop);
         }
 
         document.addEventListener("mouseup", drop);

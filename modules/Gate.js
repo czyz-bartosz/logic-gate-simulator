@@ -1,7 +1,7 @@
 import { Input } from "./Input.js";
 import { Output } from "./Output.js";
-import { gates, wires, workArea, hideSVG, makeConnection, selectElement, enterToEditMode } from "../main.js";
-import { saveToLocalStorage, updateGatePosition } from "./save.js";
+import { gates, wires, workArea, selectElement, enterToEditMode } from "../main.js";
+import { updateGatePosition } from "./save.js";
 import { addDragging, dragWire } from "./dragDrop.js";
 export {Gate, NOTGate, ANDGate, MyGate};
 
@@ -218,7 +218,8 @@ class MyGate extends Gate {
         editButton.innerText = "e";
         editButton.classList.add("edit-button");
         this.element.appendChild(editButton);
-        editButton.addEventListener("click", () => {
+        editButton.addEventListener("mousedown", (event) => {
+            event.stopPropagation();
             workArea.innerHTML = null;
             this.gatesId.forEach((id) => {
                 workArea.appendChild(gates[parseInt(id)].element);

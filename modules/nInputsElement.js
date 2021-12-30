@@ -37,6 +37,13 @@ export class nInputsElement {
             this.element.appendChild(this.changeModeButton);
             this.valueEl.textContent = 0;
             this.changeNumber();
+        }else if(idString.includes("g")) {
+            for(let i = 1; i <= n; i++) {
+                const input = new InputsElement(1, (id + i + "-gate"));
+                const inputsEl = input.element
+                this.element.appendChild(inputsEl);
+            }
+            this.valueEl.textContent = 0;
         }else {
             this.valueEl.textContent = n;
         }
@@ -75,7 +82,7 @@ export class nInputsElement {
             el.delete();
         });
     }
-    clone() {
-        return new nInputsElement(this.n, (gates.length + "-gate"))
+    clone(name="-gate") {
+        return new nInputsElement(this.n, (gates.length + name))
     }
 }

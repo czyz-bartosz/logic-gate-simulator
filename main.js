@@ -4,8 +4,9 @@ import { OutputsElement } from "./modules/OutputsElement.js";
 import { InputsElement } from "./modules/InputsElement.js";
 import { nOutputsElement } from "./modules/nOutputsElement.js";
 import { nInputsElement } from "./modules/nInputsElement.js";
-import { editSavedPresetsGate, getWorkAreaGates, getWorkAreaWires, loadSave, saveGate, saveMode, savePresetsGate, saveToLocalStorage, saveWire, updateGatePosition } from "./modules/save.js";
-export { gates, wires, workArea, presetsGates, selectElement, hideSVG, makeConnection, enterToEditMode, isEditMode, editGateId, changeMode };
+import { editSavedPresetsGate, getWorkAreaGates, getWorkAreaWires, loadSave, saveGate, saveMode, savePresetsGate, saveToLocalStorage, saveWire } from "./modules/save.js";
+import { dragDrop } from "./modules/dragDrop.js";
+export { gates, wires, workArea, presetsGates, selectElement, makeConnection, enterToEditMode, isEditMode, editGateId, changeMode };
 
 const workArea = document.querySelector("#work-area");
 const gatesToolbox = document.querySelector("footer");
@@ -68,19 +69,6 @@ function selectElement(element) {
     selectedElement = element;
 }
 
-function hideSVG() {
-    const wiresArr = document.querySelectorAll("svg");
-    wiresArr.forEach((el) => {
-        el.classList.add("hide");
-    });
-}
-function showSVG() {
-    const wiresArr = document.querySelectorAll("svg");
-    wiresArr.forEach((el) => {
-        el.classList.remove("hide");
-    });
-}
-
 workArea.addEventListener("click", () => {
     unselectElement();
 })
@@ -110,22 +98,28 @@ function makePresetsGate(gate, index) {
         gate.addEditButton();
     }
     gate.element.classList.add("draggable-gate");
-    gate.element.setAttribute("draggable", "true");
     gate.element.setAttribute("id", index + "drag");
     gate.element.style.order = index + 1;
     gatesToolbox.appendChild(gate.element);
-    gate.element.addEventListener("dragstart", (event) => {
-        const dragElementId = gate.element.getAttribute("id");
-        event.dataTransfer.setData("text/plain", dragElementId);
-        event.dataTransfer.dropEffect = "copy";
-        hideSVG();
-    });
-}
+    dragDrop(gate.element, document.body, dragFunction, undefined, dropFunction);
 
-workArea.addEventListener("dragover", function(event) {
-    event.preventDefault();
-    event.dataTransfer.dropEffect = "copy";
-});
+    function dragFunction() {
+        const id = index;
+        return presetsGates[id].clone("-g").element;
+    }
+
+    function dropFunction(event) {
+        const id = index;
+        const mousePosition = getMousePositionRelativToWorkArea(event);
+        const gatesIndex = gates.length;
+        gates[gatesIndex] = presetsGates[id].clone();
+        const gate = gates[gatesIndex];
+        prepareGate(gate);
+        gate.element.style.top = mousePosition.y;
+        gate.element.style.left = mousePosition.x;
+        saveGate(gate);
+    }
+}
 
 function getMousePositionRelativToWorkArea(e) {
     const rect = workArea.getBoundingClientRect();
@@ -133,21 +127,6 @@ function getMousePositionRelativToWorkArea(e) {
     const y = e.clientY - rect.top;
     return { x: x + "px", y: y + "px"};
 }
-
-workArea.addEventListener("drop", function(event) {
-    event.preventDefault();
-    showSVG();
-    const id = event.dataTransfer.getData("text/plain");
-    const el = document.getElementById(id);
-    const mousePosition = getMousePositionRelativToWorkArea(event);
-    const gatesIndex = gates.length;
-    gates[gatesIndex] = presetsGates[parseInt(id)].clone();
-    const gate = gates[gatesIndex];
-    prepareGate(gate);
-    gate.element.style.top = mousePosition.y;
-    gate.element.style.left = mousePosition.x;
-    saveGate(gate);
-});
 
 function getPreviousGate(input) {
     const wire = wires[input.wire];
