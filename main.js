@@ -5,15 +5,18 @@ import { InputsElement } from "./modules/InputsElement.js";
 import { nOutputsElement } from "./modules/nOutputsElement.js";
 import { nInputsElement } from "./modules/nInputsElement.js";
 import { editSavedPresetsGate, getWorkAreaGates, getWorkAreaWires, loadSave, saveGate, saveMode, savePresetsGate, saveToLocalStorage, saveWire } from "./modules/save.js";
-import { dragDrop } from "./modules/dragDrop.js";
-export { gates, wires, workArea, presetsGates, selectElement, makeConnection, enterToEditMode, isEditMode, editGateId, changeMode };
+import { dragDrop, workAreaMove } from "./modules/dragDrop.js";
+export { gates, wires, workArea, presetsGates, selectElement, makeConnection, enterToEditMode, isEditMode, editGateId, changeMode, scale };
 
+const main = document.querySelector("main");
 const workArea = document.querySelector("#work-area");
 const gatesToolbox = document.querySelector("footer");
 const createGateMenuButton = document.querySelector("#create-gate-menu-button");
 const createGateButton = document.querySelector("#create-gate-button");
 const createBlockMenu = document.querySelector("#create-block-menu");
 const deleteButton = document.querySelector("#delete-button");
+const plusBttn = document.querySelector("#plus");
+const minusBttn = document.querySelector("#minus");
 const presetsGates = [];
 const gates = [];
 const wires = [];
@@ -23,6 +26,7 @@ let selectedInput;
 let selectedElement;
 let editGateId;
 let isEditMode = false;
+let scale = 1.0;
 
 function changeMode() {
     if(isEditMode) {
@@ -123,8 +127,8 @@ function makePresetsGate(gate, index) {
 
 function getMousePositionRelativToWorkArea(e) {
     const rect = workArea.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
+    const x = (e.clientX - rect.left) / scale;
+    const y = (e.clientY - rect.top) / scale;
     return { x: x + "px", y: y + "px"};
 }
 
@@ -292,6 +296,35 @@ deleteButton.addEventListener("click", () => {
     }
     saveToLocalStorage();
 })
+
+window.addEventListener("resize", () => {
+    const width = workArea.offsetWidth * scale;
+    const height = workArea.offsetHeight * scale;
+    workArea.style.top = (workArea.offsetHeight - height) / 2 * -1 + "px";
+    workArea.style.left = (workArea.offsetWidth - width) / 2 * -1 + "px";
+});
+
+function changeScale(a) {
+    if(a === 1) {
+        if(scale < 1.10) {
+            scale += 0.05;
+        }
+    }else {
+        if(scale > 0.25) {
+            scale -= 0.05;
+        }
+    }
+    workArea.style.transform = `scale(${scale})`;
+}
+
+plusBttn.addEventListener("click", () => {
+    changeScale(1);
+});
+minusBttn.addEventListener("click", () => {
+    changeScale(-1);
+});
+
+workAreaMove(workArea, main);
 
 presetsGates.push(new OutputsElement(1, presetsGates.length));
 presetsGates.push(new nOutputsElement(2, presetsGates.length));

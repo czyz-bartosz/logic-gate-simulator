@@ -1,7 +1,8 @@
-import { makeConnection, workArea } from "../main.js";
+import { makeConnection, scale, workArea } from "../main.js";
 
 export function addDragging(ele, dragzone, dragFunction, moveFunction, dropFunction) {
     ele.addEventListener("mousedown", (event) => {
+        event.stopPropagation();
         ele.style.zIndex = "100";
         const top = ele.style.top;
         const left = ele.style.left;
@@ -12,8 +13,8 @@ export function addDragging(ele, dragzone, dragFunction, moveFunction, dropFunct
         const shiftY = event.clientY - ele.getBoundingClientRect().top;
 
         function moveAt(pageX, pageY) {
-            ele.style.left = pageX - shiftX + 'px';
-            ele.style.top = pageY - shiftY + 'px';
+            ele.style.left = (pageX - shiftX) / scale + 'px';
+            ele.style.top = (pageY - shiftY) / scale + 'px';
         }
 
         onMouseMove(event);
@@ -59,18 +60,23 @@ export function dragDrop(ele, dragzone, dragFunction, moveFunction, dropFunction
         dragzone.appendChild(copyEle);
         copyEle.style.zIndex = "100";
         copyEle.style.position = "absolute";
+        copyEle.style.transform = `scale(${scale})`;
+        console.log(copyEle.offsetWidth, copyEle.offsetHeight);
+        const copyEleRect = copyEle.getBoundingClientRect();
+        const shiftX = (copyEle.offsetWidth - copyEleRect.width) / 2;
+        const shiftY = (copyEle.offsetHeight - copyEleRect.height) / 2;
 
         function moveAt(pageX, pageY) {
-            copyEle.style.left = pageX + 'px';
-            copyEle.style.top = pageY + 'px';
+            console.log(shiftX)
+            copyEle.style.left = pageX - shiftX + 'px';
+            copyEle.style.top = pageY - shiftY + 'px';
         }
 
         onMouseMove(event);
         
         function onMouseMove(event) {
-            const rect = dragzone.getBoundingClientRect();
-            x = event.clientX - rect.left;
-            y = event.clientY - rect.top;
+            x = event.clientX;
+            y = event.clientY;
             moveAt(x, y);
             if(moveFunction) {
                 moveFunction();
@@ -106,8 +112,8 @@ export function dragWire(ele, dragzone) {
             const eleRect = ele.getBoundingClientRect();
             const targetRect = workArea.getBoundingClientRect();
         
-            const y = eleRect.top - targetRect.top;
-            const x = eleRect.left - targetRect.left;
+            const y = (eleRect.top - targetRect.top) / scale;
+            const x = (eleRect.left - targetRect.left) / scale;
             
             return {x, y};
         }
@@ -117,8 +123,8 @@ export function dragWire(ele, dragzone) {
 
         function onMouseMove(event) {
             const rect = dragzone.getBoundingClientRect();
-            const x = event.clientX - rect.left;
-            const y = event.clientY - rect.top;
+            const x = (event.clientX - rect.left) / scale;
+            const y = (event.clientY - rect.top) / scale;
             mousePosition.x = x;
             mousePosition.y = y;
             if(ele.classList.contains("input")) {
@@ -186,4 +192,32 @@ export function dragWire(ele, dragzone) {
         }
     });
     ele.addEventListener("dragstart", () => false );
+}
+
+export function workAreaMove(workArea, main) {
+    workArea.addEventListener("mousedown", (event) => {
+        const shiftX = event.clientX - workArea.offsetLeft;
+        const shiftY = event.clientY - workArea.offsetTop;
+        function moveAt(mainX, mainY) {
+            workArea.style.left = (mainX - shiftX) + "px";
+            workArea.style.top = (mainY - shiftY + 40) + "px";
+        }
+        onMouseMove(event);
+        function onMouseMove(event) {
+            const mainRect = main.getBoundingClientRect();
+            const mainX = event.clientX - mainRect.left;
+            const mainY = event.clientY - mainRect.top;
+            moveAt(mainX, mainY);
+        }
+        document.addEventListener("mousemove", onMouseMove);
+
+        function onDrop() {
+            document.removeEventListener("mousemove", onMouseMove);
+            document.removeEventListener("mouseup", onDrop);
+        }
+
+        document.addEventListener("mouseup", onDrop);
+    });
+
+    workArea.addEventListener("dragstart", () => { return false; });
 }

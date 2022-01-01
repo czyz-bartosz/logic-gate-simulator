@@ -1,12 +1,12 @@
-import { wires, gates, workArea, selectElement } from "../main.js";
+import { wires, gates, workArea, selectElement, scale } from "../main.js";
 import { setWireToDeleted } from "./save.js";
 
 function getPosition(el) {
     const eleRect = el.getBoundingClientRect();
     const targetRect = workArea.getBoundingClientRect();
 
-    const y = eleRect.top - targetRect.top;
-    const x = eleRect.left - targetRect.left;
+    const y = (eleRect.top - targetRect.top) / scale;
+    const x = (eleRect.left - targetRect.left) / scale;
     
     return {x, y};
 }

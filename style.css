@@ -18,6 +18,7 @@ main {
     display: flex;
     position: relative;
     flex-grow: 1;
+    overflow: hidden;
 }
 
 footer {
@@ -111,8 +112,10 @@ path.selected {
 }
 
 #work-area {
-    width: 100%;
-    position: relative;
+    width: 1920px;
+    height: 1080px;
+    position: absolute;
+    background-color: cadetblue;
 }
 
 .hide {
@@ -194,4 +197,14 @@ path.selected {
 
 .correct {
     background-color: hotpink;
+}
+
+#button-con {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+}
+
+#button-con button {
+    padding: 10px;
 }
