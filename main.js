@@ -6,11 +6,12 @@ import { nOutputsElement } from "./modules/nOutputsElement.js";
 import { nInputsElement } from "./modules/nInputsElement.js";
 import { editSavedPresetsGate, getWorkAreaGates, getWorkAreaWires, loadSave, saveGate, saveMode, savePresetsGate, saveToLocalStorage, saveWire } from "./modules/save.js";
 import { dragDrop, workAreaMove } from "./modules/dragDrop.js";
-export { gates, wires, workArea, presetsGates, selectElement, makeConnection, enterToEditMode, isEditMode, editGateId, changeMode, scale };
+export { gates, wires, workArea, presetsGates, selectElement, makeConnection, enterToEditMode, isEditMode, editGateId, changeMode, scale, header };
 
 const main = document.querySelector("main");
 const workArea = document.querySelector("#work-area");
 const gatesToolbox = document.querySelector("footer");
+const header = document.querySelector("header");
 const createGateMenuButton = document.querySelector("#create-gate-menu-button");
 const createGateButton = document.querySelector("#create-gate-button");
 const createBlockMenu = document.querySelector("#create-block-menu");
@@ -342,5 +343,12 @@ loadSave();
 presetsGates.forEach((gate, index) => {
     makePresetsGate(gate, index);
 });
+
+if(isEditMode) {
+    const editButtons = document.querySelectorAll(".edit-button");
+    editButtons.forEach(el => {
+        el.style.display = "none";
+    });
+}
 
 saveToLocalStorage();

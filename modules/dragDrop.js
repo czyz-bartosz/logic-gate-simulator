@@ -1,4 +1,4 @@
-import { makeConnection, scale, workArea } from "../main.js";
+import { header, makeConnection, scale, workArea } from "../main.js";
 
 export function addDragging(ele, dragzone, dragFunction, moveFunction, dropFunction) {
     ele.addEventListener("mousedown", (event) => {
@@ -171,10 +171,10 @@ export function dragWire(ele, dragzone) {
             con.setAttribute("height", height);
             if(ele2.x < el1.x - 60) {
                 if(ele2.y > el1.y) {
-                    path.setAttribute("d", `M 0 ${height - 10} H ${width/2} V 10 H ${width}`);
+                    path.setAttribute("d", `M 0 ${height - 10} H ${width/2} V 10 H ${width - 20}`);
                     con.setAttribute("style", `top: ${el1.y}px; left: ${ele2.x}px`);
                 }else if(ele2.y < el1.y){
-                    path.setAttribute("d", `M 0 10 H ${width/2} V ${height - 10} H ${width}`);
+                    path.setAttribute("d", `M 0 10 H ${width/2} V ${height - 10} H ${width - 20}`);
                     con.setAttribute("style", `top: ${ele2.y}px; left: ${ele2.x}px`);
                 }else {
                     path.setAttribute("d", `M 0 ${height / 2} H ${width}`);
@@ -182,10 +182,10 @@ export function dragWire(ele, dragzone) {
                 }
             }else {
                 if(ele2.y >= el1.y) {
-                    path.setAttribute("d", `M 60 10 H 6 V ${height / 2} H ${width - 6} V ${height - 10} H ${width - 60}`);
+                    path.setAttribute("d", `M 60 10 H 6 V ${height / 2} H ${width - 6} V ${height - 10} H ${width - 80}`);
                     con.setAttribute("style", `top: ${el1.y}px; left: ${el1.x - 60}px`);
                 }else if(ele2.y < el1.y){
-                    path.setAttribute("d", `M ${width - 60} 10 H ${width - 6} V ${height / 2} H 6 V ${height - 10} H 60`);
+                    path.setAttribute("d", `M ${width - 80} 10 H ${width - 6} V ${height / 2} H 6 V ${height - 10} H 60`);
                     con.setAttribute("style", `top: ${ele2.y}px; left: ${el1.x - 60}px`);
                 }
             }
@@ -198,9 +198,10 @@ export function workAreaMove(workArea, main) {
     workArea.addEventListener("mousedown", (event) => {
         const shiftX = event.clientX - workArea.offsetLeft;
         const shiftY = event.clientY - workArea.offsetTop;
+        const headerHeight = header.offsetHeight;
         function moveAt(mainX, mainY) {
             workArea.style.left = (mainX - shiftX) + "px";
-            workArea.style.top = (mainY - shiftY + 40) + "px";
+            workArea.style.top = (mainY - shiftY + headerHeight) + "px";
         }
         onMouseMove(event);
         function onMouseMove(event) {
@@ -219,5 +220,5 @@ export function workAreaMove(workArea, main) {
         document.addEventListener("mouseup", onDrop);
     });
 
-    workArea.addEventListener("dragstart", () => { return false; });
+    workArea.addEventListener("dragstart", () => false);
 }
