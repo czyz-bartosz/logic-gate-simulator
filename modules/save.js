@@ -13,6 +13,44 @@ let workAreaGates = [];
 let savedWires = [];
 let workAreaWires = [];
 let projectIndex = 0;
+const projectList = document.querySelector("#projects-list");
+
+class Project {
+    con;
+    nameEl;
+    buttonCon;
+    openProjectButton;
+    deleteProjectButton;
+    constructor(name="My project") {
+        this.name = name;
+        this.createElement();
+    }
+    createElement() {
+        this.con = document.createElement("div");
+        this.con.classList.add("project-con");
+        this.nameEl = document.createElement("h2");
+        this.nameEl.textContent = this.name;
+        this.con.appendChild(this.nameEl);
+        this.buttonCon = document.createElement("div");
+        this.buttonCon.classList.add("project-button-con");
+        this.openProjectButton = document.createElement("button");
+        this.openProjectButton.textContent = "open";
+        this.openProjectButton.classList.add("open-project");
+        this.deleteProjectButton = document.createElement("button");
+        this.deleteProjectButton.textContent = "delete";
+        this.deleteProjectButton.classList.add("delete-project");
+        this.buttonCon.appendChild(this.openProjectButton);
+        this.buttonCon.appendChild(this.deleteProjectButton);
+        this.con.appendChild(this.buttonCon);
+        projectList.appendChild(this.con);
+    }
+}
+
+export function showProjects() {
+    projects.forEach( obj => {
+        new Project();
+    });
+}
 
 export function loadSave() {
     const loadedProjects = getFromLocalStorage("projects");

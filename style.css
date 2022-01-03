@@ -13,6 +13,60 @@ body {
     overflow: hidden;
 }
 
+div.start-menu {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 30px;
+    gap: 30px;
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    z-index: 2;
+    background-color: azure;
+}
+
+header.start-menu {
+    width: 80%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+header.start-menu div.place {
+    width: 50px;
+}
+
+header.start-menu h1 {
+    text-align: center;
+}
+
+#menu-button-con {
+    width: 50px;
+}
+
+#projects-list {
+    height: 80%;
+    width: 80%;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, 300px);
+    grid-auto-rows: 150px;
+    justify-content: center;
+    gap: 30px;
+    overflow: auto;
+    padding-bottom: 30px;
+}
+
+.project-con {
+    width: 300px;
+    height: 150px;
+    background-color: rgb(87, 87, 87);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
 main {
     width: 100%;
     display: flex;
@@ -29,7 +83,7 @@ footer {
     overflow: auto;
 }
 
-header {
+header.app {
     display: flex;
     align-items: center;
     width: 100%;

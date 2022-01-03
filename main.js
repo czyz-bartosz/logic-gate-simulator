@@ -4,7 +4,7 @@ import { OutputsElement } from "./modules/OutputsElement.js";
 import { InputsElement } from "./modules/InputsElement.js";
 import { nOutputsElement } from "./modules/nOutputsElement.js";
 import { nInputsElement } from "./modules/nInputsElement.js";
-import { editSavedPresetsGate, getWorkAreaGates, getWorkAreaWires, loadSave, saveGate, saveMode, savePresetsGate, saveToLocalStorage, saveWire } from "./modules/save.js";
+import { editSavedPresetsGate, getWorkAreaGates, getWorkAreaWires, loadSave, saveGate, saveMode, savePresetsGate, saveToLocalStorage, saveWire, showProjects } from "./modules/save.js";
 import { dragDrop, workAreaMove } from "./modules/dragDrop.js";
 export { gates, wires, workArea, presetsGates, selectElement, makeConnection, enterToEditMode, isEditMode, editGateId, changeMode, scale, header };
 
@@ -325,6 +325,8 @@ minusBttn.addEventListener("click", () => {
     changeScale(-1);
 });
 
+
+
 workAreaMove(workArea, main);
 
 presetsGates.push(new OutputsElement(1, presetsGates.length));
@@ -339,6 +341,8 @@ presetsGates.push(new ANDGate(presetsGates.length));
 presetsGates.push(new NOTGate(presetsGates.length));
 
 loadSave();
+
+showProjects();
 
 presetsGates.forEach((gate, index) => {
     makePresetsGate(gate, index);
