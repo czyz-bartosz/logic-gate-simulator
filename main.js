@@ -4,14 +4,16 @@ import { OutputsElement } from "./modules/OutputsElement.js";
 import { InputsElement } from "./modules/InputsElement.js";
 import { nOutputsElement } from "./modules/nOutputsElement.js";
 import { nInputsElement } from "./modules/nInputsElement.js";
-import { editSavedPresetsGate, getWorkAreaGates, getWorkAreaWires, loadSave, saveGate, saveMode, savePresetsGate, saveToLocalStorage, saveWire, showProjects } from "./modules/save.js";
+import { editSavedPresetsGate, getWorkAreaGates, getWorkAreaWires, loadProject, loadSave, saveGate, saveMode, savePresetsGate, saveToLocalStorage, saveWire } from "./modules/save.js";
+import { showProjects } from "./modules/Project.js";
 import { dragDrop, workAreaMove } from "./modules/dragDrop.js";
 export { gates, wires, workArea, presetsGates, selectElement, makeConnection, enterToEditMode, isEditMode, editGateId, changeMode, scale, header };
 
+const startMenu = document.querySelector(".start-menu");
 const main = document.querySelector("main");
 const workArea = document.querySelector("#work-area");
 const gatesToolbox = document.querySelector("footer");
-const header = document.querySelector("header");
+const header = document.querySelector("header.app");
 const createGateMenuButton = document.querySelector("#create-gate-menu-button");
 const createGateButton = document.querySelector("#create-gate-button");
 const createBlockMenu = document.querySelector("#create-block-menu");
@@ -325,34 +327,37 @@ minusBttn.addEventListener("click", () => {
     changeScale(-1);
 });
 
-
-
-workAreaMove(workArea, main);
-
-presetsGates.push(new OutputsElement(1, presetsGates.length));
-presetsGates.push(new nOutputsElement(2, presetsGates.length));
-presetsGates.push(new nOutputsElement(4, presetsGates.length));
-presetsGates.push(new nOutputsElement(8, presetsGates.length));
-presetsGates.push(new InputsElement(1, presetsGates.length));
-presetsGates.push(new nInputsElement(2, presetsGates.length));
-presetsGates.push(new nInputsElement(4, presetsGates.length));
-presetsGates.push(new nInputsElement(8, presetsGates.length));
-presetsGates.push(new ANDGate(presetsGates.length));
-presetsGates.push(new NOTGate(presetsGates.length));
-
 loadSave();
 
 showProjects();
 
-presetsGates.forEach((gate, index) => {
-    makePresetsGate(gate, index);
-});
+export function start() {
+    startMenu.style.display = 'none';
+    workAreaMove(workArea, main);
 
-if(isEditMode) {
-    const editButtons = document.querySelectorAll(".edit-button");
-    editButtons.forEach(el => {
-        el.style.display = "none";
+    presetsGates.push(new OutputsElement(1, presetsGates.length));
+    presetsGates.push(new nOutputsElement(2, presetsGates.length));
+    presetsGates.push(new nOutputsElement(4, presetsGates.length));
+    presetsGates.push(new nOutputsElement(8, presetsGates.length));
+    presetsGates.push(new InputsElement(1, presetsGates.length));
+    presetsGates.push(new nInputsElement(2, presetsGates.length));
+    presetsGates.push(new nInputsElement(4, presetsGates.length));
+    presetsGates.push(new nInputsElement(8, presetsGates.length));
+    presetsGates.push(new ANDGate(presetsGates.length));
+    presetsGates.push(new NOTGate(presetsGates.length));
+
+    loadProject();
+
+    presetsGates.forEach((gate, index) => {
+        makePresetsGate(gate, index);
     });
-}
 
-saveToLocalStorage();
+    if(isEditMode) {
+        const editButtons = document.querySelectorAll(".edit-button");
+        editButtons.forEach(el => {
+            el.style.display = "none";
+        });
+    }
+
+    saveToLocalStorage();
+}

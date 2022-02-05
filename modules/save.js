@@ -3,90 +3,66 @@ import { InputsElement } from "./InputsElement.js";
 import { nInputsElement } from "./nInputsElement.js";
 import { nOutputsElement } from "./nOutputsElement.js";
 import { OutputsElement } from "./OutputsElement.js";
-import { changeMode, editGateId, enterToEditMode, gates, isEditMode, presetsGates, wires, workArea } from "../main.js";
+import { changeMode, editGateId, enterToEditMode, gates, isEditMode, presetsGates, wires } from "../main.js";
 import { Wire } from "./Wire.js";
 
-let projects = [];
+export let projects = [];
 let savedGates = [];
 let savedPresetsGates = [];
 let workAreaGates = [];
 let savedWires = [];
 let workAreaWires = [];
-let projectIndex = 0;
-const projectList = document.querySelector("#projects-list");
+export let projectIndex = 0;
 
-class Project {
-    con;
-    nameEl;
-    buttonCon;
-    openProjectButton;
-    deleteProjectButton;
-    constructor(name="My project") {
-        this.name = name;
-        this.createElement();
-    }
-    createElement() {
-        this.con = document.createElement("div");
-        this.con.classList.add("project-con");
-        this.nameEl = document.createElement("h2");
-        this.nameEl.textContent = this.name;
-        this.con.appendChild(this.nameEl);
-        this.buttonCon = document.createElement("div");
-        this.buttonCon.classList.add("project-button-con");
-        this.openProjectButton = document.createElement("button");
-        this.openProjectButton.textContent = "open";
-        this.openProjectButton.classList.add("open-project");
-        this.deleteProjectButton = document.createElement("button");
-        this.deleteProjectButton.textContent = "delete";
-        this.deleteProjectButton.classList.add("delete-project");
-        this.buttonCon.appendChild(this.openProjectButton);
-        this.buttonCon.appendChild(this.deleteProjectButton);
-        this.con.appendChild(this.buttonCon);
-        projectList.appendChild(this.con);
-    }
+export function setProjectIndex(id) {
+    projectIndex = id;
 }
 
-export function showProjects() {
-    projects.forEach( obj => {
-        new Project();
-    });
-}
+export function deleteProject(id) {
+    projects.splice(id, 1);
+    const string = JSON.stringify(projects);
+    localStorage.setItem("projects", string);
+    location.reload();
+} 
 
 export function loadSave() {
     const loadedProjects = getFromLocalStorage("projects");
     if(loadedProjects) {
         projects = [ ...loadedProjects ];
-        const project = loadedProjects[projectIndex];
-        if(project) {
-
-            if(project.workAreaGates) {
-                workAreaGates = [ ...project.workAreaGates ];
-            }
-            if(project.workAreaWires) {
-                workAreaWires = [ ...project.workAreaWires ];
-            }
-            if(project.gates) {
-                savedGates = [ ...project.gates ];
-                addGates(savedGates);
-            }
-            if(project.presetsGates) {
-                savedPresetsGates = [ ...project.presetsGates ];
-                savedPresetsGates.forEach((obj) => {
-                    const id = presetsGates.push(new MyGate(presetsGates.length, obj.amountOfInputs, obj.amountOfOutputs, obj.functionString, obj.outputsArray, obj.name, obj.color, obj.makeStringArr, obj.stringIndexArr)) - 1;
-                    presetsGates[id].gatesId = obj.gatesId;
-                    presetsGates[id].wiresId = obj.wiresId;
-                });
-            }
-            if(project.wires) {
-                savedWires = [ ...project.wires ];
-                addWires(savedWires);
-            }
-            if(project.isEditMode) {
-                changeMode();
-                enterToEditMode(project.editGateId);
-            }
-        }   
     }
+}
+
+export function loadProject() {
+    const project = projects[projectIndex];
+    if(project) {
+
+        if(project.workAreaGates) {
+            workAreaGates = [ ...project.workAreaGates ];
+        }
+        if(project.workAreaWires) {
+            workAreaWires = [ ...project.workAreaWires ];
+        }
+        if(project.gates) {
+            savedGates = [ ...project.gates ];
+            addGates(savedGates);
+        }
+        if(project.presetsGates) {
+            savedPresetsGates = [ ...project.presetsGates ];
+            savedPresetsGates.forEach((obj) => {
+                const id = presetsGates.push(new MyGate(presetsGates.length, obj.amountOfInputs, obj.amountOfOutputs, obj.functionString, obj.outputsArray, obj.name, obj.color, obj.makeStringArr, obj.stringIndexArr)) - 1;
+                presetsGates[id].gatesId = obj.gatesId;
+                presetsGates[id].wiresId = obj.wiresId;
+            });
+        }
+        if(project.wires) {
+            savedWires = [ ...project.wires ];
+            addWires(savedWires);
+        }
+        if(project.isEditMode) {
+            changeMode();
+            enterToEditMode(project.editGateId);
+        }
+    }   
 }
 
 function addWires(loadWires) {

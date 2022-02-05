@@ -63,6 +63,7 @@ header.start-menu h1 {
     background-color: rgb(87, 87, 87);
     display: flex;
     flex-direction: column;
+    gap: 20px;
     align-items: center;
     justify-content: center;
 }
@@ -261,4 +262,17 @@ path.selected {
 
 #button-con button {
     padding: 10px;
+}
+
+.create-project-menu {
+    display: none;
+    background-color: burlywood;
+    flex-direction: column;
+    gap: 20px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px;
+    border: 1px solid black;
 }
