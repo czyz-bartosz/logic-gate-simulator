@@ -4,15 +4,22 @@ import { OutputsElement } from "./modules/OutputsElement.js";
 import { InputsElement } from "./modules/InputsElement.js";
 import { nOutputsElement } from "./modules/nOutputsElement.js";
 import { nInputsElement } from "./modules/nInputsElement.js";
-import { loadSave, saveGate, savePresetsGate, saveToLocalStorage, saveWire, updateGatePosition } from "./modules/save.js";
-export { gates, wires, workArea, presetsGates, selectElement, hideSVG, makeConnection };
+import { editSavedPresetsGate, getWorkAreaGates, getWorkAreaWires, loadProject, loadSave, saveGate, saveMode, savePresetsGate, saveToLocalStorage, saveWire } from "./modules/save.js";
+import { showProjects } from "./modules/Project.js";
+import { dragDrop, workAreaMove } from "./modules/dragDrop.js";
+export { gates, wires, workArea, presetsGates, selectElement, makeConnection, enterToEditMode, isEditMode, editGateId, changeMode, scale, header };
 
+const startMenu = document.querySelector(".start-menu");
+const main = document.querySelector("main");
 const workArea = document.querySelector("#work-area");
 const gatesToolbox = document.querySelector("footer");
+const header = document.querySelector("header.app");
 const createGateMenuButton = document.querySelector("#create-gate-menu-button");
 const createGateButton = document.querySelector("#create-gate-button");
 const createBlockMenu = document.querySelector("#create-block-menu");
 const deleteButton = document.querySelector("#delete-button");
+const plusBttn = document.querySelector("#plus");
+const minusBttn = document.querySelector("#minus");
 const presetsGates = [];
 const gates = [];
 const wires = [];
@@ -20,6 +27,41 @@ const outputsSet = new Set();
 let selectedOutput;
 let selectedInput;
 let selectedElement;
+let editGateId;
+let isEditMode = false;
+let scale = 1.0;
+
+function changeMode() {
+    if(isEditMode) {
+        isEditMode = false;
+    }else {
+        isEditMode = true;
+    }
+}
+
+function enterToEditMode(id) {
+    isEditMode = true;
+    presetsGates[id].element.classList.add("edit");
+    const editButtons = document.querySelectorAll(".edit-button");
+    editButtons.forEach(el => {
+        el.style.display = "none";
+    });
+    createGateMenuButton.textContent = "edit gate";
+    createGateButton.textContent = "edit gate";
+    editGateId = id;
+    saveMode();
+}
+
+function exitFromEditMode() {
+    isEditMode = false;
+    const editButtons = document.querySelectorAll(".edit-button");
+    editButtons.forEach(el => {
+        el.style.display = "block";
+    });
+    createGateMenuButton.textContent = "create gate";
+    createGateButton.textContent = "create gate";
+    saveToLocalStorage();
+}
 
 function unselectElement() {
     selectedElement?.classList.remove("selected");
@@ -34,91 +76,64 @@ function selectElement(element) {
     selectedElement = element;
 }
 
-function hideSVG() {
-    const wiresArr = document.querySelectorAll("svg");
-    wiresArr.forEach((el) => {
-        el.classList.add("hide");
-    });
-}
-function showSVG() {
-    const wiresArr = document.querySelectorAll("svg");
-    wiresArr.forEach((el) => {
-        el.classList.remove("hide");
-    });
-}
-
 workArea.addEventListener("click", () => {
     unselectElement();
 })
 
 function makeConnection(el) {
     if(el.classList.contains("output")) {
-        if(!selectedOutput) {
-            selectedOutput = el;
-        }
+        selectedOutput = el;
     }else {
         const gateId = el.id.split("-")[1];
         const inputId = el.id.split("-")[0];
         const wire = gates[gateId].inputs[inputId].wire;
-        if(!selectedInput && wire === undefined) {
+        if(wire === undefined) {
             selectedInput = el;
         }
     }
-    if(selectedInput && selectedOutput) {
+    const outputGate = selectedOutput?.id.split("-")[1];
+    const inputGate = selectedInput?.id.split("-")[1];
+    if(selectedInput && selectedOutput && outputGate !== inputGate) {
         const wireIndex = wires.push(new Wire(selectedOutput, selectedInput)) - 1;
         saveWire(selectedOutput, selectedInput, wireIndex);
         selectedOutput = selectedInput = null;
     }
 }
 
-function makePresetsGate(el, index) {
-    el.element.classList.add("draggable-gate");
-    el.element.setAttribute("draggable", "true");
-    el.element.setAttribute("id", index + "drag");
-    gatesToolbox.appendChild(el.element);
-    el.element.addEventListener("dragstart", (event) => {
-        const dragElementId = el.element.getAttribute("id");
-        event.dataTransfer.setData("text/plain", dragElementId);
-        event.dataTransfer.dropEffect = "copy";
-        hideSVG();
-    });
-}
+function makePresetsGate(gate, index) {
+    if(gate instanceof MyGate) {
+        gate.addEditButton();
+    }
+    gate.element.classList.add("draggable-gate");
+    gate.element.setAttribute("id", index + "drag");
+    gate.element.style.order = index + 1;
+    gatesToolbox.appendChild(gate.element);
+    dragDrop(gate.element, document.body, dragFunction, undefined, dropFunction);
 
-workArea.addEventListener("dragover", function(event) {
-    event.preventDefault();
-    event.dataTransfer.dropEffect = "copy";
-});
+    function dragFunction() {
+        const id = index;
+        return presetsGates[id].clone("-g").element;
+    }
 
-function getMousePositionRelativToWorkArea(e) {
-    const rect = workArea.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    return { x: x + "px", y: y + "px"};
-}
-
-workArea.addEventListener("drop", function(event) {
-    event.preventDefault();
-    showSVG();
-    const id = event.dataTransfer.getData("text/plain");
-    const el = document.getElementById(id);
-    const mousePosition = getMousePositionRelativToWorkArea(event);
-    if(id.includes("gate")) {
-        const idGate = parseInt(id);
-        el.style.top = mousePosition.y;
-        el.style.left = mousePosition.x;
-        updateGatePosition(idGate);
-        gates[idGate].move();
-    }else {
+    function dropFunction(event) {
+        const id = index;
+        const mousePosition = getMousePositionRelativToWorkArea(event);
         const gatesIndex = gates.length;
-        gates[gatesIndex] = presetsGates[parseInt(id)].clone();
+        gates[gatesIndex] = presetsGates[id].clone();
         const gate = gates[gatesIndex];
         prepareGate(gate);
         gate.element.style.top = mousePosition.y;
         gate.element.style.left = mousePosition.x;
         saveGate(gate);
     }
-    
-});
+}
+
+function getMousePositionRelativToWorkArea(e) {
+    const rect = workArea.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / scale;
+    const y = (e.clientY - rect.top) / scale;
+    return { x: x + "px", y: y + "px"};
+}
 
 function getPreviousGate(input) {
     const wire = wires[input.wire];
@@ -149,12 +164,37 @@ createGateButton.addEventListener("click", () => {
     const outputsArr = outputsArray.filter((value) => {
         return outputsSet.has(value);
     });
+    const workAreaGates = getWorkAreaGates();
+    const workAreaWires = getWorkAreaWires();
     workArea.innerHTML = null;
-    createMyGate(functionStringArray, outputsArr);
+    if(isEditMode) {
+        editMyGate(functionStringArray, outputsArr, workAreaGates, workAreaWires);
+    }else {
+        createMyGate(functionStringArray, outputsArr, workAreaGates, workAreaWires);
+    }
     outputsSet.clear();
 });
 
-function createMyGate(functionStringArray, outputsArray) {
+function editMyGate(functionStringArray, outputsArray, workAreaGates, workAreaWires) {
+    const amountOfInputs = outputsArray.length;
+    const amountOfOutputs = functionStringArray.length;
+    const colorInput = document.querySelector("#color");
+    const nameInput = document.querySelector("#name");
+    const name = nameInput.value;
+    const color = colorInput.value;
+    presetsGates[editGateId].element.remove();
+    presetsGates[editGateId] = new MyGate(editGateId, amountOfInputs, amountOfOutputs, functionStringArray, outputsArray, name, color);
+    createBlockMenu.style.display = "none";
+    const gate = presetsGates[editGateId];
+    console.log(gate);
+    gate.gatesId = [ ...workAreaGates ];
+    gate.wiresId = [ ...workAreaWires ];
+    editSavedPresetsGate(gate, editGateId);
+    makePresetsGate(gate, editGateId);
+    exitFromEditMode();
+}
+
+function createMyGate(functionStringArray, outputsArray, workAreaGates, workAreaWires) {
     const amountOfInputs = outputsArray.length;
     const amountOfOutputs = functionStringArray.length;
     const colorInput = document.querySelector("#color");
@@ -164,6 +204,8 @@ function createMyGate(functionStringArray, outputsArray) {
     presetsGates.push(new MyGate(presetsGates.length, amountOfInputs, amountOfOutputs, functionStringArray, outputsArray, name, color));
     createBlockMenu.style.display = "none";
     const gate = presetsGates[presetsGates.length - 1];
+    gate.gatesId = [ ...workAreaGates ];
+    gate.wiresId = [ ...workAreaWires ];
     savePresetsGate(gate);
     makePresetsGate(gate, presetsGates.length - 1);
 }
@@ -258,19 +300,64 @@ deleteButton.addEventListener("click", () => {
     saveToLocalStorage();
 })
 
-presetsGates.push(new OutputsElement(1, presetsGates.length));
-presetsGates.push(new nOutputsElement(2, presetsGates.length));
-presetsGates.push(new nOutputsElement(4, presetsGates.length));
-presetsGates.push(new nOutputsElement(8, presetsGates.length));
-presetsGates.push(new InputsElement(1, presetsGates.length));
-presetsGates.push(new nInputsElement(2, presetsGates.length));
-presetsGates.push(new nInputsElement(4, presetsGates.length));
-presetsGates.push(new nInputsElement(8, presetsGates.length));
-presetsGates.push(new ANDGate(presetsGates.length));
-presetsGates.push(new NOTGate(presetsGates.length));
+window.addEventListener("resize", () => {
+    const width = workArea.offsetWidth * scale;
+    const height = workArea.offsetHeight * scale;
+    workArea.style.top = (workArea.offsetHeight - height) / 2 * -1 + "px";
+    workArea.style.left = (workArea.offsetWidth - width) / 2 * -1 + "px";
+});
+
+function changeScale(a) {
+    if(a === 1) {
+        if(scale < 1.10) {
+            scale += 0.05;
+        }
+    }else {
+        if(scale > 0.25) {
+            scale -= 0.05;
+        }
+    }
+    workArea.style.transform = `scale(${scale})`;
+}
+
+plusBttn.addEventListener("click", () => {
+    changeScale(1);
+});
+minusBttn.addEventListener("click", () => {
+    changeScale(-1);
+});
 
 loadSave();
 
-presetsGates.forEach((el, index) => {
-    makePresetsGate(el, index);
-});
+showProjects();
+
+export function start() {
+    startMenu.style.display = 'none';
+    workAreaMove(workArea, main);
+
+    presetsGates.push(new OutputsElement(1, presetsGates.length));
+    presetsGates.push(new nOutputsElement(2, presetsGates.length));
+    presetsGates.push(new nOutputsElement(4, presetsGates.length));
+    presetsGates.push(new nOutputsElement(8, presetsGates.length));
+    presetsGates.push(new InputsElement(1, presetsGates.length));
+    presetsGates.push(new nInputsElement(2, presetsGates.length));
+    presetsGates.push(new nInputsElement(4, presetsGates.length));
+    presetsGates.push(new nInputsElement(8, presetsGates.length));
+    presetsGates.push(new ANDGate(presetsGates.length));
+    presetsGates.push(new NOTGate(presetsGates.length));
+
+    loadProject();
+
+    presetsGates.forEach((gate, index) => {
+        makePresetsGate(gate, index);
+    });
+
+    if(isEditMode) {
+        const editButtons = document.querySelectorAll(".edit-button");
+        editButtons.forEach(el => {
+            el.style.display = "none";
+        });
+    }
+
+    saveToLocalStorage();
+}

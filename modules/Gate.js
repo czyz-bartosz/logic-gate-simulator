@@ -1,6 +1,8 @@
 import { Input } from "./Input.js";
 import { Output } from "./Output.js";
-import { gates, wires, workArea, hideSVG, makeConnection, selectElement } from "../main.js";
+import { gates, wires, workArea, selectElement, enterToEditMode } from "../main.js";
+import { updateGatePosition } from "./save.js";
+import { addDragging, dragWire } from "./dragDrop.js";
 export {Gate, NOTGate, ANDGate, MyGate};
 
 class Gate {
@@ -45,7 +47,7 @@ class Gate {
     move() {
         this.outputs.forEach((el, id) => {
             this.outputs[id]?.wires.forEach((el, idW) => {
-                wires[this.outputs[id].wires[idW]].draw();
+                wires[this.outputs[id].wires[idW]]?.draw();
             });
         });
         this.inputs.forEach((el, id) => {
@@ -133,6 +135,8 @@ class NOTGate extends Gate {
 class MyGate extends Gate {
     functionStringHead;
     functionStringTail;
+    gatesId = [];
+    wiresId = [];
     constructor(id, inputs, outputs, functionStringArray, outputsArray, name, color, makeStringArr=0, stringIndexArr) {
         super(id, inputs, outputs);
         this.functionString = functionStringArray;
@@ -148,7 +152,6 @@ class MyGate extends Gate {
         this.color = color;
         this.text.textContent = name;
         this.element.style.background = color;
-        console.log("a", this.makeStringArr, this.stringIndexArr)
     }
     makeString() {
         const arr = [];
@@ -210,6 +213,24 @@ class MyGate extends Gate {
             });
         });
     }
+    addEditButton() {
+        const editButton = document.createElement("button");
+        editButton.innerText = "e";
+        editButton.classList.add("edit-button");
+        this.element.appendChild(editButton);
+        editButton.addEventListener("mousedown", (event) => {
+            event.stopPropagation();
+            workArea.innerHTML = null;
+            this.gatesId.forEach((id) => {
+                workArea.appendChild(gates[parseInt(id)].element);
+            });
+            this.wiresId.forEach((id) => {
+                workArea.appendChild(wires[parseInt(id)].con);
+                wires[parseInt(id)].draw();
+            });
+            enterToEditMode(this.id);
+        });
+    }
 }
 
 function AND(a, b) {
@@ -226,30 +247,22 @@ export function prepareGate(gate) {
     const outputsArr = gate.element.querySelectorAll(".output");
     gate.element.classList.add("work");
     gate.element.id = gate.id;
-    gate.element.setAttribute("draggable", "true");
     gate.element.addEventListener("click", function(event) {
         event.stopPropagation();
         this.classList.add("selected");
         selectElement(this);
     });
-    gate.element.addEventListener("dragstart", function(event) {
-        const dragElementId = this.getAttribute("id");
-        hideSVG();
-        event.dataTransfer.setData("text/plain", dragElementId);
-        event.dataTransfer.dropEffect = "copy";
-    });
+    addDragging(gate.element, workArea, undefined, moveFuntion, dropFunction);
+    function moveFuntion() {
+        gate.move();
+    }
+    function dropFunction() {
+        updateGatePosition(parseInt(gate.id));
+    }
     inputsArr.forEach((el) => {
-        el.addEventListener("mouseup", (event) => {
-            if(event.button === 2) {
-                makeConnection(el);
-            }
-        });
+        dragWire(el, workArea);
     });
     outputsArr.forEach((el) => {
-        el.addEventListener("mouseup", (event) => {
-            if(event.button === 2) {
-                makeConnection(el);
-            }
-        });
+        dragWire(el, workArea);
     });
 }

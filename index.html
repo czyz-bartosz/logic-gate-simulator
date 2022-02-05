@@ -5,15 +5,37 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="./style.css">
-        <title>Symulator Układów Logicznych</title>
+        <title>Logic Gates Simulator</title>
     </head>
-    <body oncontextmenu="return false;">
-        <header>
+    <body>
+        <div class="start-menu">
+            <header class="start-menu">
+                <div class="place"></div>
+                <h1>Logic Gates Simulator</h1>
+                <div id="menu-button-con">
+                    <button id="open-create-project-menu" title="add project"><img src="./icons/add.svg"></button>
+                </div>
+            </header>
+            <h2>My projects</h2>
+            <div id="projects-list"></div>
+            <div class="create-project-menu">
+                <div>
+                    <label for="project-name">Project name:</label>
+                    <input type="text" id="project-name">
+                </div>
+                <button id="create-project">CREATE PROJECT</button>
+            </div>
+        </div>
+        <header class="app">
             <button id="create-gate-menu-button">create gate</button>
             <button id="delete-button">delete</button>
         </header>
         <main>
             <div id="work-area"></div>
+            <div id="button-con">
+                <button id="minus">-</button>
+                <button id="plus">+</button>
+            </div>
         </main>
         <footer></footer>
         <div id="create-block-menu">
@@ -23,7 +45,7 @@
             </div>
             <div>
                 <label for="name">Name:</label>
-                <input type="text" name="name" id="name">
+                <input type="text" name="name" id="name" autocomplete="off">
             </div>
             <button id="create-gate-button">create</button>
         </div>
