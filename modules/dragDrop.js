@@ -1,4 +1,4 @@
-import { header, makeConnection, scale, workArea } from "../main.js";
+import { header, makeConnection, scale, workArea, footer } from "../main.js";
 
 export function addDragging(ele, dragzone, dragFunction, moveFunction, dropFunction) {
     ele.addEventListener("mousedown", (event) => {
@@ -88,9 +88,11 @@ export function dragDrop(ele, dragzone, dragFunction, moveFunction, dropFunction
         function drop(event) {
             const copyEleRect = copyEle.getBoundingClientRect();
             const workAreaRect = workArea.getBoundingClientRect();
+            const footerRect = footer.getBoundingClientRect();
             copyEle.remove();
             document.removeEventListener("mousemove", onMouseMove);
             document.removeEventListener("mouseup", drop);
+            console.log(copyEleRect, workAreaRect, 'a');
             if(copyEleRect.top > workAreaRect.top && copyEleRect.bottom < workAreaRect.bottom && copyEleRect.left > workAreaRect.left && copyEleRect.right < workAreaRect.right) {
                 dropFunction(event); 
             }

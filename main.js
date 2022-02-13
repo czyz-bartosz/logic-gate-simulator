@@ -7,13 +7,14 @@ import { nInputsElement } from "./modules/nInputsElement.js";
 import { editSavedPresetsGate, getWorkAreaGates, getWorkAreaWires, loadProject, loadSave, saveGate, saveMode, savePresetsGate, saveToLocalStorage, saveWire } from "./modules/save.js";
 import { showProjects } from "./modules/Project.js";
 import { dragDrop, workAreaMove } from "./modules/dragDrop.js";
-export { gates, wires, workArea, presetsGates, selectElement, makeConnection, enterToEditMode, isEditMode, editGateId, changeMode, scale, header };
+export { gates, wires, workArea, presetsGates, selectElement, makeConnection, enterToEditMode, isEditMode, editGateId, changeMode, scale, header, footer };
 
 const startMenu = document.querySelector(".start-menu");
 const main = document.querySelector("main");
 const workArea = document.querySelector("#work-area");
 const gatesToolbox = document.querySelector("footer");
 const header = document.querySelector("header.app");
+const footer = document.querySelector('footer');
 const createGateMenuButton = document.querySelector("#create-gate-menu-button");
 const createGateButton = document.querySelector("#create-gate-button");
 const createBlockMenu = document.querySelector("#create-block-menu");
@@ -156,21 +157,25 @@ createGateButton.addEventListener("click", () => {
         const id = parseInt(el.id);
         return gates[id].outputs[0].outputEl.id;
     });
-    idInputsElement.forEach((value) => {
-        const stringFun = prepareString(goThroughTheGates(getPreviousGate(gates[value].inputs[0]), getWhichOutput(gates[value].inputs[0])));
-        functionStringArray.push(stringFun);
-    });
-
-    const outputsArr = outputsArray.filter((value) => {
-        return outputsSet.has(value);
-    });
-    const workAreaGates = getWorkAreaGates();
-    const workAreaWires = getWorkAreaWires();
-    workArea.innerHTML = null;
-    if(isEditMode) {
-        editMyGate(functionStringArray, outputsArr, workAreaGates, workAreaWires);
-    }else {
-        createMyGate(functionStringArray, outputsArr, workAreaGates, workAreaWires);
+    try {
+        idInputsElement.forEach((value) => {
+            const stringFun = prepareString(goThroughTheGates(getPreviousGate(gates[value].inputs[0]), getWhichOutput(gates[value].inputs[0])));
+            functionStringArray.push(stringFun);
+        });
+        const outputsArr = outputsArray.filter((value) => {
+            return outputsSet.has(value);
+        });
+        const workAreaGates = getWorkAreaGates();
+        const workAreaWires = getWorkAreaWires();
+        workArea.innerHTML = null;
+        if(isEditMode) {
+            editMyGate(functionStringArray, outputsArr, workAreaGates, workAreaWires);
+        }else {
+            createMyGate(functionStringArray, outputsArr, workAreaGates, workAreaWires);
+        }
+    }
+    catch {
+        alert('ERROR! check that everything is properly connected and that there are no unnecessary elements');
     }
     outputsSet.clear();
 });
