@@ -7,12 +7,17 @@ import { changeMode, editGateId, enterToEditMode, gates, isEditMode, presetsGate
 import { Wire } from "./Wire.js";
 
 export let projects = [];
+let name;
 let savedGates = [];
 let savedPresetsGates = [];
 let workAreaGates = [];
 let savedWires = [];
 let workAreaWires = [];
 export let projectIndex = 0;
+
+export function setName(n) {
+    name = n;
+}
 
 export function setProjectIndex(id) {
     projectIndex = id;
@@ -62,6 +67,7 @@ export function loadProject() {
             changeMode();
             enterToEditMode(project.editGateId);
         }
+        name = name ?? project.name;
     }   
 }
 
@@ -161,6 +167,7 @@ export function saveGate(gate) {
 
 export function saveToLocalStorage() {
     const project = {};
+    project.name = name;
     project.gates = savedGates;
     project.presetsGates = savedPresetsGates;
     project.workAreaGates = getWorkAreaGates();
@@ -169,7 +176,7 @@ export function saveToLocalStorage() {
     project.isEditMode = isEditMode;
     project.editGateId = editGateId;
     projects[projectIndex] = project;
-    const string = JSON.stringify(projects);
+    const string = JSON.stringify(projects);``
     localStorage.setItem("projects", string);
 }
 

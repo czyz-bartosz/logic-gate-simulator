@@ -3,7 +3,7 @@ const createProjectBtn = document.querySelector("#create-project");
 const openCreateProjectMenu = document.querySelector("#open-create-project-menu");
 const createProjectMenu = document.querySelector(".create-project-menu")
 import { start } from "../main.js";
-import { deleteProject, projects, setProjectIndex } from "./save.js"
+import { deleteProject, projects, setName, setProjectIndex } from "./save.js"
 
 class Project {
     con;
@@ -38,7 +38,6 @@ class Project {
         projectList.appendChild(this.con);
     }
     openProject = () => {
-        console.log(this.id);
         setProjectIndex(this.id);
         start();
     }
@@ -49,7 +48,7 @@ class Project {
 
 export function showProjects() {
     projects.forEach( (obj, id) => {
-        new Project(id);
+        new Project(id, projects[id].name);
     });
 }
 
@@ -58,8 +57,9 @@ openCreateProjectMenu.addEventListener('click', () => {
 });
 
 createProjectBtn.addEventListener('click', () => {
-    console.log('a');
     const newProjectIndex = projects.length;
+    const name = document.querySelector("#project-name").value;
     setProjectIndex(newProjectIndex);
+    setName(name);
     start();
 });
