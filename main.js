@@ -7,7 +7,7 @@ import { nInputsElement } from "./modules/nInputsElement.js";
 import { editSavedPresetsGate, getWorkAreaGates, getWorkAreaWires, loadProject, loadSave, saveGate, saveMode, savePresetsGate, saveToLocalStorage, saveWire } from "./modules/save.js";
 import { showProjects } from "./modules/Project.js";
 import { dragDrop, workAreaMove } from "./modules/dragDrop.js";
-export { gates, wires, workArea, presetsGates, selectElement, makeConnection, enterToEditMode, isEditMode, editGateId, changeMode, scale, header, footer };
+export { gates, wires, workArea, presetsGates, selectElement, makeConnection, enterToEditMode, isEditMode, editGateId, changeMode, scale, header, footer, resetConnection };
 
 const startMenu = document.querySelector(".start-menu");
 const main = document.querySelector("main");
@@ -81,6 +81,11 @@ function selectElement(element) {
 workArea.addEventListener("click", () => {
     unselectElement();
 })
+
+function resetConnection() {
+    selectedOutput = undefined;
+    selectedInput = undefined;
+}
 
 function makeConnection(el) {
     if(el.classList.contains("output")) {
@@ -304,11 +309,14 @@ closeFrameBttn.forEach(( ele ) => {
 
 deleteButton.addEventListener("click", () => {
     const id = selectedElement?.id?.split("-");
-    if(id[1] === "gate") {
-        gates[id[0]].delete();
-    }else if(id[1] === "wire"){
-        wires[id[0]].delete();
+    if(id) {
+        if(id[1] === "gate") {
+            gates[id[0]].delete();
+        }else if(id[1] === "wire"){
+            wires[id[0]].delete();
+        }
     }
+
     saveToLocalStorage();
 })
 

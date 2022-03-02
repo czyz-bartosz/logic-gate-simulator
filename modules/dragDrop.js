@@ -1,4 +1,4 @@
-import { header, makeConnection, scale, workArea, footer } from "../main.js";
+import { header, makeConnection, scale, workArea, footer, resetConnection } from "../main.js";
 
 export function addDragging(ele, dragzone, dragFunction, moveFunction, dropFunction) {
     ele.addEventListener("mousedown", (event) => {
@@ -144,9 +144,14 @@ export function dragWire(ele, dragzone) {
             con.remove();
             document.removeEventListener("mousemove", onMouseMove);
             document.removeEventListener("mouseup", drop);
+            if(elemBelow === ele) {
+                return;
+            }
             if(elemBelow?.classList.contains("input") || elemBelow?.classList.contains("output")) {
                 makeConnection(ele);
                 makeConnection(elemBelow);
+            }else {
+                resetConnection();
             }
         }
 
