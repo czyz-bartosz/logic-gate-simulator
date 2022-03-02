@@ -276,3 +276,18 @@ path.selected {
     padding: 20px;
     border: 1px solid black;
 }
+
+.project-con h2 {
+    text-align: center;
+    overflow: auto;
+    width: 240px;
+}
+
+.close-frame {
+    align-self: flex-end;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

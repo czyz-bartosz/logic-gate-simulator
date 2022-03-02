@@ -21,6 +21,7 @@ const createBlockMenu = document.querySelector("#create-block-menu");
 const deleteButton = document.querySelector("#delete-button");
 const plusBttn = document.querySelector("#plus");
 const minusBttn = document.querySelector("#minus");
+const closeFrameBttn = document.querySelectorAll(".close-frame");
 const presetsGates = [];
 const gates = [];
 const wires = [];
@@ -293,6 +294,12 @@ createGateMenuButton.addEventListener("click", () => {
     const colorInput = document.querySelector("#color");
     colorInput.value = randomColor();
     createBlockMenu.style.display = "flex";
+});
+
+closeFrameBttn.forEach(( ele ) => {
+    ele.addEventListener("click", () => {
+        ele.parentElement.style.display = "none";
+    });
 });
 
 deleteButton.addEventListener("click", () => {
