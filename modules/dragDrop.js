@@ -145,6 +145,7 @@ export function dragWire(ele, dragzone) {
             document.removeEventListener("mousemove", onMouseMove);
             document.removeEventListener("mouseup", drop);
             if(elemBelow === ele) {
+                resetConnection();
                 return;
             }
             if(elemBelow?.classList.contains("input") || elemBelow?.classList.contains("output")) {
