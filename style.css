@@ -103,6 +103,12 @@ header.app {
     padding: 10px;
 }
 
+.gate p {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
 .work.selected {
     box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.89), -3px -3px 6px rgba(0, 0, 0, 0.5);
 }

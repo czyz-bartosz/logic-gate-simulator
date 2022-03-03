@@ -172,6 +172,9 @@ createGateButton.addEventListener("click", () => {
     });
     try {
         idInputsElement.forEach((value) => {
+            if(getPreviousGate(gates[value].inputs[0]) instanceof OutputsElement) {
+                throw "Connection without gates is not possible. Do it with AND GATE";
+            }
             const stringFun = prepareString(goThroughTheGates(getPreviousGate(gates[value].inputs[0]), getWhichOutput(gates[value].inputs[0])));
             functionStringArray.push(stringFun);
         });
@@ -187,8 +190,12 @@ createGateButton.addEventListener("click", () => {
             createMyGate(functionStringArray, outputsArr, workAreaGates, workAreaWires);
         }
     }
-    catch {
-        alert('ERROR! check that everything is properly connected and that there are no unnecessary elements');
+    catch(error) {
+        if(error === "Connection without gates is not possible. Do it with AND GATE") {
+            alert(error);
+        }else {
+            alert('ERROR! check that everything is properly connected and that there are no unnecessary elements');
+        }
     }
     outputsSet.clear();
 });
