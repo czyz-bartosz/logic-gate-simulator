@@ -144,8 +144,16 @@ function makePresetsGate(gate, index) {
 
 function getMousePositionRelativToWorkArea(e) {
     const rect = workArea.getBoundingClientRect();
-    const x = (e.clientX - rect.left) / scale;
-    const y = (e.clientY - rect.top) / scale;
+    let x;
+    let y;
+    if(e instanceof TouchEvent) {
+        x = (e.changedTouches[0].clientX - rect.left) / scale;
+        y = (e.changedTouches[0].clientY - rect.top) / scale;
+    }else {
+        x = (e.clientX - rect.left) / scale;
+        y = (e.clientY - rect.top) / scale;
+    }
+
     return { x: x + "px", y: y + "px"};
 }
 

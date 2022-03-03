@@ -267,7 +267,9 @@ path.selected {
 }
 
 #button-con button {
+    position: relative;
     padding: 10px;
+    z-index: 100;
 }
 
 .create-project-menu {
