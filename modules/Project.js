@@ -56,10 +56,12 @@ openCreateProjectMenu.addEventListener('click', () => {
     createProjectMenu.style.display = 'flex';
 });
 
-createProjectBtn.addEventListener('click', () => {
+function createProject() {
     const newProjectIndex = projects.length;
     const name = document.querySelector("#project-name").value;
     setProjectIndex(newProjectIndex);
     setName(name);
     start();
-});
+}
+
+createProjectMenu.addEventListener("submit", createProject);

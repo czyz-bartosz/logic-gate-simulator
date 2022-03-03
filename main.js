@@ -22,6 +22,7 @@ const deleteButton = document.querySelector("#delete-button");
 const plusBttn = document.querySelector("#plus");
 const minusBttn = document.querySelector("#minus");
 const closeFrameBttn = document.querySelectorAll(".close-frame");
+const forms = document.querySelectorAll("form");
 const presetsGates = [];
 const gates = [];
 const wires = [];
@@ -32,6 +33,12 @@ let selectedElement;
 let editGateId;
 let isEditMode = false;
 let scale = 1.0;
+
+forms.forEach( (el) => {
+    el.addEventListener("submit", ( e ) => {
+        e.preventDefault();
+    });
+});
 
 function changeMode() {
     if(isEditMode) {

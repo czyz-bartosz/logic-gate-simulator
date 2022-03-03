@@ -18,14 +18,14 @@
             </header>
             <h2>My projects</h2>
             <div id="projects-list"></div>
-            <div class="create-project-menu">
-                <button class="close-frame"><img src="./icons/close.svg"></button>
+            <form class="create-project-menu">
+                <button type="button" class="close-frame"><img src="./icons/close.svg"></button>
                 <div>
                     <label for="project-name">Project name:</label>
                     <input type="text" id="project-name" autocomplete="off">
                 </div>
-                <button id="create-project">CREATE PROJECT</button>
-            </div>
+                <button type="submit" id="create-project">CREATE PROJECT</button>
+            </form>
         </div>
         <header class="app">
             <button id="create-gate-menu-button">create gate</button>
@@ -40,8 +40,8 @@
             </div>
         </main>
         <footer></footer>
-        <div id="create-block-menu">
-            <button class="close-frame"><img src="./icons/close.svg"></button>
+        <form id="create-block-menu">
+            <button type="button" class="close-frame"><img src="./icons/close.svg"></button>
             <div>
                 <label for="color">Color:</label>
                 <input type="color" name="color" id="color">
@@ -50,8 +50,8 @@
                 <label for="name">Name:</label>
                 <input type="text" name="name" id="name" autocomplete="off">
             </div>
-            <button id="create-gate-button">create</button>
-        </div>
+            <button type="submit" id="create-gate-button">create</button>
+        </form>
         <script type="module" src="./main.js"></script>
     </body>
 </html>
