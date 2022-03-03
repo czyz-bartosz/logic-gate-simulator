@@ -197,7 +197,6 @@ function editMyGate(functionStringArray, outputsArray, workAreaGates, workAreaWi
     presetsGates[editGateId] = new MyGate(editGateId, amountOfInputs, amountOfOutputs, functionStringArray, outputsArray, name, color);
     createBlockMenu.style.display = "none";
     const gate = presetsGates[editGateId];
-    console.log(gate);
     gate.gatesId = [ ...workAreaGates ];
     gate.wiresId = [ ...workAreaWires ];
     editSavedPresetsGate(gate, editGateId);
@@ -231,6 +230,9 @@ function prepareString(str) {
     while(regEx.test(string)) {
         const index = string.search(regEx) + 1;
         string = addStringAtPosition(string, ",", index);
+    }
+    if(string[string.length - 1] === ',') {
+        string = string.slice(0, -1);
     }
     return string;
 }

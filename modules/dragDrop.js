@@ -61,13 +61,11 @@ export function dragDrop(ele, dragzone, dragFunction, moveFunction, dropFunction
         copyEle.style.zIndex = "100";
         copyEle.style.position = "absolute";
         copyEle.style.transform = `scale(${scale})`;
-        console.log(copyEle.offsetWidth, copyEle.offsetHeight);
         const copyEleRect = copyEle.getBoundingClientRect();
         const shiftX = (copyEle.offsetWidth - copyEleRect.width) / 2;
         const shiftY = (copyEle.offsetHeight - copyEleRect.height) / 2;
 
         function moveAt(pageX, pageY) {
-            console.log(shiftX)
             copyEle.style.left = pageX - shiftX + 'px';
             copyEle.style.top = pageY - shiftY + 'px';
         }
@@ -92,7 +90,6 @@ export function dragDrop(ele, dragzone, dragFunction, moveFunction, dropFunction
             copyEle.remove();
             document.removeEventListener("mousemove", onMouseMove);
             document.removeEventListener("mouseup", drop);
-            console.log(copyEleRect, workAreaRect, 'a');
             if(copyEleRect.top > workAreaRect.top && copyEleRect.bottom < workAreaRect.bottom && copyEleRect.left > workAreaRect.left && copyEleRect.right < workAreaRect.right) {
                 dropFunction(event); 
             }
