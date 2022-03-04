@@ -123,7 +123,9 @@ export function dragDrop(ele, dragzone, dragFunction, moveFunction, dropFunction
             document.removeEventListener("mouseup", drop);
             document.removeEventListener("touchend", drop);
             if(copyEleRect.top > workAreaRect.top && copyEleRect.bottom < workAreaRect.bottom && copyEleRect.left > workAreaRect.left && copyEleRect.right < workAreaRect.right) {
-                dropFunction(event); 
+                if(isInScreen(copyEleRect)) {
+                    dropFunction(event); 
+                }
             }
         }
         document.addEventListener("mouseup", drop);
@@ -303,4 +305,15 @@ export function workAreaMove(workArea, main) {
     workArea.addEventListener("touchstart", dragStart);
     workArea.addEventListener("mousedown", dragStart);
     workArea.addEventListener("dragstart", () => false);
+}
+
+function isInScreen(position) {
+    const y = document.documentElement.offsetHeight;
+    const x = document.documentElement.offsetWidth;
+    const headerHeight = header.offsetHeight;
+    const footerHeight = footer.offsetHeight;
+    if(position.y > headerHeight && position.y < y - footerHeight && position.x < x) {
+        return true;
+    }
+    return false;
 }
