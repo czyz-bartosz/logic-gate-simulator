@@ -352,13 +352,14 @@ window.addEventListener("resize", () => {
 });
 
 function changeScale(a) {
+    const step = 0.1;
     if(a === 1) {
-        if(scale < 1.10) {
-            scale += 0.05;
+        if(scale < 2.0) {
+            scale += step;
         }
     }else {
         if(scale > 0.25) {
-            scale -= 0.05;
+            scale -= step;
         }
     }
     workArea.style.transform = `scale(${scale})`;
@@ -404,4 +405,12 @@ export function start() {
     }
 
     saveToLocalStorage();
+
+    window.addEventListener("wheel", (event) => {
+        if(event.deltaY < 0) {
+            changeScale(1);
+        }else {
+            changeScale(-1);
+        }
+    });
 }
