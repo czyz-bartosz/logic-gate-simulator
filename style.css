@@ -10,6 +10,9 @@
     --dark-color: #495057;
     --false-color: #212529;
     --true-color: #7fff00;
+    --white-font-color: #DEE2E6;
+    --white-button: #F8F9FA;
+    --frame-color: #6C757D;
 }
 
 body {
@@ -22,6 +25,33 @@ body {
     color: var(--the-darkest-color);
 }
 
+button {
+    cursor: pointer;
+    background-color: var(--white-button);
+    border: none;
+    font-size: 16px;
+}
+
+.big-button {
+    width: 40px;
+    height: 40px;
+}
+
+.vertical-button {
+    width: 90px;
+    height: 30px;
+}
+
+button[type=submit] {
+    font-weight: bold;
+    height: 50px;
+}
+
+.project-button-con {
+    display: flex;
+    gap: 10px;
+}
+
 div.start-menu {
     display: flex;
     flex-direction: column;
@@ -32,7 +62,8 @@ div.start-menu {
     height: 100vh;
     position: absolute;
     z-index: 101;
-    background-color: azure;
+    background-color: var(--the-darkest-color);
+    color: var(--white-font-color);
 }
 
 header.start-menu {
@@ -69,7 +100,7 @@ header.start-menu h1 {
 .project-con {
     width: 300px;
     height: 150px;
-    background-color: rgb(87, 87, 87);
+    background-color: var(--dark-color);
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -96,20 +127,22 @@ footer {
 
 header.app {
     display: flex;
+    padding-left: 10px;
+    padding-right: 10px;
+    gap: 10px;
     align-items: center;
     width: 100%;
-    height: 40px;
     background-color: var(--the-darkest-color);
 }
 
 .gate {
-    width: 120px;
-    background-color: aquamarine;
+    width: 130px;
     display: flex;
     align-items: center;
     cursor: pointer;
     justify-content: space-between;
-    padding: 10px;
+    padding: 6px;
+    font-weight: bold;
 }
 
 .gate p {
@@ -254,6 +287,23 @@ path.selected {
     cursor: pointer;
 }
 
+.n-outputs-element,
+.n-inputs-element {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.n-outputs-element {
+    background-color: #F45B69;
+}
+
+.n-inputs-element {
+    background-color: #CED0CE;
+}
+
+.n-inputs-element h2,
 .n-outputs-element h2 {
     color: var(--the-darkest-color);
     width: 40px;
@@ -263,29 +313,13 @@ path.selected {
     align-items: center;
 }
 
-.n-outputs-element {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    background-color: #F45B69;
-}
-
-.n-inputs-element h2 {
-    color: var(--the-darkest-color);
-    width: 40px;
-    height: 40px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.n-inputs-element {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    background-color: #CED0CE;
+.n-inputs-element button,
+.n-outputs-element button {
+    width: 30px;
+    height: 30px;
+    border: 1px solid var(--dark-color);
+    border-radius: 50%;
+    margin-bottom: 7px;
 }
 
 .draggable-gate .inputs,
@@ -293,22 +327,17 @@ path.selected {
     display: none;
 }
 
-.gate.draggable-gate {
-    justify-content: center;
+.draggable-gate button {
+    margin-left: 2px;
+    border-radius: 50%;
+    border: 1px solid var(--dark-color);
+    width: 25px;
+    height: 25px;
+    flex-shrink: 0;
 }
 
-#create-block-menu {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    display: none;
-    flex-direction: column;
-    gap: 20px;
-    border: 1px solid black;
-    padding: 10px;
-    z-index: 2;
-    background-color: white;
+.gate.draggable-gate {
+    justify-content: center;
 }
 
 .edit {
@@ -329,19 +358,14 @@ path.selected {
     position: relative;
     padding: 10px;
     z-index: 100;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 40px;
 }
 
-.create-project-menu {
-    display: none;
-    background-color: burlywood;
-    flex-direction: column;
-    gap: 20px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    padding: 20px;
-    border: 1px solid black;
+.blured {
+    filter: blur(1px);
 }
 
 .project-con h2 {
@@ -357,4 +381,20 @@ path.selected {
     display: flex;
     justify-content: center;
     align-items: center;
+    border: none;
+}
+
+form {
+    display: none;
+    z-index: 102;
+    position: absolute;
+    gap: 20px;
+    flex-direction: column;
+    background-color: var(--frame-color);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px;
+    width: 340px;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.322), -5px -5px 10px rgba(0, 0, 0, 0.322);
 }

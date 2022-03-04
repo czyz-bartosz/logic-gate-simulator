@@ -7,7 +7,7 @@ import { nInputsElement } from "./modules/nInputsElement.js";
 import { editSavedPresetsGate, getWorkAreaGates, getWorkAreaWires, loadProject, loadSave, saveGate, saveMode, savePresetsGate, saveToLocalStorage, saveWire } from "./modules/save.js";
 import { showProjects } from "./modules/Project.js";
 import { dragDrop, workAreaMove } from "./modules/dragDrop.js";
-export { gates, wires, workArea, presetsGates, selectElement, makeConnection, enterToEditMode, isEditMode, editGateId, changeMode, scale, header, footer, resetConnection };
+export { gates, wires, workArea, presetsGates, selectElement, makeConnection, enterToEditMode, isEditMode, editGateId, changeMode, scale, header, footer, resetConnection, startMenu };
 
 const startMenu = document.querySelector(".start-menu");
 const main = document.querySelector("main");
@@ -328,6 +328,7 @@ createGateMenuButton.addEventListener("click", () => {
 closeFrameBttn.forEach(( ele ) => {
     ele.addEventListener("click", () => {
         ele.parentElement.style.display = "none";
+        startMenu.classList.remove("blured");
     });
 });
 

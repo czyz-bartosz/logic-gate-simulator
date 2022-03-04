@@ -217,8 +217,11 @@ class MyGate extends Gate {
     }
     addEditButton() {
         const editButton = document.createElement("button");
-        editButton.innerText = "e";
+        const image = document.createElement("img");
+        image.src = "./icons/edit.svg";
+        editButton.appendChild(image);
         editButton.classList.add("edit-button");
+        editButton.title = "edit gate";
         this.element.appendChild(editButton);
         editButton.addEventListener("mousedown", (event) => {
             event.stopPropagation();

@@ -2,7 +2,7 @@ const projectList = document.querySelector("#projects-list");
 const createProjectBtn = document.querySelector("#create-project");
 const openCreateProjectMenu = document.querySelector("#open-create-project-menu");
 const createProjectMenu = document.querySelector(".create-project-menu")
-import { start } from "../main.js";
+import { start, startMenu } from "../main.js";
 import { deleteProject, projects, setName, setProjectIndex } from "./save.js"
 
 class Project {
@@ -28,10 +28,12 @@ class Project {
         this.openProjectButton.addEventListener('click', this.openProject);
         this.openProjectButton.textContent = "open";
         this.openProjectButton.classList.add("open-project");
+        this.openProjectButton.classList.add("vertical-button");
         this.deleteProjectButton = document.createElement("button");
         this.deleteProjectButton.addEventListener('click', this.deleteProject);
         this.deleteProjectButton.textContent = "delete";
         this.deleteProjectButton.classList.add("delete-project");
+        this.deleteProjectButton.classList.add("vertical-button");
         this.buttonCon.appendChild(this.openProjectButton);
         this.buttonCon.appendChild(this.deleteProjectButton);
         this.con.appendChild(this.buttonCon);
@@ -54,11 +56,16 @@ export function showProjects() {
 
 openCreateProjectMenu.addEventListener('click', () => {
     createProjectMenu.style.display = 'flex';
+    startMenu.classList.add("blured");
 });
 
 function createProject() {
+    createProjectMenu.style.display = 'none';
     const newProjectIndex = projects.length;
-    const name = document.querySelector("#project-name").value;
+    let name = document.querySelector("#project-name").value;
+    if(name === "") {
+        name = null;
+    }
     setProjectIndex(newProjectIndex);
     setName(name);
     start();

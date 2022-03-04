@@ -67,7 +67,7 @@ export function loadProject() {
             changeMode();
             enterToEditMode(project.editGateId);
         }
-        name = name ?? project.name;
+        name = project.name;
     }   
 }
 
@@ -167,7 +167,7 @@ export function saveGate(gate) {
 
 export function saveToLocalStorage() {
     const project = {};
-    project.name = name;
+    project.name = name ?? "My project";
     project.gates = savedGates;
     project.presetsGates = savedPresetsGates;
     project.workAreaGates = getWorkAreaGates();
