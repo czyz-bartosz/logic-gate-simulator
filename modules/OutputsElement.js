@@ -16,7 +16,7 @@ export class OutputsElement {
     addOutputs() {
         for(let i = 0; i < this.amountOfOutputs; i++) {
             this.outputs.push(new Output(i));
-            this.outputs[i].outputEl.setAttribute("id", i+"-"+this.id);
+            this.outputs[i].outputEl.setAttribute("id", i+"-"+this.id+"-o");
             this.outputs[i].outputEl.addEventListener("dblclick", () => {
                 this.outputs[i].toggleValue();
                 const parentElement = this.element.parentElement;

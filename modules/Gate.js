@@ -35,12 +35,12 @@ class Gate {
     addInputsAndOutput() {
         for(let i = 0; i < this.amountOfInputs; i++) {
             this.inputs.push(new Input(i));
-            this.inputs[i].inputEl.setAttribute("id", i+"-"+this.id);
+            this.inputs[i].inputEl.setAttribute("id", i+"-"+this.id+"-i");
             this.inputsConEl.appendChild(this.inputs[i].inputEl);
         }
         for(let i = 0; i < this.amountOfOutputs; i++) {
             this.outputs.push(new Output(i));
-            this.outputs[i].outputEl.setAttribute("id", i+"-"+this.id);
+            this.outputs[i].outputEl.setAttribute("id", i+"-"+this.id+"-o");
             this.outputsConEl.appendChild(this.outputs[i].outputEl);
         }
     }

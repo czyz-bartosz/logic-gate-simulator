@@ -7,7 +7,7 @@ export class Input {
     wire;
     constructor(id) {
         this.createElement();
-        this.id = id;
+        this.id = id + "-i";
     }
     createElement() {
         this.inputEl.classList.add("input");

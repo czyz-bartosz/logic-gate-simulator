@@ -5,7 +5,7 @@ export class Output {
     wires = [];
     constructor(id) {
         this.createElement();
-        this.id = id;
+        this.id = id + "-o";
     }
     createElement() {
         this.outputEl.classList.add("output");

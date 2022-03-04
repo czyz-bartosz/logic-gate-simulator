@@ -50,14 +50,15 @@ function changeMode() {
 
 function enterToEditMode(id) {
     isEditMode = true;
-    presetsGates[id].element.classList.add("edit");
+    const idP = parseInt(id);
+    presetsGates[idP].element.classList.add("edit");
     const editButtons = document.querySelectorAll(".edit-button");
     editButtons.forEach(el => {
         el.style.display = "none";
     });
     createGateMenuButton.textContent = "edit gate";
     createGateButton.textContent = "edit gate";
-    editGateId = id;
+    editGateId = idP;
     saveMode();
 }
 
@@ -233,7 +234,7 @@ function createMyGate(functionStringArray, outputsArray, workAreaGates, workArea
     const nameInput = document.querySelector("#name");
     const name = nameInput.value;
     const color = colorInput.value;
-    presetsGates.push(new MyGate(presetsGates.length, amountOfInputs, amountOfOutputs, functionStringArray, outputsArray, name, color));
+    presetsGates.push(new MyGate(presetsGates.length + "-pre", amountOfInputs, amountOfOutputs, functionStringArray, outputsArray, name, color));
     createBlockMenu.style.display = "none";
     const gate = presetsGates[presetsGates.length - 1];
     gate.gatesId = [ ...workAreaGates ];
@@ -381,16 +382,16 @@ export function start() {
     startMenu.style.display = 'none';
     workAreaMove(workArea, main);
 
-    presetsGates.push(new OutputsElement(1, presetsGates.length));
-    presetsGates.push(new nOutputsElement(2, presetsGates.length));
-    presetsGates.push(new nOutputsElement(4, presetsGates.length));
-    presetsGates.push(new nOutputsElement(8, presetsGates.length));
-    presetsGates.push(new InputsElement(1, presetsGates.length));
-    presetsGates.push(new nInputsElement(2, presetsGates.length));
-    presetsGates.push(new nInputsElement(4, presetsGates.length));
-    presetsGates.push(new nInputsElement(8, presetsGates.length));
-    presetsGates.push(new ANDGate(presetsGates.length));
-    presetsGates.push(new NOTGate(presetsGates.length));
+    presetsGates.push(new OutputsElement(1, presetsGates.length + "-pre"));
+    presetsGates.push(new nOutputsElement(2, presetsGates.length + "-pre"));
+    presetsGates.push(new nOutputsElement(4, presetsGates.length + "-pre"));
+    presetsGates.push(new nOutputsElement(8, presetsGates.length + "-pre"));
+    presetsGates.push(new InputsElement(1, presetsGates.length + "-pre"));
+    presetsGates.push(new nInputsElement(2, presetsGates.length + "-pre"));
+    presetsGates.push(new nInputsElement(4, presetsGates.length + "-pre"));
+    presetsGates.push(new nInputsElement(8, presetsGates.length + "-pre"));
+    presetsGates.push(new ANDGate(presetsGates.length + "-pre"));
+    presetsGates.push(new NOTGate(presetsGates.length + "-pre"));
 
     loadProject();
 
