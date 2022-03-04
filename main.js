@@ -146,7 +146,7 @@ function getMousePositionRelativToWorkArea(e) {
     const rect = workArea.getBoundingClientRect();
     let x;
     let y;
-    if(e instanceof TouchEvent) {
+    if( window.TouchEvent && e instanceof TouchEvent) {
         x = (e.changedTouches[0].clientX - rect.left) / scale;
         y = (e.changedTouches[0].clientY - rect.top) / scale;
     }else {

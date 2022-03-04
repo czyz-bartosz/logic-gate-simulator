@@ -12,7 +12,7 @@ export function addDragging(ele, dragzone, dragFunction, moveFunction, dropFunct
         let shiftX;
         let shiftY;
 
-        if(event instanceof TouchEvent) {
+        if( window.TouchEvent && event instanceof TouchEvent) {
             shiftX = event.touches[0].clientX - ele.getBoundingClientRect().left;
             shiftY = event.touches[0].clientY - ele.getBoundingClientRect().top;
         }else {
@@ -32,7 +32,7 @@ export function addDragging(ele, dragzone, dragFunction, moveFunction, dropFunct
             const rect = dragzone.getBoundingClientRect();
             let x;
             let y;
-            if(event instanceof TouchEvent) {
+            if( window.TouchEvent && event instanceof TouchEvent) {
                 x = event.touches[0].clientX - rect.left;
                 y = event.touches[0].clientY - rect.top;
             }else {
@@ -98,7 +98,7 @@ export function dragDrop(ele, dragzone, dragFunction, moveFunction, dropFunction
         onMouseMove(event);
         
         function onMouseMove(event) {
-            if(event instanceof TouchEvent) {
+            if( window.TouchEvent && event instanceof TouchEvent) {
                 x = event.touches[0].clientX;
                 y = event.touches[0].clientY;
             }else {
@@ -162,7 +162,7 @@ export function dragWire(ele, dragzone) {
             const rect = dragzone.getBoundingClientRect();
             let x;
             let y;
-            if(event instanceof TouchEvent) {
+            if( window.TouchEvent && event instanceof TouchEvent) {
                 x = (event.touches[0].clientX - rect.left) / scale;
                 y = (event.touches[0].clientY - rect.top) / scale;
             }else {
@@ -185,7 +185,7 @@ export function dragWire(ele, dragzone) {
         function drop(event) {
             event.stopPropagation();
             let elemBelow;
-            if(event instanceof TouchEvent) {
+            if( window.TouchEvent && event instanceof TouchEvent) {
                 elemBelow = document.elementFromPoint(event.changedTouches[0].clientX, event.changedTouches[0].clientY);
             }else {
                 elemBelow = document.elementFromPoint(event.clientX, event.clientY);
@@ -261,7 +261,7 @@ export function workAreaMove(workArea, main) {
         let shiftX;
         let shiftY;
 
-        if(event instanceof TouchEvent) {
+        if( window.TouchEvent && event instanceof TouchEvent) {
             shiftX = event.touches[0].clientX - workArea.offsetLeft;
             shiftY = event.touches[0].clientY - workArea.offsetTop;
         }else {
@@ -279,7 +279,7 @@ export function workAreaMove(workArea, main) {
             const mainRect = main.getBoundingClientRect();
             let mainX;
             let mainY;
-            if(event instanceof TouchEvent) {
+            if( window.TouchEvent && event instanceof TouchEvent) {
                 mainX = event.touches[0].clientX - mainRect.left;
                 mainY = event.touches[0].clientY - mainRect.top;
             }else {
