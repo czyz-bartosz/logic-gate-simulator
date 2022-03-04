@@ -74,6 +74,7 @@ class ANDGate extends Gate {
         super(id);
         this.text.textContent = "AND";
         this.changeStatus();
+        this.element.style.backgroundColor = "#F5F749";
     }
     returnValue(a, b) {
         if(a === true && b === true) {
@@ -109,6 +110,7 @@ class NOTGate extends Gate {
         super(id, 1, 1);
         this.text.textContent = "NOT";
         this.changeStatus();
+        this.element.style.backgroundColor = "#23CE6B";
     }
     returnValue(a) {
         return !a;

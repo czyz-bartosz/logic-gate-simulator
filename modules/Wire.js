@@ -41,9 +41,13 @@ export class Wire {
     transfer() {
         const id = +this.array2[0];
         if(this.el1.element.classList.contains("true")){
+            this.el.classList.add("true");
+            this.el.classList.remove("false");
             gates[this.nextGateId].inputs[id].setInputValue(true, this.nextGateId);
         }else if(this.el1.element.classList.contains("false")) {
             gates[this.nextGateId].inputs[id].setInputValue(false, this.nextGateId);
+            this.el.classList.remove("true");
+            this.el.classList.add("false");
         }
     }
     draw() {

@@ -4,6 +4,14 @@
     box-sizing: border-box;
 }
 
+:root {
+    --the-darkest-color: #212529;
+    --darker-color: #343A40;
+    --dark-color: #495057;
+    --false-color: #212529;
+    --true-color: #7fff00;
+}
+
 body {
     display: flex;
     flex-direction: column;
@@ -11,6 +19,7 @@ body {
     height: 100vh;
     user-select: none;
     overflow: hidden;
+    color: var(--the-darkest-color);
 }
 
 div.start-menu {
@@ -74,13 +83,14 @@ main {
     position: relative;
     flex-grow: 1;
     overflow: hidden;
+    background-color: var(--darker-color);
 }
 
 footer {
     display: flex;
     align-items: center;
     gap: 10px;
-    background-color: rgba(0, 0, 0, 0.541);
+    background-color: var(--the-darkest-color);
     overflow: auto;
 }
 
@@ -89,7 +99,7 @@ header.app {
     align-items: center;
     width: 100%;
     height: 40px;
-    background-color: rgba(0, 0, 0, 0.541);
+    background-color: var(--the-darkest-color);
 }
 
 .gate {
@@ -148,7 +158,7 @@ header.app {
 .draggable-gate .output::after,
 .draggable-gate .input::after {
     content: "1";
-    color: white;
+    color: var(--the-darkest-color);
     font-size: 1.5em;
     font-weight: bold;
 }
@@ -164,7 +174,7 @@ header.app {
     display: block;
     width: 9px;
     height: 3px;
-    background-color: black;
+    background-color: var(--the-darkest-color);
     position: relative;
     transform: translate(-50%, -50%);
     top: 50%;
@@ -176,7 +186,7 @@ header.app {
     display: block;
     width: 9px;
     height: 3px;
-    background-color: black;
+    background-color: var(--the-darkest-color);
     position: relative;
     transform: translate(-50%, -50%);
     top: 50%;
@@ -188,11 +198,11 @@ header.app {
 }
 
 .true {
-    background-color: chartreuse;
+    background-color: var(--true-color);
 }
 
 .false {
-    background-color: cornflowerblue;
+    background-color: var(--false-color);
 }
 
 svg {
@@ -202,22 +212,30 @@ svg {
 
 path {
     fill: none;
-    stroke: black;
+    stroke: var(--false-color);
     stroke-width: 5;
     stroke-linejoin: round;
     cursor: pointer;
     pointer-events: initial;
 }
 
+path.true {
+    stroke: var(--true-color);
+}
+
+path.false {
+    stroke: var(--false-color);
+}
+
 path.selected {
-    filter: drop-shadow( 0px 2px 3px rgb(0, 0, 0));
+    filter: drop-shadow( 0px 2px 3px rgba(0, 0, 0, 0.747));
 }
 
 #work-area {
     width: 1920px;
     height: 1080px;
     position: absolute;
-    background-color: rgb(186, 192, 192);
+    background-color: var(--dark-color);
 }
 
 .hide {
@@ -225,19 +243,19 @@ path.selected {
 }
 
 .outputs-element {
-    background-color: darkred;
+    background-color: #F45B69;
     padding: 10px;
     cursor: pointer;
 }
 
 .inputs-element {
-    background-color: black;
+    background-color: #CED0CE;
     padding: 10px;
     cursor: pointer;
 }
 
 .n-outputs-element h2 {
-    color: white;
+    color: var(--the-darkest-color);
     width: 40px;
     height: 40px;
     display: flex;
@@ -250,11 +268,11 @@ path.selected {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-color: darkred;
+    background-color: #F45B69;
 }
 
 .n-inputs-element h2 {
-    color: white;
+    color: var(--the-darkest-color);
     width: 40px;
     height: 40px;
     display: flex;
@@ -267,7 +285,7 @@ path.selected {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-color: black;
+    background-color: #CED0CE;
 }
 
 .draggable-gate .inputs,
