@@ -25,7 +25,7 @@ export class nInputsElement {
                 this.inputsElementsId.push(id + i);
                 this.element.appendChild(inputsEl.element);    
             }
-            this.changeModeButton.textContent = "u2";
+            this.changeModeButton.textContent = "2's";
             this.changeModeButton.addEventListener("click", () => {
                 if(this.numberMode) {
                     this.numberMode = 0;

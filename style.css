@@ -95,7 +95,6 @@ header.app {
 .gate {
     width: 120px;
     background-color: aquamarine;
-    border: 5px solid black;
     display: flex;
     align-items: center;
     cursor: pointer;
@@ -130,28 +129,70 @@ header.app {
     gap: 5px;
 }
 
+.output,
 .input {
     width: 20px;
     height: 20px;
     border-radius: 50%;
-    background: cornflowerblue;
-    transform: translateX(-20px);
 }
 
-.output {
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background: cornflowerblue;
-    transform: translateX(20px);
+.draggable-gate .output,
+.draggable-gate .input {
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent;
+}
+
+.draggable-gate .output::after,
+.draggable-gate .input::after {
+    content: "1";
+    color: white;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.work .input {
+    transform: translateX(-40px);
+}
+
+
+
+.work .input::after {
+    content: "";
+    display: block;
+    width: 9px;
+    height: 3px;
+    background-color: black;
+    position: relative;
+    transform: translate(-50%, -50%);
+    top: 50%;
+    left: 25px;
+}
+
+.work .output::before {
+    content: "";
+    display: block;
+    width: 9px;
+    height: 3px;
+    background-color: black;
+    position: relative;
+    transform: translate(-50%, -50%);
+    top: 50%;
+    right: 5px;
+}
+
+.work .output {
+    transform: translateX(40px);
 }
 
 .true {
-    background: chartreuse;
+    background-color: chartreuse;
 }
 
 .false {
-    background: cornflowerblue;
+    background-color: cornflowerblue;
 }
 
 svg {
@@ -162,7 +203,7 @@ svg {
 path {
     fill: none;
     stroke: black;
-    stroke-width: 3;
+    stroke-width: 5;
     stroke-linejoin: round;
     cursor: pointer;
     pointer-events: initial;
@@ -176,7 +217,7 @@ path.selected {
     width: 1920px;
     height: 1080px;
     position: absolute;
-    background-color: cadetblue;
+    background-color: rgb(186, 192, 192);
 }
 
 .hide {

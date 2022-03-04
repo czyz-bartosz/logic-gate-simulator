@@ -11,6 +11,7 @@ export class Input {
     }
     createElement() {
         this.inputEl.classList.add("input");
+        this.inputEl.classList.add("false");
     }
     setInputValue(value, parentId) {
         this.currentValue = value;

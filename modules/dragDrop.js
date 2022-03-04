@@ -80,6 +80,7 @@ export function dragDrop(ele, dragzone, dragFunction, moveFunction, dropFunction
         let y;
         const copyEle = dragFunction();
         copyEle.classList.remove("draggable-gate");
+        copyEle.classList.add("work");
         dragzone.appendChild(copyEle);
         copyEle.style.zIndex = "100";
         copyEle.style.position = "absolute";
