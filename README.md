@@ -1,1 +1,1 @@
-# Symulator Układów Logicznych
+# Logic gate simulator
